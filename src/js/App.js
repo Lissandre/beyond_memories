@@ -1,4 +1,4 @@
-import { Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { FogExp2, Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
 
 import Sizes from '@tools/Sizes'
@@ -20,12 +20,14 @@ export default class App {
 
     this.setConfig()
     this.setRenderer()
-    this.setCamera()
     this.setWorld()
+    this.setCamera()
   }
   setRenderer() {
     // Set scene
     this.scene = new Scene()
+    // Set fog
+    this.scene.fog = new FogExp2(0xfafafa, 0.08)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -36,7 +38,7 @@ export default class App {
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
     // Set background color
-    this.renderer.setClearColor(0x212121, 1)
+    this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
@@ -52,9 +54,10 @@ export default class App {
       // When tab is not visible (tab is not active or window is minimized), browser stops requesting animation frames. Thus, this does not work
       // if the window is only in the background without focus (for example, if you select another window without minimizing the browser one), 
       // which might cause some performance or batteries issues when testing on multiple browsers
-      if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
+      // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         this.renderer.render(this.scene, this.camera.camera)
-      }
+        this.camera.orbitControls.update()
+      // }
     })
 
     if (this.debug) {

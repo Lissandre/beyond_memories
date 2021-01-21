@@ -22,7 +22,7 @@ export default class Camera {
       75,
       this.sizes.viewport.width / this.sizes.viewport.height,
       0.1,
-      1000
+      90
     )
     this.container.add(this.camera)
     // Change camera aspect on resize
@@ -37,7 +37,7 @@ export default class Camera {
     // Set camera position
     this.camera.position.x = 0
     this.camera.position.y = 1
-    this.camera.position.z = 5
+    this.camera.position.z = 3.5
   }
   setOrbitControls() {
     // Set orbit control
@@ -45,9 +45,21 @@ export default class Camera {
       this.camera,
       this.renderer.domElement
     )
-    this.orbitControls.enabled = false
+    this.orbitControls.enabled = true
     this.orbitControls.enableKeys = true
-    this.orbitControls.zoomSpeed = 1
+    this.orbitControls.zoomSpeed = 0.5
+    this.orbitControls.minDistance = 3
+    this.orbitControls.maxDistance = 4
+    this.orbitControls.enableZoom = true
+    this.orbitControls.enablePan = false
+    this.orbitControls.minPolarAngle = Math.PI / 6
+    this.orbitControls.maxPolarAngle = Math.PI / 2.7
+    this.orbitControls.enableDamping = true
+    this.orbitControls.dampingFactor = 0.05
+
+
+
+    // this.orbitControls.target = this.world.perso.container.position
 
     if (this.debug) {
       this.debugFolder = this.debug.addFolder('Camera')

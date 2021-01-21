@@ -37,7 +37,6 @@
     "webpack-merge": "^5.7.3"
   },
   "scripts": {
-    "init": "sh ./init.sh",
     "build": "webpack --config ./bundler/webpack.prod.js",
     "watch": "webpack --watch --config ./bundler/webpack.prod.js",
     "dev": "webpack serve --config ./bundler/webpack.dev.js --client-log-level warning",

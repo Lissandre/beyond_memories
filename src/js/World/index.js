@@ -2,7 +2,8 @@ import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './AmbientLight'
 import PointLightSource from './PointLight'
-import Suzanne from './Suzanne'
+import Floor from './Floor'
+import Perso from './Perso'
 
 export default class World {
   constructor(options) {
@@ -26,7 +27,8 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setPointLight()
-    this.setSuzanne()
+    this.setFloor()
+    this.setPerso()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -45,13 +47,11 @@ export default class World {
       })
 
       this.assets.on('ressourcesReady', () => {
+        this.init()
+        this.loadDiv.style.opacity = 0
         setTimeout(() => {
-          this.init()
-          this.loadDiv.style.opacity = 0
-          setTimeout(() => {
-            this.loadDiv.remove()
-          }, 550)
-        }, 1000)
+          this.loadDiv.remove()
+        }, 550)
       })
     }
   }
@@ -67,11 +67,12 @@ export default class World {
     })
     this.container.add(this.light.container)
   }
-  setSuzanne() {
-    this.suzanne = new Suzanne({
-      time: this.time,
-      assets: this.assets,
-    })
-    this.container.add(this.suzanne.container)
+  setFloor() {
+    this.floor = new Floor()
+    this.container.add(this.floor.container)
+  }
+  setPerso() {
+    this.perso = new Perso()
+    this.container.add(this.perso.container)
   }
 }
