@@ -1,5 +1,6 @@
 import { BoxBufferGeometry, Mesh, MeshLambertMaterial, Object3D, Vector3, Quaternion, Euler } from "three"
 import Mouse from '@tools/Mouse'
+import { TweenMax } from 'gsap'
 
 export default class Perso {
   constructor(options) {
@@ -16,7 +17,7 @@ export default class Perso {
     this.moveRight = false
     this.rotation = 0
     this.speed = 0
-    this.deceleration = 0.05
+    this.deceleration = 0.12
 
     this.setPerso()
     this.setListeners()
@@ -104,26 +105,30 @@ export default class Perso {
         vec.crossVectors( this.perso.up, vec )
         this.perso.position.addScaledVector( vec, 0.1 )
         this.camera.cameraUpdate(this.perso.position)
+        this.lerpOrientation()
       }
       if (this.moveBackward) {
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         vec.crossVectors( this.perso.up, vec )
         this.perso.position.addScaledVector( vec, -0.1 )
         this.camera.cameraUpdate(this.perso.position)
+        this.lerpOrientation()
       }
       if (this.moveLeft) {
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         this.perso.position.addScaledVector( vec, -0.06 )
         this.camera.cameraUpdate(this.perso.position)
+        this.lerpOrientation()
       }
       if (this.moveRight) {
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         this.perso.position.addScaledVector( vec, 0.06 )
         this.camera.cameraUpdate(this.perso.position)
+        this.lerpOrientation()
       }
       if (this.mouse.grab === true) {
         this.speed = 0
-        this.speed = this.mouse.delta.x * 0.1
+        this.speed = -this.mouse.delta.x * 0.1
       } else if (this.mouse.grab === false && Math.abs(this.speed) > 0) {
         Math.sign(this.speed) * this.speed - this.deceleration > 0
           ? (this.speed -= Math.sign(this.speed) * this.deceleration)
@@ -136,11 +141,24 @@ export default class Perso {
         this.deltaRotationQuaternion,
         this.camera.container.quaternion
       )
-      this.perso.quaternion.multiplyQuaternions(
-        this.deltaRotationQuaternion,
-        this.perso.quaternion
-      )
     })
+  }
+  lerpOrientation() {
+    if(this.camera.container.quaternion != this.perso.quaternion) {
+      let quat = this.perso.quaternion
+      console.log(quat);
+      quat.multiplyQuaternions(
+        this.deltaRotationQuaternion,
+        quat
+      )
+      TweenMax.to(this.perso.quaternion, {
+        duration: 0.42,
+        x: this.camera.container.quaternion.x,
+        y: this.camera.container.quaternion.y,
+        z: this.camera.container.quaternion.z,
+        w: this.camera.container.quaternion.w
+      })
+    }
   }
   toRadians(angle) {
     return angle * (Math.PI / 180)

@@ -3,7 +3,9 @@
   "version": "3.0.1",
   "description": "Three template",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "gsap": "^3.6.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
