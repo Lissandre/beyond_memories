@@ -20,8 +20,8 @@ export default class App {
 
     this.setConfig()
     this.setRenderer()
-    this.setWorld()
     this.setCamera()
+    this.setWorld()
   }
   setRenderer() {
     // Set scene
@@ -51,12 +51,8 @@ export default class App {
     })
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
-      // When tab is not visible (tab is not active or window is minimized), browser stops requesting animation frames. Thus, this does not work
-      // if the window is only in the background without focus (for example, if you select another window without minimizing the browser one), 
-      // which might cause some performance or batteries issues when testing on multiple browsers
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         this.renderer.render(this.scene, this.camera.camera)
-        this.camera.orbitControls.update()
       // }
     })
 
@@ -85,6 +81,7 @@ export default class App {
       time: this.time,
       debug: this.debug,
       assets: this.assets,
+      camera: this.camera,
     })
     // Add world to scene
     this.scene.add(this.world.container)

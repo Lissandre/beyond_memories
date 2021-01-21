@@ -4,6 +4,7 @@ export default class Perso {
   constructor(options) {
     // Set options
     this.time = options.time
+    this.camera = options.camera
 
     // Set up
     this.container = new Object3D()
@@ -21,7 +22,7 @@ export default class Perso {
       new BoxBufferGeometry(0.6, 1.5, 0.3),
       new MeshLambertMaterial({color: 0xff0000})
     )
-    this.perso.position.set(0, 0.75, 0)
+    this.perso.translateY(0.75)
     this.container.add(this.perso)
   }
   setListeners() {
@@ -97,20 +98,23 @@ export default class Perso {
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         vec.crossVectors( this.perso.up, vec )
         this.perso.position.addScaledVector( vec, 0.1 )
+        this.camera.cameraUpdate(this.perso.position)
       }
       if (this.moveBackward) {
-        console.log(this.perso)
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         vec.crossVectors( this.perso.up, vec )
         this.perso.position.addScaledVector( vec, -0.1 )
+        this.camera.cameraUpdate(this.perso.position)
       }
       if (this.moveLeft) {
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         this.perso.position.addScaledVector( vec, -0.06 )
+        this.camera.cameraUpdate(this.perso.position)
       }
       if (this.moveRight) {
         vec.setFromMatrixColumn( this.perso.matrix, 0 )
         this.perso.position.addScaledVector( vec, 0.06 )
+        this.camera.cameraUpdate(this.perso.position)
       }
     })
   }

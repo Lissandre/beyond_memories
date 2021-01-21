@@ -11,6 +11,7 @@ export default class World {
     this.time = options.time
     this.debug = options.debug
     this.assets = options.assets
+    this.camera = options.camera
 
     // Set up
     this.container = new Object3D()
@@ -74,6 +75,7 @@ export default class World {
   setPerso() {
     this.perso = new Perso({
       time: this.time,
+      camera: this.camera,
     })
     this.container.add(this.perso.container)
   }
