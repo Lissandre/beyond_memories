@@ -138,7 +138,6 @@ export default class Perso {
         Math.sign(this.speedY) * this.speedY - this.deceleration > 0
           ? (this.speedY -= Math.sign(this.speedY) * this.deceleration)
           : (this.speedY = 0)
-        console.log(this.speedY);
       }
       if(this.speedY) {
         if (this.camera.camera.position.y + this.speedY > 3) {
