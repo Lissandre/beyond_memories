@@ -128,12 +128,30 @@ export default class Perso {
       }
       if (this.mouse.grab === true) {
         this.speed = 0
+        this.speedY = 0
         this.speed = -this.mouse.delta.x * 0.1
-      } else if (this.mouse.grab === false && Math.abs(this.speed) > 0) {
+        this.speedY = -this.mouse.delta.y * 0.01
+      } else if (this.mouse.grab === false && (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)) {
         Math.sign(this.speed) * this.speed - this.deceleration > 0
           ? (this.speed -= Math.sign(this.speed) * this.deceleration)
           : (this.speed = 0)
+        Math.sign(this.speedY) * this.speedY - this.deceleration > 0
+          ? (this.speedY -= Math.sign(this.speedY) * this.deceleration)
+          : (this.speedY = 0)
+        console.log(this.speedY);
       }
+      if(this.speedY) {
+        if (this.camera.camera.position.y + this.speedY > 3) {
+          this.camera.camera.position.y = 3
+          this.speedY = 0
+        } else if (this.camera.camera.position.y + this.speedY < 0.5) {
+          this.camera.camera.position.y = 0.5
+          this.speedY = 0
+        } else {
+          this.camera.camera.position.y += this.speedY
+        }
+      }
+      this.camera.camera.lookAt(this.perso.position)
       this.deltaRotationQuaternion = new Quaternion().setFromEuler(
         new Euler(0, this.toRadians(this.speed), 0, 'XYZ')
       )
@@ -145,12 +163,6 @@ export default class Perso {
   }
   lerpOrientation() {
     if(this.camera.container.quaternion != this.perso.quaternion) {
-      let quat = this.perso.quaternion
-      console.log(quat);
-      quat.multiplyQuaternions(
-        this.deltaRotationQuaternion,
-        quat
-      )
       TweenMax.to(this.perso.quaternion, {
         duration: 0.42,
         x: this.camera.container.quaternion.x,
