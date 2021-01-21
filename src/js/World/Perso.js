@@ -1,4 +1,5 @@
-import { BoxBufferGeometry, Mesh, MeshLambertMaterial, Object3D, Vector3 } from "three"
+import { BoxBufferGeometry, Mesh, MeshLambertMaterial, Object3D, Vector3, Quaternion, Euler } from "three"
+import Mouse from '@tools/Mouse'
 
 export default class Perso {
   constructor(options) {
@@ -8,10 +9,14 @@ export default class Perso {
 
     // Set up
     this.container = new Object3D()
+    this.mouse = new Mouse()
     this.moveForward = false
     this.moveBackward = false
     this.moveLeft = false
     this.moveRight = false
+    this.rotation = 0
+    this.speed = 0
+    this.deceleration = 0.05
 
     this.setPerso()
     this.setListeners()
@@ -116,6 +121,28 @@ export default class Perso {
         this.perso.position.addScaledVector( vec, 0.06 )
         this.camera.cameraUpdate(this.perso.position)
       }
+      if (this.mouse.grab === true) {
+        this.speed = 0
+        this.speed = this.mouse.delta.x * 0.1
+      } else if (this.mouse.grab === false && Math.abs(this.speed) > 0) {
+        Math.sign(this.speed) * this.speed - this.deceleration > 0
+          ? (this.speed -= Math.sign(this.speed) * this.deceleration)
+          : (this.speed = 0)
+      }
+      this.deltaRotationQuaternion = new Quaternion().setFromEuler(
+        new Euler(0, this.toRadians(this.speed), 0, 'XYZ')
+      )
+      this.camera.container.quaternion.multiplyQuaternions(
+        this.deltaRotationQuaternion,
+        this.camera.container.quaternion
+      )
+      this.perso.quaternion.multiplyQuaternions(
+        this.deltaRotationQuaternion,
+        this.perso.quaternion
+      )
     })
+  }
+  toRadians(angle) {
+    return angle * (Math.PI / 180)
   }
 }
