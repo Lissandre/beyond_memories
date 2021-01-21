@@ -72,7 +72,9 @@ export default class World {
     this.container.add(this.floor.container)
   }
   setPerso() {
-    this.perso = new Perso()
+    this.perso = new Perso({
+      time: this.time,
+    })
     this.container.add(this.perso.container)
   }
 }
