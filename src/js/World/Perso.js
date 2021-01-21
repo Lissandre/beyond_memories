@@ -130,7 +130,7 @@ export default class Perso {
         this.speed = 0
         this.speedY = 0
         this.speed = -this.mouse.delta.x * 0.1
-        this.speedY = -this.mouse.delta.y * 0.01
+        this.speedY = this.mouse.delta.y * 0.01
       } else if (this.mouse.grab === false && (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)) {
         Math.sign(this.speed) * this.speed - this.deceleration > 0
           ? (this.speed -= Math.sign(this.speed) * this.deceleration)
@@ -150,7 +150,7 @@ export default class Perso {
           this.camera.camera.position.y += this.speedY
         }
       }
-      this.camera.camera.lookAt(this.perso.position)
+      this.camera.camera.lookAt(this.camera.container.position)
       this.deltaRotationQuaternion = new Quaternion().setFromEuler(
         new Euler(0, this.toRadians(this.speed), 0, 'XYZ')
       )
