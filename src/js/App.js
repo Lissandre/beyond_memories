@@ -19,7 +19,7 @@ export default class App {
     this.sizes = new Sizes()
     this.assets = new Assets()
     this.params = {
-      fogColor: 0xfafafa
+      fogColor: 0xc0dded
     }
 
     this.setConfig()
