@@ -1,28 +1,30 @@
-import { Object3D, PointLight, Color } from 'three'
+import { Object3D, HemisphereLight, Color } from 'three'
 
-export default class PointLightSource {
+
+export default class HemisphereLightSource {
   constructor(options) {
     // Set options
     this.debug = options.debug
 
     // Set up
     this.container = new Object3D()
-    this.container.name = 'Point Light'
+    this.container.name = 'Hemisphere Light'
     this.params = {
-      color: 0xffffff,
+      skycolor: 0xffffff,
+      groundcolor: 0xffffff,
       positionX: 0,
       positionY: 2,
       positionZ: 5,
     }
 
-    this.createPointLight()
+    this.createHemisphereLight()
 
     if (this.debug) {
       this.setDebug()
     }
   }
-  createPointLight() {
-    this.light = new PointLight(this.params.color)
+  createHemisphereLight() {
+    this.light = new HemisphereLight(this.params.skycolor, this.params.groundcolor)
     this.light.castShadow = true
     this.light.position.set(
       this.params.positionX,
@@ -30,16 +32,23 @@ export default class PointLightSource {
       this.params.positionZ
     )
     this.container.add(this.light)
+    console.log(this.light);
   }
   setDebug() {
     // Color debug
-    this.debugFolder = this.debug.addFolder('Point Light')
+    this.debugFolder = this.debug.addFolder('Hemisphere Light')
     this.debugFolder.open()
     this.debugFolder
-      .addColor(this.params, 'color')
-      .name('Color')
+      .addColor(this.params, 'skycolor')
+      .name('Sky Color')
       .onChange(() => {
-        this.light.color = new Color(this.params.color)
+        this.light.color = new Color(this.params.skycolor)
+      })
+    this.debugFolder
+      .addColor(this.params, 'groundcolor')
+      .name('Ground Color')
+      .onChange(() => {
+        this.light.groundColor = new Color(this.params.groundcolor)
       })
     //Position debug
     this.debugFolder

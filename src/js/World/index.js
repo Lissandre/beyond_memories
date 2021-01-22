@@ -1,7 +1,7 @@
 import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './Lights/AmbientLight'
-import PointLightSource from './Lights/PointLight'
+import HemisphereLightSource from './Lights/HemisphereLight'
 import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
@@ -29,7 +29,7 @@ export default class World {
   }
   init() {
     this.setAmbientLight()
-    this.setPointLight()
+    this.setHemisphereLight()
     this.setPhysic()
     this.setFloor()
     this.setPerso()
@@ -65,8 +65,8 @@ export default class World {
     })
     this.container.add(this.ambientlight.container)
   }
-  setPointLight() {
-    this.light = new PointLightSource({
+  setHemisphereLight() {
+    this.light = new HemisphereLightSource({
       debug: this.debugFolder,
     })
     this.container.add(this.light.container)
