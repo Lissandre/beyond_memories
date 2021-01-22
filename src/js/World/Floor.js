@@ -15,9 +15,10 @@ export default class Floor {
   setFloor() {
     this.floor = new Mesh(
       new PlaneBufferGeometry(200, 200, 200, 200),
-      new MeshLambertMaterial({ color: 0x959595, wireframe: true })
+      new MeshLambertMaterial({ color: 0x959595, wireframe: false })
     )
     this.floor.rotateX(-Math.PI / 2)
+    this.floor.receiveShadow = true
     this.container.add(this.floor)
   }
   setPhysic() {

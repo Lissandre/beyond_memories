@@ -5,6 +5,8 @@ import PointLightSource from './Lights/PointLight'
 import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
+import Sky from './Sky/Sky'
+import Skybox from './Sky/Sky'
 
 export default class World {
   constructor(options) {
@@ -30,6 +32,7 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setPointLight()
+    this.setSky()
     this.setPhysic()
     this.setFloor()
     this.setPerso()
@@ -90,5 +93,19 @@ export default class World {
       camera: this.camera,
     })
     this.container.add(this.perso.container)
+  }
+  setSky() {
+    this.sky = new Skybox({
+      time: this.time,
+      debug: this.debug,
+      turbidity: 1.8,
+      rayleigh: 2.5,
+      mieCoefficient: 0.007,
+      mieDirectionalG: 0.945,
+      azimuth: 0.0082,
+      lightColor: 0xffffff,
+      lightPpower: 3
+    })
+    this.container.add(this.sky.container)
   }
 }

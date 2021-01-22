@@ -37,6 +37,7 @@ export default class Perso {
       new MeshLambertMaterial({ color: 0xff0000 })
     )
     this.perso.translateY(0.75)
+    this.perso.castShadow = true
     this.container.add(this.perso)
   }
   setListeners() {
