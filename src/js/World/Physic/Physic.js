@@ -67,7 +67,6 @@ export default class Physic {
     if(this.debug) {
       this.physicDebug = {enabled: false}
       this.debugFolder = this.debug.addFolder('Physic')
-      this.debugFolder.open()
       this.debugFolder
         .add(this.physicDebug, 'enabled')
         .name('Show bodies')

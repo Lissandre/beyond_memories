@@ -12,9 +12,7 @@ export default class HemisphereLightSource {
     this.params = {
       skycolor: 0xffffff,
       groundcolor: 0xffffff,
-      positionX: 0,
-      positionY: 2,
-      positionZ: 5,
+      intensity: 1,
     }
 
     this.createHemisphereLight()
@@ -24,19 +22,13 @@ export default class HemisphereLightSource {
     }
   }
   createHemisphereLight() {
-    this.light = new HemisphereLight(this.params.skycolor, this.params.groundcolor)
-    this.light.position.set(
-      this.params.positionX,
-      this.params.positionY,
-      this.params.positionZ
-    )
+    this.light = new HemisphereLight(this.params.skycolor, this.params.groundcolor, this.params.intensity)
     this.container.add(this.light)
     console.log(this.light);
   }
   setDebug() {
     // Color debug
     this.debugFolder = this.debug.addFolder('Hemisphere Light')
-    this.debugFolder.open()
     this.debugFolder
       .addColor(this.params, 'skycolor')
       .name('Sky Color')
@@ -49,24 +41,10 @@ export default class HemisphereLightSource {
       .onChange(() => {
         this.light.groundColor = new Color(this.params.groundcolor)
       })
-    //Position debug
     this.debugFolder
-      .add(this.light.position, 'x')
-      .step(0.1)
-      .min(-5)
-      .max(5)
-      .name('Position X')
-    this.debugFolder
-      .add(this.light.position, 'y')
-      .step(0.1)
-      .min(-5)
-      .max(5)
-      .name('Position Y')
-    this.debugFolder
-      .add(this.light.position, 'z')
-      .step(0.1)
-      .min(-5)
-      .max(5)
-      .name('Position Z')
+      .add(this.light, 'intensity')
+      .name('Intensity')
+      .min(0)
+      .max(1)
   }
 }
