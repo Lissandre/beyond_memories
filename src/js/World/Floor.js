@@ -18,6 +18,7 @@ export default class Floor {
       new MeshLambertMaterial({ color: 0x959595 })
     )
     this.floor.rotateX(-Math.PI / 2)
+    this.floor.receiveShadow = true
     this.container.add(this.floor)
   }
   setPhysic() {

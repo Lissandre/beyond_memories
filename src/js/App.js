@@ -41,6 +41,7 @@ export default class App {
     })
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
+    this.renderer.shadowMap.enabled = true
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
