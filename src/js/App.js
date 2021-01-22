@@ -1,4 +1,4 @@
-import { FogExp2, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { Color, FogExp2, Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -18,6 +18,9 @@ export default class App {
     this.time = new Time()
     this.sizes = new Sizes()
     this.assets = new Assets()
+    this.params = {
+      fogColor: 0xfafafa
+    }
 
     this.setConfig()
     this.setRenderer()
@@ -28,7 +31,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new FogExp2(0xfafafa, 0.08)
+    this.scene.fog = new FogExp2(this.params.fogColor, 0.04)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -65,6 +68,18 @@ export default class App {
       const folder = this.debug.addFolder('Renderer')
       folder.open()
       folder.add(this.renderOnBlur, 'activated').name('Render on window blur')
+      folder
+        .add(this.scene.fog, 'density')
+        .name('Fog density')
+        .min(0)
+        .max(1)
+        .step(0.01)
+      folder
+        .addColor(this.params, 'fogColor')
+        .name('Fog Color')
+        .onChange(() => {
+          this.scene.fog.color = new Color(this.params.fogColor)
+        })
     }
   }
   setCamera() {
