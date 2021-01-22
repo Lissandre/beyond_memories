@@ -99,7 +99,9 @@ export default class World {
       time: this.time,
       debug: this.debug,
       sphereTopColor: 0x330d75,
-      sphereBottomColor: 0xc0dded
+      sphereBottomColor: 0xcfc5b0,
+      offset: 20,
+      exponent: 2
     })
     this.container.add(this.sky.container)
   }

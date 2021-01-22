@@ -13,6 +13,8 @@ export default class Skybox {
     //Set options for sphere color
     this.sphereTopColor = options.sphereTopColor
     this.sphereBottomColor = options.sphereBottomColor
+    this.offset = options.offset
+    this.exponent = options.exponent
 
     // Set up
     this.container = new Object3D()
@@ -25,8 +27,8 @@ export default class Skybox {
     this.uniforms = {
       "topColor": { value: new Color(  this.sphereTopColor ) },
       "bottomColor": { value: new Color(  this.sphereBottomColor ) },
-      "offset": { value: 20 },
-      "exponent": { value: 2 }
+      "offset": { value: this.offset },
+      "exponent": { value: this.exponent }
     }
     
     this.skyGeo = new SphereBufferGeometry( 200, 32, 45)
