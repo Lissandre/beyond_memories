@@ -1,10 +1,10 @@
 import { AxesHelper, Object3D } from 'three'
 
-import AmbientLightSource from './AmbientLight'
-import PointLightSource from './PointLight'
-import Physic from './Physic'
+import AmbientLightSource from './Lights/AmbientLight'
+import PointLightSource from './Lights/PointLight'
+import Physic from './Physic/Physic'
 import Floor from './Floor'
-import Perso from './Perso'
+import Perso from './Perso/Perso'
 
 export default class World {
   constructor(options) {
