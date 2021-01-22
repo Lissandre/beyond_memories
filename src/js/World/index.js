@@ -31,7 +31,6 @@ export default class World {
   }
   init() {
     this.setAmbientLight()
-    this.setPointLight()
     this.setSky()
     this.setHemisphereLight()
     this.setPhysic()
