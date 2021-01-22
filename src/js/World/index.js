@@ -98,13 +98,10 @@ export default class World {
     this.sky = new Skybox({
       time: this.time,
       debug: this.debug,
-      turbidity: 1.8,
-      rayleigh: 2.5,
-      mieCoefficient: 0.007,
-      mieDirectionalG: 0.945,
-      azimuth: 0.0082,
-      lightColor: 0xffffff,
-      lightPpower: 3
+      sphereTopColor: 0x330d75,
+      sphereBottomColor: 0xcfc5b0,
+      offset: 20,
+      exponent: 2
     })
     this.container.add(this.sky.container)
   }
