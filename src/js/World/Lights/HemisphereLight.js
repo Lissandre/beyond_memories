@@ -25,7 +25,6 @@ export default class HemisphereLightSource {
   }
   createHemisphereLight() {
     this.light = new HemisphereLight(this.params.skycolor, this.params.groundcolor)
-    this.light.castShadow = true
     this.light.position.set(
       this.params.positionX,
       this.params.positionY,
