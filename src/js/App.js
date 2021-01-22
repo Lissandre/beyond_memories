@@ -1,5 +1,6 @@
 import { FogExp2, Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
+import Stats from 'stats.js'
 
 import Sizes from '@tools/Sizes'
 import Time from '@tools/Time'
@@ -51,9 +52,11 @@ export default class App {
     })
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
+      this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         this.renderer.render(this.scene, this.camera.camera)
       // }
+      this.debug && this.stats.end()
     })
 
     if (this.debug) {
@@ -89,6 +92,9 @@ export default class App {
   setConfig() {
     if (window.location.hash === '#debug') {
       this.debug = new dat.GUI({ width: 450 })
+      this.stats = new Stats()
+      this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
+      document.body.appendChild(this.stats.dom)
     }
   }
 }

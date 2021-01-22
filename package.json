@@ -4,7 +4,8 @@
   "description": "Three template",
   "main": "index.js",
   "dependencies": {
-    "gsap": "^3.6.0"
+    "gsap": "^3.6.0",
+    "stats.js": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
