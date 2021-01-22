@@ -2,6 +2,7 @@ import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './AmbientLight'
 import PointLightSource from './PointLight'
+import Physic from './Physic'
 import Floor from './Floor'
 import Perso from './Perso'
 
@@ -12,6 +13,7 @@ export default class World {
     this.debug = options.debug
     this.assets = options.assets
     this.camera = options.camera
+    this.scene = options.scene
 
     // Set up
     this.container = new Object3D()
@@ -28,6 +30,7 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setPointLight()
+    this.setPhysic()
     this.setFloor()
     this.setPerso()
   }
@@ -68,8 +71,17 @@ export default class World {
     })
     this.container.add(this.light.container)
   }
+  setPhysic() {
+    this.physic = new Physic({
+      time: this.time,
+      debug: this.debug,
+      scene: this.scene,
+    })
+  }
   setFloor() {
-    this.floor = new Floor()
+    this.floor = new Floor({
+      physic: this.physic
+    })
     this.container.add(this.floor.container)
   }
   setPerso() {
