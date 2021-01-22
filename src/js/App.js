@@ -54,7 +54,7 @@ export default class App {
     this.time.on('tick', () => {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
-        this.renderer.render(this.scene, this.camera.camera)
+      this.renderer.render(this.scene, this.camera.camera)
       // }
       this.debug && this.stats.end()
     })
@@ -63,9 +63,7 @@ export default class App {
       this.renderOnBlur = { activated: true }
       const folder = this.debug.addFolder('Renderer')
       folder.open()
-      folder
-        .add(this.renderOnBlur, 'activated')
-        .name('Render on window blur')
+      folder.add(this.renderOnBlur, 'activated').name('Render on window blur')
     }
   }
   setCamera() {

@@ -1,4 +1,12 @@
-import { BoxBufferGeometry, Mesh, MeshLambertMaterial, Object3D, Vector3, Quaternion, Euler } from "three"
+import {
+  BoxBufferGeometry,
+  Mesh,
+  MeshLambertMaterial,
+  Object3D,
+  Vector3,
+  Quaternion,
+  Euler,
+} from 'three'
 import Mouse from '@tools/Mouse'
 import { TweenMax } from 'gsap'
 
@@ -26,7 +34,7 @@ export default class Perso {
   setPerso() {
     this.perso = new Mesh(
       new BoxBufferGeometry(0.6, 1.5, 0.3),
-      new MeshLambertMaterial({color: 0xff0000})
+      new MeshLambertMaterial({ color: 0xff0000 })
     )
     this.perso.translateY(0.75)
     this.container.add(this.perso)
@@ -101,28 +109,28 @@ export default class Perso {
     let vec = new Vector3()
     this.time.on('tick', () => {
       if (this.moveForward) {
-        vec.setFromMatrixColumn( this.perso.matrix, 0 )
-        vec.crossVectors( this.perso.up, vec )
-        this.perso.position.addScaledVector( vec, 0.1 )
+        vec.setFromMatrixColumn(this.perso.matrix, 0)
+        vec.crossVectors(this.perso.up, vec)
+        this.perso.position.addScaledVector(vec, 0.1)
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveBackward) {
-        vec.setFromMatrixColumn( this.perso.matrix, 0 )
-        vec.crossVectors( this.perso.up, vec )
-        this.perso.position.addScaledVector( vec, -0.1 )
+        vec.setFromMatrixColumn(this.perso.matrix, 0)
+        vec.crossVectors(this.perso.up, vec)
+        this.perso.position.addScaledVector(vec, -0.1)
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveLeft) {
-        vec.setFromMatrixColumn( this.perso.matrix, 0 )
-        this.perso.position.addScaledVector( vec, -0.06 )
+        vec.setFromMatrixColumn(this.perso.matrix, 0)
+        this.perso.position.addScaledVector(vec, -0.06)
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveRight) {
-        vec.setFromMatrixColumn( this.perso.matrix, 0 )
-        this.perso.position.addScaledVector( vec, 0.06 )
+        vec.setFromMatrixColumn(this.perso.matrix, 0)
+        this.perso.position.addScaledVector(vec, 0.06)
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
@@ -131,7 +139,10 @@ export default class Perso {
         this.speedY = 0
         this.speed = -this.mouse.delta.x * 0.1
         this.speedY = this.mouse.delta.y * 0.01
-      } else if (this.mouse.grab === false && (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)) {
+      } else if (
+        this.mouse.grab === false &&
+        (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)
+      ) {
         Math.sign(this.speed) * this.speed - this.deceleration > 0
           ? (this.speed -= Math.sign(this.speed) * this.deceleration)
           : (this.speed = 0)
@@ -139,7 +150,7 @@ export default class Perso {
           ? (this.speedY -= Math.sign(this.speedY) * this.deceleration)
           : (this.speedY = 0)
       }
-      if(this.speedY) {
+      if (this.speedY) {
         if (this.camera.camera.position.y + this.speedY > 3) {
           this.camera.camera.position.y = 3
           this.speedY = 0
@@ -161,13 +172,13 @@ export default class Perso {
     })
   }
   lerpOrientation() {
-    if(this.camera.container.quaternion != this.perso.quaternion) {
+    if (this.camera.container.quaternion != this.perso.quaternion) {
       TweenMax.to(this.perso.quaternion, {
         duration: 0.42,
         x: this.camera.container.quaternion.x,
         y: this.camera.container.quaternion.y,
         z: this.camera.container.quaternion.z,
-        w: this.camera.container.quaternion.w
+        w: this.camera.container.quaternion.w,
       })
     }
   }
