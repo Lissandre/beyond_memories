@@ -1,5 +1,6 @@
 import {
   BoxBufferGeometry,
+  Box3,
   Mesh,
   MeshLambertMaterial,
   Object3D,
@@ -7,6 +8,7 @@ import {
   Quaternion,
   Euler,
 } from 'three'
+import { Body, Box, Vec3 } from 'cannon-es'
 import Mouse from '@tools/Mouse'
 import { TweenMax } from 'gsap'
 
@@ -15,6 +17,7 @@ export default class Perso {
     // Set options
     this.time = options.time
     this.camera = options.camera
+    this.physic = options.physic
 
     // Set up
     this.container = new Object3D()
@@ -28,6 +31,7 @@ export default class Perso {
     this.deceleration = 0.12
 
     this.setPerso()
+    this.setPhysic()
     this.setListeners()
     this.setMovements()
   }
@@ -36,11 +40,27 @@ export default class Perso {
       new BoxBufferGeometry(0.6, 1.5, 0.3),
       new MeshLambertMaterial({ color: 0xff0000 })
     )
-    this.perso.translateY(0.75)
+    this.perso.position.set(0, 0.75, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
   }
   setListeners() {
+    // this.canJump = false
+    // this.contactNormal = new Vec3() // Normal in the contact, pointing *out* of whatever the player touched
+    // this.upAxis = new Vec3(0,1,0)
+    // this.body.addEventListener("collide",function(e){
+    //   this.contact = e.contact
+    //   // contact.bi and contact.bj are the colliding bodies, and contact.ni is the collision normal.
+    //   // We do not yet know which one is which! Let's check.
+    //   if(this.contact.bi.id == this.body.id)  // bi is the player body, flip the contact normal
+    //     this.contact.ni.negate(this.contactNormal)
+    //   else
+    //     this.contactNormal.copy(this.contact.ni) // bi is something else. Keep the normal as it is
+    //     // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
+    //   if(this.contactNormal.dot(this.upAxis) > 0.5) // Use a "good" threshold value between 0 and 1 here!
+    //     this.canJump = true
+    // })
+    // this.velocity = this.body.velocity
     document.addEventListener(
       'keydown',
       (event) => {
@@ -67,10 +87,13 @@ export default class Perso {
           case 'ShiftLeft':
             this.run = true
             break
-          // case 'Space': // space
-          //   if ( this.canJump === true ) this.velocity.y += 2
-          //   this.canJump = false
-          //   break
+          case 'Space': // space
+            // if ( this.canJump === true ){
+              // this.body.velocity.y=-200
+              this.body.applyImpulse(new Vec3(0,25,0))
+            // }
+            this.canJump = false
+            break
         }
       },
       false
@@ -112,26 +135,38 @@ export default class Perso {
       if (this.moveForward) {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         vec.crossVectors(this.perso.up, vec)
-        this.perso.position.addScaledVector(vec, 0.1)
+        let oldp = new Vector3().copy(this.body.position)
+        oldp.addScaledVector(vec, 0.1)
+        this.body.position.copy(oldp)
+        this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveBackward) {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         vec.crossVectors(this.perso.up, vec)
-        this.perso.position.addScaledVector(vec, -0.1)
+        let oldp = new Vector3().copy(this.body.position)
+        oldp.addScaledVector(vec, -0.1)
+        this.body.position.copy(oldp)
+        this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveLeft) {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
-        this.perso.position.addScaledVector(vec, -0.06)
+        let oldp = new Vector3().copy(this.body.position)
+        oldp.addScaledVector(vec, -0.06)
+        this.body.position.copy(oldp)
+        this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveRight) {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
-        this.perso.position.addScaledVector(vec, 0.06)
+        let oldp = new Vector3().copy(this.body.position)
+        oldp.addScaledVector(vec, 0.06)
+        this.body.position.copy(oldp)
+        this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
@@ -170,10 +205,20 @@ export default class Perso {
         this.deltaRotationQuaternion,
         this.camera.container.quaternion
       )
+      if (this.perso.position != this.body.position) {
+        this.setPosition()
+      }
     })
   }
   lerpOrientation() {
-    if (this.camera.container.quaternion != this.perso.quaternion) {
+    if (this.camera.container.quaternion != this.body.quaternion) {
+      TweenMax.to(this.body.quaternion, {
+        duration: 0.42,
+        x: this.camera.container.quaternion.x,
+        y: this.camera.container.quaternion.y,
+        z: this.camera.container.quaternion.z,
+        w: this.camera.container.quaternion.w,
+      })
       TweenMax.to(this.perso.quaternion, {
         duration: 0.42,
         x: this.camera.container.quaternion.x,
@@ -185,5 +230,33 @@ export default class Perso {
   }
   toRadians(angle) {
     return angle * (Math.PI / 180)
+  }
+  setPhysic() {
+    this.size = new Vector3()
+    this.center = new Vector3()
+    this.calcBox = new Box3().setFromObject(this.container)
+
+    this.calcBox.getSize(this.size)
+    this.size.x *= 0.5
+    this.size.y *= 0.5
+    this.size.z *= 0.5
+    this.calcBox.getCenter(this.center)
+
+    this.box = new Box(new Vec3().copy(this.size))
+    this.body = new Body({
+      mass: 5,
+      position: this.center,
+      allowSleep: false,
+    })
+
+    this.body.addShape(this.box)
+    this.physic.world.addBody(this.body)
+  }
+  setPosition() {
+    this.perso.position.set(
+      this.body.position.x - this.center.x,
+      this.body.position.y,
+      this.body.position.z - this.center.z
+    )
   }
 }

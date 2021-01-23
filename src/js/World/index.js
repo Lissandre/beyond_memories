@@ -91,6 +91,7 @@ export default class World {
     this.perso = new Perso({
       time: this.time,
       camera: this.camera,
+      physic: this.physic,
     })
     this.container.add(this.perso.container)
   }
