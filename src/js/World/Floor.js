@@ -14,10 +14,11 @@ export default class Floor {
   }
   setFloor() {
     this.floor = new Mesh(
-      new BoxBufferGeometry(200, 200, 0.1, 200, 200, 1),
+      new BoxBufferGeometry(200, 200, 0.1, 1, 1, 1),
       new MeshLambertMaterial({ color: 0x959595 })
     )
     this.floor.rotateX(-Math.PI / 2)
+    this.floor.position.y = -0.05
     this.floor.receiveShadow = true
     this.container.add(this.floor)
   }
