@@ -27,7 +27,6 @@ export default class HemisphereLightSource {
       this.params.intensity
     )
     this.container.add(this.light)
-    console.log(this.light)
   }
   setDebug() {
     // Color debug

@@ -278,11 +278,6 @@ export default class Perso {
     )
   }
   setDebug() {
-    // this.params = {
-    //   sideSpeed: 0.06,
-    //   frontSpeed: 0.1,
-    //   jumpForce: 180,
-    // }
     this.debugFolder = this.debug.addFolder('Perso')
     this.debugFolder
       .add(this.params, 'deceleration')
