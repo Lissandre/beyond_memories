@@ -278,60 +278,62 @@ export default class Perso {
     )
   }
   setDebug() {
-    this.debugFolder = this.debug.addFolder('Perso')
-    this.debugFolder
-      .add(this.params, 'deceleration')
-      .name('Camera Deceleration')
-      .min(0)
-      .max(0.5)
-      .step(0.02)
-    this.debugFolder
-      .add(this.params, 'cameraSpeedX')
-      .name('Camera Speed X')
-      .min(0)
-      .max(0.5)
-      .step(0.05)
-    this.debugFolder
-      .add(this.params, 'cameraSpeedY')
-      .name('Camera Speed Y')
-      .min(0)
-      .max(0.5)
-      .step(0.01)
-    this.debugFolder
-      .add(this.params, 'cameraMinY')
-      .name('Camera Min Y')
-      .min(0)
-      .max(4)
-      .step(0.1)
-    this.debugFolder
-      .add(this.params, 'cameraMaxY')
-      .name('Camera Max Y')
-      .min(0)
-      .max(4)
-      .step(0.1)
-    this.debugFolder
-      .add(this.params, 'lerpDuration')
-      .name('Rotation Lerp Duration')
-      .min(0)
-      .max(1)
-      .step(0.02)
-    this.debugFolder
-      .add(this.params, 'frontSpeed')
-      .name('Front Speed')
-      .min(0)
-      .max(1)
-      .step(0.02)
-    this.debugFolder
-      .add(this.params, 'sideSpeed')
-      .name('Side Speed')
-      .min(0)
-      .max(1)
-      .step(0.02)
-    this.debugFolder
-      .add(this.params, 'jumpForce')
-      .name('Jump Force')
-      .min(0)
-      .max(300)
-      .step(10)
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('Perso')
+      this.debugFolder
+        .add(this.params, 'deceleration')
+        .name('Camera Deceleration')
+        .min(0)
+        .max(0.5)
+        .step(0.02)
+      this.debugFolder
+        .add(this.params, 'cameraSpeedX')
+        .name('Camera Speed X')
+        .min(0)
+        .max(0.5)
+        .step(0.05)
+      this.debugFolder
+        .add(this.params, 'cameraSpeedY')
+        .name('Camera Speed Y')
+        .min(0)
+        .max(0.5)
+        .step(0.01)
+      this.debugFolder
+        .add(this.params, 'cameraMinY')
+        .name('Camera Min Y')
+        .min(0)
+        .max(4)
+        .step(0.1)
+      this.debugFolder
+        .add(this.params, 'cameraMaxY')
+        .name('Camera Max Y')
+        .min(0)
+        .max(4)
+        .step(0.1)
+      this.debugFolder
+        .add(this.params, 'lerpDuration')
+        .name('Rotation Lerp Duration')
+        .min(0)
+        .max(1)
+        .step(0.02)
+      this.debugFolder
+        .add(this.params, 'frontSpeed')
+        .name('Front Speed')
+        .min(0)
+        .max(1)
+        .step(0.02)
+      this.debugFolder
+        .add(this.params, 'sideSpeed')
+        .name('Side Speed')
+        .min(0)
+        .max(1)
+        .step(0.02)
+      this.debugFolder
+        .add(this.params, 'jumpForce')
+        .name('Jump Force')
+        .min(0)
+        .max(300)
+        .step(10)
+    }
   }
 }
