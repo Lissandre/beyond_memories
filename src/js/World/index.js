@@ -91,6 +91,7 @@ export default class World {
       time: this.time,
       camera: this.camera,
       physic: this.physic,
+      debug: this.debug,
     })
     this.container.add(this.perso.container)
   }

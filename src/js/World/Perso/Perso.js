@@ -9,7 +9,7 @@ import {
   Euler,
 } from 'three'
 import { threeToCannon } from 'three-to-cannon'
-import { Body, Box, Vec3 } from 'cannon-es'
+import { Body, Vec3 } from 'cannon-es'
 import Mouse from '@tools/Mouse'
 import { TweenMax } from 'gsap'
 
@@ -19,6 +19,7 @@ export default class Perso {
     this.time = options.time
     this.camera = options.camera
     this.physic = options.physic
+    this.debug = options.debug
 
     // Set up
     this.container = new Object3D()
@@ -29,13 +30,25 @@ export default class Perso {
     this.moveRight = false
     this.rotation = 0
     this.speed = 0
-    this.deceleration = 0.12
     this.canJump = false
+    this.params = {
+      deceleration: 0.12,
+      sideSpeed: 0.06,
+      frontSpeed: 0.1,
+      jumpForce: 180,
+      cameraSpeedX: 0.1,
+      cameraSpeedY: 0.01,
+      cameraMaxY: 3,
+      cameraMinY: 0.5,
+      persoMass: 35,
+      lerpDuration: 0.42,
+    }
 
     this.setPerso()
     this.setPhysic()
     this.setListeners()
     this.setMovements()
+    this.setDebug()
   }
   setPerso() {
     this.perso = new Mesh(
@@ -74,11 +87,11 @@ export default class Perso {
             this.run = true
             break
           case 'Space': // space
-              if (this.canJump) {
-                // this.body.allowSleep = false
-                this.body.applyImpulse(new Vec3(0, 180, 0))
-              }
-              this.canJump = false
+            if (this.canJump) {
+              // this.body.allowSleep = false
+              this.body.applyImpulse(new Vec3(0, this.params.jumpForce, 0))
+            }
+            this.canJump = false
             break
         }
       },
@@ -122,7 +135,7 @@ export default class Perso {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         vec.crossVectors(this.perso.up, vec)
         let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, 0.1)
+        oldp.addScaledVector(vec, this.params.frontSpeed)
         this.body.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
@@ -132,7 +145,7 @@ export default class Perso {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         vec.crossVectors(this.perso.up, vec)
         let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, -0.1)
+        oldp.addScaledVector(vec, -this.params.frontSpeed)
         this.body.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
@@ -141,7 +154,7 @@ export default class Perso {
       if (this.moveLeft) {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, -0.06)
+        oldp.addScaledVector(vec, -this.params.sideSpeed)
         this.body.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
@@ -150,7 +163,7 @@ export default class Perso {
       if (this.moveRight) {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, 0.06)
+        oldp.addScaledVector(vec, this.params.sideSpeed)
         this.body.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
@@ -159,25 +172,31 @@ export default class Perso {
       if (this.mouse.grab === true) {
         this.speed = 0
         this.speedY = 0
-        this.speed = -this.mouse.delta.x * 0.1
-        this.speedY = this.mouse.delta.y * 0.01
+        this.speed = -this.mouse.delta.x * this.params.cameraSpeedX
+        this.speedY = this.mouse.delta.y * this.params.cameraSpeedY
       } else if (
         this.mouse.grab === false &&
         (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)
       ) {
-        Math.sign(this.speed) * this.speed - this.deceleration > 0
-          ? (this.speed -= Math.sign(this.speed) * this.deceleration)
+        Math.sign(this.speed) * this.speed - this.params.deceleration > 0
+          ? (this.speed -= Math.sign(this.speed) * this.params.deceleration)
           : (this.speed = 0)
-        Math.sign(this.speedY) * this.speedY - this.deceleration > 0
-          ? (this.speedY -= Math.sign(this.speedY) * this.deceleration)
+        Math.sign(this.speedY) * this.speedY - this.params.deceleration > 0
+          ? (this.speedY -= Math.sign(this.speedY) * this.params.deceleration)
           : (this.speedY = 0)
       }
       if (this.speedY) {
-        if (this.camera.camera.position.y + this.speedY > 3) {
-          this.camera.camera.position.y = 3
+        if (
+          this.camera.camera.position.y + this.speedY >
+          this.params.cameraMaxY
+        ) {
+          this.camera.camera.position.y = this.params.cameraMaxY
           this.speedY = 0
-        } else if (this.camera.camera.position.y + this.speedY < 0.5) {
-          this.camera.camera.position.y = 0.5
+        } else if (
+          this.camera.camera.position.y + this.speedY <
+          this.params.cameraMinY
+        ) {
+          this.camera.camera.position.y = this.params.cameraMinY
           this.speedY = 0
         } else {
           this.camera.camera.position.y += this.speedY
@@ -199,14 +218,14 @@ export default class Perso {
   lerpOrientation() {
     if (this.camera.container.quaternion != this.body.quaternion) {
       TweenMax.to(this.body.quaternion, {
-        duration: 0.42,
+        duration: this.params.lerpDuration,
         x: this.camera.container.quaternion.x,
         y: this.camera.container.quaternion.y,
         z: this.camera.container.quaternion.z,
         w: this.camera.container.quaternion.w,
       })
       TweenMax.to(this.perso.quaternion, {
-        duration: 0.42,
+        duration: this.params.lerpDuration,
         x: this.camera.container.quaternion.x,
         y: this.camera.container.quaternion.y,
         z: this.camera.container.quaternion.z,
@@ -232,36 +251,23 @@ export default class Perso {
       type: threeToCannon.Type.SPHERE,
     })
     this.body = new Body({
-      mass: 35,
+      mass: this.params.persoMass,
       position: this.center,
       shape: this.shape,
       allowSleep: false,
       angularDamping: 1,
       material: this.physic.groundMaterial,
     })
-
-    // this.body.addShape(this.box)
     this.physic.world.addBody(this.body)
 
     this.body.addEventListener('collide', (e) => {
       let contactNormal = new Vec3()
       let upAxis = new Vec3(0, 1, 0)
       let contact = e.contact
-      // contact.bi and contact.bj are the colliding bodies, and contact.ni is the collision normal.
-      // We do not yet know which one is which! Let's check.
-      if (contact.bi.id == this.body.id)
-        // bi is the player body, flip the contact normal
-        contact.ni.negate(contactNormal)
-      else contactNormal.copy(contact.ni) // bi is something else. Keep the normal as it is
-
-      // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
-      if (contactNormal.dot(upAxis) > 0.5) {
-        // Use a "good" threshold value between 0 and 1 here!
-        this.canJump = true
-        // this.body.allowSleep = true
-      }
-      if (!this.canJump)
-        this.body.allowSleep = false
+      if (contact.bi.id == this.body.id) contact.ni.negate(contactNormal)
+      else contactNormal.copy(contact.ni)
+      if (contactNormal.dot(upAxis) > 0.5) this.canJump = true
+      if (!this.canJump) this.body.allowSleep = false
     })
   }
   setPosition() {
@@ -270,5 +276,67 @@ export default class Perso {
       this.body.position.y,
       this.body.position.z - this.center.z
     )
+  }
+  setDebug() {
+    // this.params = {
+    //   sideSpeed: 0.06,
+    //   frontSpeed: 0.1,
+    //   jumpForce: 180,
+    // }
+    this.debugFolder = this.debug.addFolder('Perso')
+    this.debugFolder
+      .add(this.params, 'deceleration')
+      .name('Camera Deceleration')
+      .min(0)
+      .max(0.5)
+      .step(0.02)
+    this.debugFolder
+      .add(this.params, 'cameraSpeedX')
+      .name('Camera Speed X')
+      .min(0)
+      .max(0.5)
+      .step(0.05)
+    this.debugFolder
+      .add(this.params, 'cameraSpeedY')
+      .name('Camera Speed Y')
+      .min(0)
+      .max(0.5)
+      .step(0.01)
+    this.debugFolder
+      .add(this.params, 'cameraMinY')
+      .name('Camera Min Y')
+      .min(0)
+      .max(4)
+      .step(0.1)
+    this.debugFolder
+      .add(this.params, 'cameraMaxY')
+      .name('Camera Max Y')
+      .min(0)
+      .max(4)
+      .step(0.1)
+    this.debugFolder
+      .add(this.params, 'lerpDuration')
+      .name('Rotation Lerp Duration')
+      .min(0)
+      .max(1)
+      .step(0.02)
+    this.debugFolder
+      .add(this.params, 'frontSpeed')
+      .name('Front Speed')
+      .min(0)
+      .max(1)
+      .step(0.02)
+    this.debugFolder
+      .add(this.params, 'sideSpeed')
+      .name('Side Speed')
+      .min(0)
+      .max(1)
+      .step(0.02)
+    this.debugFolder
+      .add(this.params, 'jumpForce')
+      .name('Jump Force')
+      .min(0)
+      .max(300)
+      .step(10)
   }
 }
