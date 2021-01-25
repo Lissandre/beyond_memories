@@ -8,6 +8,7 @@ import {
   Quaternion,
   Euler,
 } from 'three'
+import { threeToCannon } from 'three-to-cannon'
 import { Body, Box, Vec3 } from 'cannon-es'
 import Mouse from '@tools/Mouse'
 import { TweenMax } from 'gsap'
@@ -46,22 +47,6 @@ export default class Perso {
     this.container.add(this.perso)
   }
   setListeners() {
-    // this.canJump = false
-    // this.contactNormal = new Vec3() // Normal in the contact, pointing *out* of whatever the player touched
-    // this.upAxis = new Vec3(0,1,0)
-    // this.body.addEventListener("collide",function(e){
-    //   this.contact = e.contact
-    //   // contact.bi and contact.bj are the colliding bodies, and contact.ni is the collision normal.
-    //   // We do not yet know which one is which! Let's check.
-    //   if(this.contact.bi.id == this.body.id)  // bi is the player body, flip the contact normal
-    //     this.contact.ni.negate(this.contactNormal)
-    //   else
-    //     this.contactNormal.copy(this.contact.ni) // bi is something else. Keep the normal as it is
-    //     // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
-    //   if(this.contactNormal.dot(this.upAxis) > 0.5) // Use a "good" threshold value between 0 and 1 here!
-    //     this.canJump = true
-    // })
-    // this.velocity = this.body.velocity
     document.addEventListener(
       'keydown',
       (event) => {
@@ -89,10 +74,11 @@ export default class Perso {
             this.run = true
             break
           case 'Space': // space
-            if (this.canJump) {
-              this.body.applyImpulse(new Vec3(0, 180, 0))
-            }
-            this.canJump = false
+              if (this.canJump) {
+                // this.body.allowSleep = false
+                this.body.applyImpulse(new Vec3(0, 180, 0))
+              }
+              this.canJump = false
             break
         }
       },
@@ -242,15 +228,19 @@ export default class Perso {
     this.size.z *= 0.5
     this.calcBox.getCenter(this.center)
 
-    this.box = new Box(new Vec3().copy(this.size))
+    this.shape = threeToCannon(this.perso, {
+      type: threeToCannon.Type.SPHERE,
+    })
     this.body = new Body({
-      mass: 30,
+      mass: 35,
       position: this.center,
+      shape: this.shape,
       allowSleep: false,
       angularDamping: 1,
+      material: this.physic.groundMaterial,
     })
 
-    this.body.addShape(this.box)
+    // this.body.addShape(this.box)
     this.physic.world.addBody(this.body)
 
     this.body.addEventListener('collide', (e) => {
@@ -265,9 +255,13 @@ export default class Perso {
       else contactNormal.copy(contact.ni) // bi is something else. Keep the normal as it is
 
       // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
-      if (contactNormal.dot(upAxis) > 0.5)
+      if (contactNormal.dot(upAxis) > 0.5) {
         // Use a "good" threshold value between 0 and 1 here!
         this.canJump = true
+        // this.body.allowSleep = true
+      }
+      if (!this.canJump)
+        this.body.allowSleep = false
     })
   }
   setPosition() {

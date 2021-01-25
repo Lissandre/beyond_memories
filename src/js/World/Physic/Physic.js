@@ -18,9 +18,13 @@ export default class Physic {
     this.world = new World()
     this.world.gravity.set(0, -9.82, 0)
     this.world.broadphase = new SAPBroadphase(this.world)
+    // this.world.broadphase = new NaiveBroadphase()
+    // this.world.solver = new GSSolver()
     this.world.solver.iterations = 20
+    // this.world.solver.tolerance = 0.1
     this.world.allowSleep = true
     this.world.quatNormalizeFast = true
+    this.world.quatNormalizeSkip = 0
     this.world.bodies.forEach((body) => {
       body.sleepSpeedLimit = 0.01
     })
@@ -33,7 +37,7 @@ export default class Physic {
       {
         friction: 1,
         restitution: 0,
-        contactEquationStiffness: 1000,
+        contactEquationStiffness: 1e9,
       }
     )
     // Add contact material to the world
@@ -71,8 +75,8 @@ export default class Physic {
       this.debugFolder
         .add(this.world.gravity, 'y')
         .name('Gravity')
-        .min(1)
-        .max(15)
+        .min(-10)
+        .max(0.1)
         .step(0.2)
     }
   }

@@ -44,6 +44,7 @@ export default class Floor {
     this.container.body = new Body({
       mass: 0,
       position: this.center,
+      material: this.physic.groundMaterial,
     })
 
     this.container.body.addShape(this.box)
