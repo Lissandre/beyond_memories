@@ -1,6 +1,5 @@
 import { Object3D, HemisphereLight, Color } from 'three'
 
-
 export default class HemisphereLightSource {
   constructor(options) {
     // Set options
@@ -22,9 +21,13 @@ export default class HemisphereLightSource {
     }
   }
   createHemisphereLight() {
-    this.light = new HemisphereLight(this.params.skycolor, this.params.groundcolor, this.params.intensity)
+    this.light = new HemisphereLight(
+      this.params.skycolor,
+      this.params.groundcolor,
+      this.params.intensity
+    )
     this.container.add(this.light)
-    console.log(this.light);
+    console.log(this.light)
   }
   setDebug() {
     // Color debug

@@ -8,7 +8,7 @@ import {
   Quaternion,
   Euler,
 } from 'three'
-import { Body, Box, Ray, Vec3 } from 'cannon-es'
+import { Body, Box, Vec3 } from 'cannon-es'
 import Mouse from '@tools/Mouse'
 import { TweenMax } from 'gsap'
 
@@ -89,8 +89,8 @@ export default class Perso {
             this.run = true
             break
           case 'Space': // space
-            if ( this.canJump ) {
-              this.body.applyImpulse(new Vec3(0,180,0))
+            if (this.canJump) {
+              this.body.applyImpulse(new Vec3(0, 180, 0))
             }
             this.canJump = false
             break
@@ -253,19 +253,20 @@ export default class Perso {
     this.body.addShape(this.box)
     this.physic.world.addBody(this.body)
 
-    this.body.addEventListener("collide", (e) => {
+    this.body.addEventListener('collide', (e) => {
       let contactNormal = new Vec3()
-      let upAxis = new Vec3(0,1,0)
+      let upAxis = new Vec3(0, 1, 0)
       let contact = e.contact
       // contact.bi and contact.bj are the colliding bodies, and contact.ni is the collision normal.
       // We do not yet know which one is which! Let's check.
-      if(contact.bi.id == this.body.id)  // bi is the player body, flip the contact normal
+      if (contact.bi.id == this.body.id)
+        // bi is the player body, flip the contact normal
         contact.ni.negate(contactNormal)
-      else
-        contactNormal.copy(contact.ni) // bi is something else. Keep the normal as it is
+      else contactNormal.copy(contact.ni) // bi is something else. Keep the normal as it is
 
       // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
-      if(contactNormal.dot(upAxis) > 0.5) // Use a "good" threshold value between 0 and 1 here!
+      if (contactNormal.dot(upAxis) > 0.5)
+        // Use a "good" threshold value between 0 and 1 here!
         this.canJump = true
     })
   }

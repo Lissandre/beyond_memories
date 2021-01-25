@@ -1,4 +1,11 @@
-import { Box3, Object3D, Mesh, BoxBufferGeometry, MeshLambertMaterial, Vector3 } from 'three'
+import {
+  Box3,
+  Object3D,
+  Mesh,
+  BoxBufferGeometry,
+  MeshLambertMaterial,
+  Vector3,
+} from 'three'
 import { Body, Box, Vec3 } from 'cannon-es'
 
 export default class Floor {

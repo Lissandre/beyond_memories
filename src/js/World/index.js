@@ -5,7 +5,6 @@ import HemisphereLightSource from './Lights/HemisphereLight'
 import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
-import Sky from './Sky/Sky'
 import Skybox from './Sky/Sky'
 
 export default class World {
@@ -83,7 +82,7 @@ export default class World {
   }
   setFloor() {
     this.floor = new Floor({
-      physic: this.physic
+      physic: this.physic,
     })
     this.container.add(this.floor.container)
   }
@@ -102,7 +101,7 @@ export default class World {
       sphereTopColor: 0x330d75,
       sphereBottomColor: 0xcfc5b9,
       offset: 20,
-      exponent: 2
+      exponent: 2,
     })
     this.container.add(this.sky.container)
   }

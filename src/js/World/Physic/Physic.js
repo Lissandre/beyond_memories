@@ -1,9 +1,4 @@
-import {
-  World,
-  SAPBroadphase,
-  Material,
-  ContactMaterial,
-} from 'cannon-es'
+import { World, SAPBroadphase, Material, ContactMaterial } from 'cannon-es'
 import cannonDebugger from 'cannon-es-debugger'
 
 export default class Physic {
@@ -64,13 +59,15 @@ export default class Physic {
     })
   }
   setDebug() {
-    if(this.debug) {
-      this.physicDebug = {enabled: false}
+    if (this.debug) {
+      this.physicDebug = { enabled: false }
       this.debugFolder = this.debug.addFolder('Physic')
       this.debugFolder
         .add(this.physicDebug, 'enabled')
         .name('Show bodies')
-        .onChange(() => {cannonDebugger(this.scene, this.world.bodies)})
+        .onChange(() => {
+          cannonDebugger(this.scene, this.world.bodies)
+        })
       this.debugFolder
         .add(this.world.gravity, 'y')
         .name('Gravity')

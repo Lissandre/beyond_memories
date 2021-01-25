@@ -1,11 +1,16 @@
-import { Object3D, Vector3, DirectionalLight, Color, SphereBufferGeometry, ShaderMaterial, BackSide, Mesh } from 'three'
+import {
+  Object3D,
+  Color,
+  SphereBufferGeometry,
+  ShaderMaterial,
+  BackSide,
+  Mesh,
+} from 'three'
 import SkyFrag from '@shaders/SkyFrag.frag'
 import SkyVert from '@shaders/SkyVert.vert'
 
 export default class Skybox {
-
   constructor(options) {
-
     //Set options
     this.debug = options.debug
     this.time = options.time
@@ -20,25 +25,24 @@ export default class Skybox {
     this.container = new Object3D()
 
     this.createSkyBox()
-
   }
 
   createSkyBox() {
     this.uniforms = {
-      "topColor": { value: new Color(  this.sphereTopColor ) },
-      "bottomColor": { value: new Color(  this.sphereBottomColor ) },
-      "offset": { value: this.offset },
-      "exponent": { value: this.exponent }
+      topColor: { value: new Color(this.sphereTopColor) },
+      bottomColor: { value: new Color(this.sphereBottomColor) },
+      offset: { value: this.offset },
+      exponent: { value: this.exponent },
     }
-    
-    this.skyGeo = new SphereBufferGeometry( 200, 32, 45)
-    this.skyMat = new ShaderMaterial( {
+
+    this.skyGeo = new SphereBufferGeometry(200, 32, 45)
+    this.skyMat = new ShaderMaterial({
       uniforms: this.uniforms,
       vertexShader: SkyVert,
       fragmentShader: SkyFrag,
-      side: BackSide
+      side: BackSide,
     })
-    this.sky = new Mesh( this.skyGeo, this.skyMat)
+    this.sky = new Mesh(this.skyGeo, this.skyMat)
 
     this.time.on('tick', () => {
       this.date = new Date()
@@ -49,5 +53,4 @@ export default class Skybox {
 
     this.container.add(this.sky)
   }
-
 }
