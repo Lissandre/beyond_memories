@@ -78,6 +78,5 @@ export default class Physic {
         .max(15)
         .step(0.2)
     }
-    cannonDebugger(this.scene, this.world.bodies)
   }
 }
