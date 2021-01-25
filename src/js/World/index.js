@@ -100,7 +100,7 @@ export default class World {
       time: this.time,
       debug: this.debug,
       sphereTopColor: 0x330d75,
-      sphereBottomColor: 0xcfc5b0,
+      sphereBottomColor: 0xcfc5b9,
       offset: 20,
       exponent: 2
     })
