@@ -89,6 +89,7 @@ export default class World {
   setPerso() {
     this.perso = new Perso({
       time: this.time,
+      assets: this.assets,
       camera: this.camera,
       physic: this.physic,
       debug: this.debug,

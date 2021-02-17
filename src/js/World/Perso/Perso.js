@@ -1,8 +1,8 @@
 import {
-  BoxBufferGeometry,
+  // BoxBufferGeometry,
   Box3,
-  Mesh,
-  MeshLambertMaterial,
+  // Mesh,
+  // MeshLambertMaterial,
   Object3D,
   Vector3,
   Quaternion,
@@ -11,12 +11,13 @@ import {
 import { threeToCannon } from 'three-to-cannon'
 import { Body, Vec3 } from 'cannon-es'
 import Mouse from '@tools/Mouse'
-import { TweenMax } from 'gsap'
+// import { TweenMax } from 'gsap'
 
 export default class Perso {
   constructor(options) {
     // Set options
     this.time = options.time
+    this.assets = options.assets
     this.camera = options.camera
     this.physic = options.physic
     this.debug = options.debug
@@ -41,7 +42,7 @@ export default class Perso {
       cameraMaxY: 3,
       cameraMinY: 0.5,
       persoMass: 35,
-      lerpDuration: 0.42,
+      lerpSpeed: 0.005,
     }
 
     this.setPerso()
@@ -51,13 +52,12 @@ export default class Perso {
     this.setDebug()
   }
   setPerso() {
-    this.perso = new Mesh(
-      new BoxBufferGeometry(0.6, 1.5, 0.3),
-      new MeshLambertMaterial({ color: 0xff0000 })
-    )
-    this.perso.position.set(0, 0.75, 0)
+    this.perso = this.assets.models.RobotExpressive.scene
+    this.perso.scale.set(0.2, 0.2, 0.2)
+    this.perso.children[0].rotation.set(0, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
+    console.log(this.assets.models.RobotExpressive);
   }
   setListeners() {
     document.addEventListener(
@@ -216,21 +216,10 @@ export default class Perso {
     })
   }
   lerpOrientation() {
-    if (this.camera.container.quaternion != this.body.quaternion) {
-      TweenMax.to(this.body.quaternion, {
-        duration: this.params.lerpDuration,
-        x: this.camera.container.quaternion.x,
-        y: this.camera.container.quaternion.y,
-        z: this.camera.container.quaternion.z,
-        w: this.camera.container.quaternion.w,
-      })
-      TweenMax.to(this.perso.quaternion, {
-        duration: this.params.lerpDuration,
-        x: this.camera.container.quaternion.x,
-        y: this.camera.container.quaternion.y,
-        z: this.camera.container.quaternion.z,
-        w: this.camera.container.quaternion.w,
-      })
+    const baseQuat = new Quaternion().copy(this.body.quaternion)
+    if ( !baseQuat.equals( this.camera.container.quaternion ) ) {
+      const step = this.params.lerpSpeed * this.time.delta
+      this.perso.quaternion.rotateTowards( this.camera.container.quaternion, step )
     }
   }
   toRadians(angle) {
@@ -247,7 +236,7 @@ export default class Perso {
     this.size.z *= 0.5
     this.calcBox.getCenter(this.center)
 
-    this.shape = threeToCannon(this.perso, {
+    this.shape = threeToCannon(this.perso.children[0], {
       type: threeToCannon.Type.SPHERE,
     })
     this.body = new Body({
@@ -273,7 +262,7 @@ export default class Perso {
   setPosition() {
     this.perso.position.set(
       this.body.position.x - this.center.x,
-      this.body.position.y,
+      this.body.position.y - this.center.y,
       this.body.position.z - this.center.z
     )
   }
@@ -311,11 +300,11 @@ export default class Perso {
         .max(4)
         .step(0.1)
       this.debugFolder
-        .add(this.params, 'lerpDuration')
+        .add(this.params, 'lerpSpeed')
         .name('Rotation Lerp Duration')
         .min(0)
         .max(1)
-        .step(0.02)
+        .step(0.001)
       this.debugFolder
         .add(this.params, 'frontSpeed')
         .name('Front Speed')
