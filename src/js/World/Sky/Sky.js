@@ -8,6 +8,7 @@ import {
 } from 'three'
 import SkyFrag from '@shaders/SkyFrag.frag'
 import SkyVert from '@shaders/SkyVert.vert'
+import Sun from './Sun'
 
 export default class Skybox {
   constructor(options) {
@@ -20,6 +21,10 @@ export default class Skybox {
     this.sphereBottomColor = options.sphereBottomColor
     this.offset = options.offset
     this.exponent = options.exponent
+
+    //Set options for Sun
+    this.color = options.color
+    this.intensity = options.color
 
     // Set up
     this.container = new Object3D()
@@ -44,13 +49,27 @@ export default class Skybox {
     })
     this.sky = new Mesh(this.skyGeo, this.skyMat)
 
+    
     this.time.on('tick', () => {
       this.date = new Date()
       this.hours = this.date.getHours()
       this.minutes = this.date.getMinutes()
       // this.effectController.inclination = this.hours / 12 - 1 + this.minutes / 60 / 24
     })
-
+    
     this.container.add(this.sky)
+
+    this.setSun()
+  }
+
+  setSun() {
+    this.sun = new Sun({
+      debug: this.debug,
+      time: this.time,
+      color: 0xf2ebd0,
+      intensity: 0.3
+    })
+    this.sun.container.position.set(-50, 50,-50)
+    this.container.add(this.sun.container)
   }
 }
