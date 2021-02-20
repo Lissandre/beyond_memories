@@ -1,4 +1,4 @@
-# THREE.js TEMPLATE
+# Game project
 
 ## Requirements & Setup
 You need to have **node.js** installed. 
@@ -19,26 +19,6 @@ $ npm run dev
 
 ### Debug
 Go to your-url/#debug
-
-## Alias
-- **@**: `src/`
-- **@style**: `src/style/`
-- **@fonts**: `src/fonts/`
-- **@models**: `src/models/`
-- **@sounds**: `src/sounds/`
-- **@shaders**: `src/shaders/`
-- **@textures**: `src/textures/`
-- **@js**: `src/js/`
-- **@tools**: `src/js/Tools/`
-- **@world**: `src/js/World/`
-
-## Features
-- eslint
-- prettier
-- babel
-- stylus
-- dat.GUI
-- automatic models / textures / sounds / fonts.json import
 
 ## Deployment
 Build the current application (default output in `dist/`).
