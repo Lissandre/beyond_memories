@@ -6,6 +6,7 @@ import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import MarchingBlob from './marchingBubble/MarchingBubbles'
 
 export default class World {
   constructor(options) {
@@ -35,6 +36,8 @@ export default class World {
     // this.setPhysic()
     // this.setFloor()
     // this.setPerso()
+
+    this.setMarchingBubble()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -104,5 +107,12 @@ export default class World {
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+
+  setMarchingBubble() {
+    this.marchingBubble = new MarchingBlob({
+      time: this.time,
+    })
+    this.container.add(this.marchingBubble.container)
   }
 }
