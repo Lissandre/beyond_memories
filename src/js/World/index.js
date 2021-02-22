@@ -30,11 +30,11 @@ export default class World {
   }
   init() {
     this.setAmbientLight()
-    this.setSky()
+    // this.setSky()
     this.setHemisphereLight()
-    this.setPhysic()
-    this.setFloor()
-    this.setPerso()
+    // this.setPhysic()
+    // this.setFloor()
+    // this.setPerso()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')

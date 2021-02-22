@@ -43,7 +43,7 @@ export default class App {
     this.renderer.gammaFactor = 2.2
     this.renderer.shadowMap.enabled = true
     // Set background color
-    this.renderer.setClearColor(0xfafafa, 1)
+    this.renderer.setClearColor(0xaeaeae, 1)
     // Set renderer pixel ratio & sizes
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
