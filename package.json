@@ -1,7 +1,7 @@
 {
-  "name": "three_template",
-  "version": "3.0.1",
-  "description": "Three template",
+  "name": "beyond_memories",
+  "version": "0.0.1",
+  "description": "Beyond Memories",
   "main": "index.js",
   "dependencies": {
     "cannon-es": "^0.16.0",
