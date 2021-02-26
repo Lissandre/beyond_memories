@@ -6,6 +6,7 @@ import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import Grass from './Grass/Grass'
 
 export default class World {
   constructor(options) {
@@ -32,9 +33,10 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPhysic()
-    this.setFloor()
-    this.setPerso()
+    this.setGrass()
+    // this.setPhysic()
+    // this.setFloor()
+    // this.setPerso()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -106,5 +108,18 @@ export default class World {
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+
+  setGrass() {
+    this.grass = new Grass({
+      time: this.time,
+      GFrequency: 20,
+      GSpeed: 0.5,
+      DepthColor: 0x042808,
+      SurfaceColor: 0x98aa15,
+      ColorOffset: 0,
+      ColorMultiplier: 1.83
+    })
+    this.container.add(this.grass.container)
   }
 }
