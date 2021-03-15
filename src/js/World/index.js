@@ -6,6 +6,7 @@ import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import Butterfly from './Butterfly/Butterfly'
 
 export default class World {
   constructor(options) {
@@ -34,7 +35,8 @@ export default class World {
     this.setHemisphereLight()
     this.setPhysic()
     this.setFloor()
-    this.setPerso()
+    this.setButterfly()
+    // this.setPerso()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -106,5 +108,12 @@ export default class World {
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+  setButterfly() {
+    this.butterfly = new Butterfly({
+      time: this.time,
+      assets: this.assets
+    })
+    this.container.add(this.butterfly.container)
   }
 }
