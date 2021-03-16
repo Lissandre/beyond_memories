@@ -1,5 +1,5 @@
 import { Object3D, PerspectiveCamera } from 'three'
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export default class Camera {
   constructor(options) {
@@ -15,7 +15,7 @@ export default class Camera {
 
     this.setCamera()
     this.setPosition()
-    // this.setOrbitControls()
+    this.setOrbitControls()
   }
   setCamera() {
     // Create camera
@@ -45,32 +45,32 @@ export default class Camera {
     this.container.position.copy(position)
     this.camera.lookAt(this.container.position)
   }
-  // setOrbitControls() {
-  //   // Set orbit control
-  //   this.orbitControls = new OrbitControls(
-  //     this.camera,
-  //     this.renderer.domElement
-  //   )
-  //   this.orbitControls.enabled = true
-  //   this.orbitControls.enableKeys = true
-  //   this.orbitControls.zoomSpeed = 0.5
-  //   this.orbitControls.minDistance = 3
-  //   this.orbitControls.maxDistance = 4
-  //   this.orbitControls.enableZoom = true
-  //   this.orbitControls.enablePan = false
-  //   this.orbitControls.minPolarAngle = Math.PI / 6
-  //   this.orbitControls.maxPolarAngle = Math.PI / 2.7
-  //   this.orbitControls.enableDamping = true
-  //   this.orbitControls.dampingFactor = 0.05
+  setOrbitControls() {
+    // Set orbit control
+    this.orbitControls = new OrbitControls(
+      this.camera,
+      this.renderer.domElement
+    )
+    // this.orbitControls.enabled = true
+    // this.orbitControls.enableKeys = true
+    // this.orbitControls.zoomSpeed = 0.5
+    // this.orbitControls.minDistance = 3
+    // this.orbitControls.maxDistance = 4
+    // this.orbitControls.enableZoom = true
+    // this.orbitControls.enablePan = false
+    // this.orbitControls.minPolarAngle = Math.PI / 6
+    // this.orbitControls.maxPolarAngle = Math.PI / 2.7
+    // this.orbitControls.enableDamping = true
+    // this.orbitControls.dampingFactor = 0.05
 
-  //   // this.orbitControls.target = this.world.perso.container.position
+    // this.orbitControls.target = this.world.perso.container.position
 
-  //   if (this.debug) {
-  //     this.debugFolder = this.debug.addFolder('Camera')
-  //     this.debugFolder.open()
-  //     this.debugFolder
-  //       .add(this.orbitControls, 'enabled')
-  //       .name('Enable Orbit Control')
-  //   }
-  // }
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('Camera')
+      this.debugFolder.open()
+      this.debugFolder
+        .add(this.orbitControls, 'enabled')
+        .name('Enable Orbit Control')
+    }
+  }
 }

@@ -6,6 +6,8 @@ import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import Planet from './Planet/Planet'
+import { Plane } from 'cannon-es'
 
 export default class World {
   constructor(options) {
@@ -15,6 +17,7 @@ export default class World {
     this.assets = options.assets
     this.camera = options.camera
     this.scene = options.scene
+    this.params = options.params
 
     // Set up
     this.container = new Object3D()
@@ -32,9 +35,10 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPhysic()
-    this.setFloor()
-    this.setPerso()
+    // this.setPhysic()
+    // this.setFloor()
+    // this.setPerso()
+    this.setPlanet()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -101,10 +105,19 @@ export default class World {
       time: this.time,
       debug: this.debug,
       sphereTopColor: 0x330d75,
-      sphereBottomColor: 0xcfc5b9,
+      sphereBottomColor: 0xdb81a8,
       offset: 20,
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+
+  setPlanet() {
+    this.planet = new Planet({
+      time: this.time,
+      assets: this.assets,
+      params: this.params
+    })
+    this.container.add(this.planet.container)
   }
 }
