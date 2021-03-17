@@ -21,15 +21,15 @@ export default class Flare {
         for ( let i = 0; i < 250; i ++ ) {
 
             const x = (Math.random() * 2000 - 850)/10;
-					const y = Math.random()*10 - 5;
-					const z = (Math.random() * 2000 - 1500)/10;
+					const y = Math.random()*10 - 7;
+					const z = (Math.random() * 2000 - 1450)/10;
 
             vertices.push( x, y, z );
 
         }
 
         geometry.setAttribute( 'position', new Float32BufferAttribute( vertices, 3 ) )
-        this.materials = new PointsMaterial( { size: 1, map: this.assets.textures.flare, blending: AdditiveBlending, depthTest: true, transparent: true } )
+        this.materials = new PointsMaterial( { size: 0.3, map: this.assets.textures.flare, blending: AdditiveBlending, depthTest: true, transparent: true } )
         this.particles = new Points( geometry, this.materials)
 
         this.container.add(this.particles)
@@ -38,6 +38,8 @@ export default class Flare {
         this.time.on('tick', ()=>{
             this.count += 0.007
             this.container.position.y = Math.sin(this.count)/5
+            this.container.position.x = Math.cos(this.count)/5
+            this.container.rotation.y = Math.sin(this.count)/100
         })
     }
 }
