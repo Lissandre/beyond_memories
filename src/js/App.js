@@ -41,7 +41,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new FogExp2(this.params.fogColor, this.params.fogDensity)
+    // this.scene.fog = new FogExp2(this.params.fogColor, this.params.fogDensity)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,

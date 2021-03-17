@@ -1,5 +1,6 @@
 import {Object3D, Color, UniformsUtils} from 'three'
 import { fogParsVert, fogVert, fogParsFrag, fogFrag } from '@shaders/FogReplace'
+import Flare from './Flare'
 
 export default class Planet {
     constructor(options) {
@@ -16,6 +17,7 @@ export default class Planet {
         // this.setPhysic()
         this.setWorld()
         this.updateShader()
+        this.createParticle( )
     }
 
     setWorld() {
@@ -71,5 +73,13 @@ export default class Planet {
                 this.terrainShader.uniforms.time.value += 0.1
               }
         })
+    }
+
+    createParticle() {
+      this.particle = new Flare({
+        time: this.time,
+        assets: this.assets
+      })
+      this.container.add(this.particle.container)
     }
 }
