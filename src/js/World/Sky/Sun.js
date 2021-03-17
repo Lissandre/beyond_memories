@@ -31,7 +31,7 @@ export default class Sun {
         this.target = new Vector3(0, 0, 0)
 
         this.geometry = new SphereBufferGeometry(5,10,10)
-        this.mat = new MeshPhongMaterial(0xFFFFFF)
+        this.mat = new MeshPhongMaterial(0xfcd303)
         this.sun = new Mesh(this.geometry, this.mat)
         // this.light.target = this.target
 
