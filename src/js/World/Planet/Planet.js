@@ -23,6 +23,14 @@ export default class Planet {
         // this.world.ReceivedShadow = true
         this.world.scale.set(0.25, 0.25, 0.25)
         this.world.position.set(0,-5,0)
+        this.world.traverse((child)=> {
+            if(child.name.includes("Cylinder") || child.name.includes("Cube")) {
+                child.castShadow = true
+            }
+            if(child.name === "SOL") {
+                child.receiveShadow = true
+            }
+        })
 
         this.world.children[4].material.onBeforeCompile = shader => {
             shader.vertexShader = shader.vertexShader.replace(
