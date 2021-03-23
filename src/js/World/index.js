@@ -1,4 +1,4 @@
-import { AxesHelper, Object3D } from 'three'
+import { AxesHelper, Box3, Box3Helper, Object3D } from 'three'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -6,6 +6,7 @@ import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import Elmo from './Elmo/Elmo'
 
 export default class World {
   constructor(options) {
@@ -35,6 +36,8 @@ export default class World {
     this.setPhysic()
     this.setFloor()
     this.setPerso()
+    this.setElmo()
+    this.PlayerEnterPNJArea()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -107,5 +110,31 @@ export default class World {
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+
+  setElmo() {
+    this.elmo = new Elmo({
+      time: this.time,
+      assets: this.assets
+    })
+    this.container.add(this.elmo.container)
+  }
+
+  PlayerEnterPNJArea() {
+    this.elmoBB = new Box3().setFromObject(this.elmo.container)
+    this.helperElmo = new Box3Helper(this.elmoBB, 0x00FF00)
+
+    this.playerBB = new Box3().setFromObject(this.perso.container)
+    this.helperPlayer = new Box3Helper(this.playerBB, 0x00FF00)
+    
+    this.container.add(this.helperElmo, this.helperPlayer)
+
+    this.playerEntered = this.elmoBB.containsBox(this.playerBB)
+
+    if(this.playerEntered === true) {
+      console.log("player in box");
+    }else{
+      console.log("not in");
+    }
   }
 }

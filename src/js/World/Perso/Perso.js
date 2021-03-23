@@ -58,7 +58,6 @@ export default class Perso {
     this.perso.children[0].rotation.set(0, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
-    console.log(this.assets.models.elmo);
   }
   setListeners() {
     document.addEventListener(
