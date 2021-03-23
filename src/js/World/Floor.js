@@ -5,6 +5,7 @@ import {
   BoxBufferGeometry,
   MeshLambertMaterial,
   Vector3,
+  RepeatWrapping
 } from 'three'
 import { Body, Box, Vec3 } from 'cannon-es'
 
@@ -12,6 +13,7 @@ export default class Floor {
   constructor(options) {
     // Set options
     this.physic = options.physic
+    this.assets = options.assets
 
     // Set up
     this.container = new Object3D()
@@ -20,9 +22,13 @@ export default class Floor {
     this.setPhysic()
   }
   setFloor() {
+    this.assets.textures.floor.repeat.set(10, 10);
+    this.assets.textures.floor.wrapS = RepeatWrapping;
+    this.assets.textures.floor.wrapT = RepeatWrapping;
+
     this.floor = new Mesh(
       new BoxBufferGeometry(200, 200, 0.1, 1, 1, 1),
-      new MeshLambertMaterial({ color: 0x959595 })
+      new MeshLambertMaterial({ map: this.assets.textures.floor })
     )
     this.floor.rotateX(-Math.PI / 2)
     this.floor.position.y = -0.05
