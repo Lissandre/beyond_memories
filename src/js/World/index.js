@@ -122,14 +122,12 @@ export default class World {
 
   PlayerEnterPNJArea() {
     this.elmoBB = new Box3().setFromObject(this.elmo.container)
-    this.helperElmo = new Box3Helper(this.elmoBB, 0x00FF00)
+    this.helperElmo = new Box3Helper(this.elmoBB, 0xFF0000)
+  
 
-    this.playerBB = new Box3().setFromObject(this.perso.container)
-    this.helperPlayer = new Box3Helper(this.playerBB, 0x00FF00)
-    
-    this.container.add(this.helperElmo, this.helperPlayer)
+    this.container.add(this.helperElmo)
 
-    this.playerEntered = this.elmoBB.containsBox(this.playerBB)
+    this.playerEntered = this.elmoBB.containsBox(this.perso.playerBB)
 
     if(this.playerEntered === true) {
       console.log("player in box");
