@@ -16,10 +16,14 @@ export default class World {
     this.assets = options.assets
     this.camera = options.camera
     this.scene = options.scene
-
+    this.text_01 = options.text_01
+    this.text_02 = options.text_02
+    
     // Set up
     this.container = new Object3D()
     this.container.name = 'World'
+    
+    this.startText = false
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -119,17 +123,36 @@ export default class World {
     })
     this.container.add(this.elmo.container)
   }
+  openDiagOne() {
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        switch (event.code) {
+          case 'KeyE': // e
+            this.startText = true
+            this.text_01.style.opacity = 0
+            this.text_02.style.opacity = 1
+            break
+        }
+      },
+      false
+    )
+  }
 
   PlayerEnterPNJArea() {
     this.elmoBB = new Box3().setFromObject(this.elmo.container)
 
     this.time.on('tick', ()=> {
       if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+
         this.playerEntered = this.elmoBB.intersectsBox(this.perso.playerBB)
+
         if(this.playerEntered === true) {
-          console.log("player in box");
+          this.text_01.style.opacity = 1
+          this.openDiagOne()
         }else{
-          console.log("not in");
+          this.text_01.style.opacity = 0
+          this.text_02.style.opacity = 0
         }
       }
     })
