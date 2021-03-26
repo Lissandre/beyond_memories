@@ -1,8 +1,6 @@
 import {
-  BoxBufferGeometry,
   BoxGeometry,
   Box3,
-  Box3Helper,
   Mesh,
   // MeshLambertMaterial,
   MeshBasicMaterial,
@@ -66,12 +64,12 @@ export default class Perso {
   }
   setCollider() {
     this.geometry = new BoxGeometry( 1, 1, 1 );
-    this.material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
+    this.material = new MeshBasicMaterial( {color: 0x00ff00, opacity: 0, transparent: true} );
     this.cube = new Mesh( this.geometry, this.material )
     this.cube.position.set(0,0.5,0)
     this.playerBB = new Box3().setFromObject(this.cube)
-      this.helperPlayer = new Box3Helper(this.playerBB, 0xFF0000)
-    this.container.add(this.cube, this.helperPlayer)
+    console.log(this.cube);
+    this.container.add(this.cube)
 }
   setListeners() {
     document.addEventListener(
@@ -150,10 +148,9 @@ export default class Perso {
         vec.crossVectors(this.perso.up, vec)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, this.params.frontSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
         this.cube.position.copy(oldp)
-        this.playerBB = new Box3().setFromObject(this.cube)
-        this.helperPlayer = new Box3Helper(this.playerBB, 0xFF0000)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
@@ -163,6 +160,7 @@ export default class Perso {
         vec.crossVectors(this.perso.up, vec)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, -this.params.frontSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
         this.cube.position.copy(oldp)
         this.setPosition()
@@ -173,6 +171,7 @@ export default class Perso {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, -this.params.sideSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
         this.cube.position.copy(oldp)
         this.setPosition()
@@ -183,6 +182,7 @@ export default class Perso {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, this.params.sideSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
         this.cube.position.copy(oldp)
         this.setPosition()

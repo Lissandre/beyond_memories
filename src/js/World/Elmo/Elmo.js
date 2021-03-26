@@ -25,7 +25,7 @@ export default class Elmo {
 
     setCollider() {
         this.geometry = new BoxGeometry( 4, 4, 4 );
-        this.material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
+        this.material = new MeshBasicMaterial( {color: 0x00ff00, transparent: true, opacity: 0} );
         this.cube = new Mesh( this.geometry, this.material )
         this.cube.position.set(0,1,0)
         this.container.add(this.cube)

@@ -1,4 +1,4 @@
-import { AxesHelper, Box3, Box3Helper, Object3D } from 'three'
+import { AxesHelper, Box3, Object3D } from 'three'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -122,17 +122,17 @@ export default class World {
 
   PlayerEnterPNJArea() {
     this.elmoBB = new Box3().setFromObject(this.elmo.container)
-    this.helperElmo = new Box3Helper(this.elmoBB, 0xFF0000)
-  
 
-    this.container.add(this.helperElmo)
-
-    this.playerEntered = this.elmoBB.containsBox(this.perso.playerBB)
-
-    if(this.playerEntered === true) {
-      console.log("player in box");
-    }else{
-      console.log("not in");
-    }
+    this.time.on('tick', ()=> {
+      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+        this.playerEntered = this.elmoBB.intersectsBox(this.perso.playerBB)
+        if(this.playerEntered === true) {
+          console.log("player in box");
+        }else{
+          console.log("not in");
+        }
+      }
+    })
+    
   }
 }
