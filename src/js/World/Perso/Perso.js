@@ -34,14 +34,14 @@ export default class Perso {
     this.canJump = false
     this.params = {
       deceleration: 0.12,
-      sideSpeed: 0.06,
-      frontSpeed: 0.1,
+      sideSpeed: 0.4,
+      frontSpeed: 0.5,
       jumpForce: 180,
       cameraSpeedX: 0.1,
       cameraSpeedY: 0.01,
       cameraMaxY: 3,
       cameraMinY: 0.5,
-      persoMass: 35,
+      persoMass: 70,
       lerpSpeed: 0.005,
     }
 
@@ -57,7 +57,6 @@ export default class Perso {
     this.perso.children[0].rotation.set(0, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
-    console.log(this.assets.models.RobotExpressive);
   }
   setListeners() {
     document.addEventListener(
@@ -245,7 +244,7 @@ export default class Perso {
       shape: this.shape,
       allowSleep: false,
       angularDamping: 1,
-      material: this.physic.groundMaterial,
+      material: this.physic.charMaterial,
     })
     this.physic.world.addBody(this.body)
 

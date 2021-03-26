@@ -1,4 +1,4 @@
-import { World, SAPBroadphase, Material, ContactMaterial } from 'cannon-es'
+import { World, NaiveBroadphase, Material, ContactMaterial } from 'cannon-es'
 import cannonDebugger from 'cannon-es-debugger'
 
 export default class Physic {
@@ -16,11 +16,11 @@ export default class Physic {
   }
   setWorld() {
     this.world = new World()
-    this.world.gravity.set(0, -9.82, 0)
-    this.world.broadphase = new SAPBroadphase(this.world)
-    // this.world.broadphase = new NaiveBroadphase()
+    this.world.gravity.set(0, -1, 0)
+    // this.world.broadphase = new SAPBroadphase(this.world)
+    this.world.broadphase = new NaiveBroadphase()
     // this.world.solver = new GSSolver()
-    this.world.solver.iterations = 20
+    this.world.solver.iterations = 10
     // this.world.solver.tolerance = 0.1
     this.world.allowSleep = true
     this.world.quatNormalizeFast = true
@@ -30,14 +30,15 @@ export default class Physic {
     })
 
     this.groundMaterial = new Material('groundMaterial')
-    // Adjust constraint equation parameters for ground/ground contact
+    this.charMaterial = new Material('charMaterial')
+
+    // Adjust constraint equation parameters for char/ground contact
     this.ground_ground_cm = new ContactMaterial(
-      this.groundMaterial,
+      this.charMaterial,
       this.groundMaterial,
       {
-        friction: 1,
-        restitution: 0,
-        contactEquationStiffness: 1e9,
+        friction: 200,
+        restitution: 1e-4,
       }
     )
     // Add contact material to the world
