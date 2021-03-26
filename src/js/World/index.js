@@ -83,6 +83,7 @@ export default class World {
   setFloor() {
     this.floor = new Floor({
       physic: this.physic,
+      assets: this.assets,
     })
     this.container.add(this.floor.container)
   }
