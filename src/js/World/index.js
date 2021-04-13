@@ -126,15 +126,33 @@ export default class World {
   openDiagOne() {
     document.addEventListener(
       'keydown',
-      (event) => {
-        switch (event.code) {
-          case 'KeyE': // e
-            this.startText = true
-            this.text_01.style.opacity = 0
-            this.text_02.style.opacity = 1
-            break
+      this.handleKeyE.bind(this),
+      false
+    )
+  }
+
+  handleKeyE(event) {
+    if(!this.playerEnteredInElmo) {
+      return
+    }
+    switch (event.code) {
+      case 'KeyE': // e
+        this.text_01.style.opacity = 0
+        if(this.playerEnteredInElmo) {
+          this.interactWithElmo()
         }
-      },
+        break
+    }
+  }
+
+  interactWithElmo() {
+    this.text_02.style.opacity = 1
+  }
+
+  closeDiag() {
+    document.removeEventListener(
+      'keydown',
+      this.handleKeyE, 
       false
     )
   }
@@ -142,18 +160,21 @@ export default class World {
   PlayerEnterPNJArea() {
     this.elmoBB = new Box3().setFromObject(this.elmo.container)
 
+    this.openDiagOne()
+
     this.time.on('tick', ()=> {
       if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
 
-        this.playerEntered = this.elmoBB.intersectsBox(this.perso.playerBB)
+        this.playerEnteredInElmo = this.elmoBB.intersectsBox(this.perso.playerBB)
 
-        if(this.playerEntered === true) {
+        if(this.playerEnteredInElmo === true) {
           this.text_01.style.opacity = 1
-          this.openDiagOne()
+          
         }else{
           this.text_01.style.opacity = 0
           this.text_02.style.opacity = 0
         }
+
       }
     })
     
