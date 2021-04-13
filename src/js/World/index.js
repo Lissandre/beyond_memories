@@ -169,6 +169,7 @@ export default class World {
 
         if(this.playerEnteredInElmo === true) {
           this.text_01.style.opacity = 1
+          this.text_02.style.opacity = 0
           
         }else{
           this.text_01.style.opacity = 0
