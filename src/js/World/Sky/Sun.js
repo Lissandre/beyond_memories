@@ -19,7 +19,6 @@ export default class Sun {
     createSun() {
         this.light = new DirectionalLight(this.color, this.intensity)
         this.light.castShadow = true
-        console.log(this.light.shadow.camera);
         this.light.shadow.camera.top = 100
         this.light.shadow.camera.bottom = -100
         this.light.shadow.camera.left = -100
@@ -38,6 +37,6 @@ export default class Sun {
         this.helper = new DirectionalLightHelper(this.light, 10)
         this.camHelper = new CameraHelper(this.light.shadow.camera  )
 
-        this.container.add(this.light, this.helper, this.sun, this.camHelper)
+        this.container.add(this.light, this.sun)
     }
 }

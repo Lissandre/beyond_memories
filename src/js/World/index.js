@@ -38,8 +38,8 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setSky()
-    this.setHemisphereLig
-    this.setPlanet()
+    this.setHemisphereLight()
+    // this.setPlanet()
     this.setPhysic()
     this.setFloor()
     this.setPerso()
@@ -93,8 +93,10 @@ export default class World {
   }
   setFloor() {
     this.floor = new Floor({
+      time: this.time,
       physic: this.physic,
       assets: this.assets,
+      params: this.params,
     })
     this.container.add(this.floor.container)
   }
@@ -112,8 +114,8 @@ export default class World {
     this.sky = new Skybox({
       time: this.time,
       debug: this.debug,
-      sphereTopColor: 0x330d75,
-      sphereBottomColor: 0xdb81a8,
+      sphereTopColor: 0x0d0da8,
+      sphereBottomColor: 0x64a6e3,
       offset: 20,
       exponent: 2,
     })
@@ -127,6 +129,7 @@ export default class World {
       params: this.params
     })
     this.container.add(this.planet.container)
+  }
   setButterfly() {
     this.butterfly = new Butterfly({
       time: this.time,

@@ -18,11 +18,11 @@ export default class Flare {
         const geometry = new BufferGeometry();
 		const vertices = [];
 
-        for ( let i = 0; i < 250; i ++ ) {
+        for ( let i = 0; i < 300; i ++ ) {
 
-            const x = (Math.random() * 2000 - 850)/10;
-					const y = Math.random()*10 - 7;
-					const z = (Math.random() * 2000 - 1450)/10;
+            const x = (Math.random() * 2000 - 1000)/8;
+					const y = Math.random()*10;
+					const z = (Math.random() * 2000 - 1000)/8;
 
             vertices.push( x, y, z );
 

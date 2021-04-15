@@ -24,10 +24,10 @@ export default class App {
     this.sizes = new Sizes()
     this.assets = new Assets()
     this.params = {
-      fogColor: 0xdb81a8,
-      fogNearColor: 0xfc4848,
-      fogHorizonColor: 0xe4dcff,
-      fogDensity: 0.02,
+      fogColor: 0x64a6e3,
+      fogNearColor: 0x64a6e3,
+      fogHorizonColor: 0x64a6e3,
+      fogDensity: 0.025,
       fogNoiseSpeed: 50,
       fogNoiseFreq: .0012,
       fogNoiseImpact: 1
@@ -43,7 +43,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    // this.scene.fog = new FogExp2(this.params.fogColor, this.params.fogDensity)
+    this.scene.fog = new FogExp2(this.params.fogColor, this.params.fogDensity)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -112,7 +112,7 @@ export default class App {
       assets: this.assets,
       camera: this.camera,
       scene: this.scene,
-      params: this.params
+      params: this.params,
       text_01: this.text_01,
       text_02: this.text_02
     })
