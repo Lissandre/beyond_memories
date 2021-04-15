@@ -6,6 +6,7 @@
   "dependencies": {
     "cannon-es": "^0.16.0",
     "cannon-es-debugger": "^0.1.1",
+    "core-js": "^3.9.1",
     "gsap": "^3.6.0",
     "stats.js": "^0.17.0",
     "three-to-cannon": "^3.1.0"

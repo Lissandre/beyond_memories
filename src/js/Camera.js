@@ -37,7 +37,7 @@ export default class Camera {
   setPosition() {
     // Set camera position
     this.camera.position.x = 0
-    this.camera.position.y = 1
+    this.camera.position.y = 5
     this.camera.position.z = 3.5
     this.cameraUpdate(this.container.position)
   }
@@ -51,8 +51,8 @@ export default class Camera {
       this.camera,
       this.renderer.domElement
     )
-    // this.orbitControls.enabled = true
-    // this.orbitControls.enableKeys = true
+    this.orbitControls.enabled = true
+    this.orbitControls.enableKeys = true
     // this.orbitControls.zoomSpeed = 0.5
     // this.orbitControls.minDistance = 3
     // this.orbitControls.maxDistance = 4

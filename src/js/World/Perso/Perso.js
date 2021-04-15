@@ -1,8 +1,9 @@
 import {
-  // BoxBufferGeometry,
+  BoxGeometry,
   Box3,
-  // Mesh,
+  Mesh,
   // MeshLambertMaterial,
+  MeshBasicMaterial,
   Object3D,
   Vector3,
   Quaternion,
@@ -34,14 +35,14 @@ export default class Perso {
     this.canJump = false
     this.params = {
       deceleration: 0.12,
-      sideSpeed: 0.06,
-      frontSpeed: 0.1,
+      sideSpeed: 0.4,
+      frontSpeed: 0.5,
       jumpForce: 180,
       cameraSpeedX: 0.1,
       cameraSpeedY: 0.01,
       cameraMaxY: 3,
       cameraMinY: 0.5,
-      persoMass: 35,
+      persoMass: 70,
       lerpSpeed: 0.005,
     }
 
@@ -50,6 +51,7 @@ export default class Perso {
     this.setListeners()
     this.setMovements()
     this.setDebug()
+    this.setCollider()
   }
   setPerso() {
     this.perso = this.assets.models.RobotExpressive.scene
@@ -57,8 +59,16 @@ export default class Perso {
     this.perso.children[0].rotation.set(0, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
-    console.log(this.assets.models.RobotExpressive);
   }
+  setCollider() {
+    this.geometry = new BoxGeometry( 1, 1, 1 );
+    this.material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
+    this.cube = new Mesh( this.geometry, this.material )
+    this.cube.position.set(0,0.5,0)
+    this.playerBB = new Box3().setFromObject(this.cube)
+    console.log(this.cube);
+    this.container.add(this.cube)
+  } 
   setListeners() {
     document.addEventListener(
       'keydown',
@@ -136,7 +146,9 @@ export default class Perso {
         vec.crossVectors(this.perso.up, vec)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, this.params.frontSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
+        this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
@@ -146,7 +158,9 @@ export default class Perso {
         vec.crossVectors(this.perso.up, vec)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, -this.params.frontSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
+        this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
@@ -155,7 +169,9 @@ export default class Perso {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, -this.params.sideSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
+        this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
@@ -164,7 +180,9 @@ export default class Perso {
         vec.setFromMatrixColumn(this.perso.matrix, 0)
         let oldp = new Vector3().copy(this.body.position)
         oldp.addScaledVector(vec, this.params.sideSpeed)
+        this.playerBB.setFromObject(this.cube)
         this.body.position.copy(oldp)
+        this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
         this.lerpOrientation()
@@ -245,7 +263,7 @@ export default class Perso {
       shape: this.shape,
       allowSleep: false,
       angularDamping: 1,
-      material: this.physic.groundMaterial,
+      material: this.physic.charMaterial,
     })
     this.physic.world.addBody(this.body)
 

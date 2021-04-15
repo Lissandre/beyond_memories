@@ -1,4 +1,4 @@
-import { AxesHelper, Object3D } from 'three'
+import { AxesHelper, Object3D, Box3 } from 'three'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -8,6 +8,8 @@ import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Planet from './Planet/Planet'
 import { Plane } from 'cannon-es'
+import Butterfly from './Butterfly/Butterfly'
+import Elmo from './Elmo/Elmo'
 
 export default class World {
   constructor(options) {
@@ -18,6 +20,8 @@ export default class World {
     this.camera = options.camera
     this.scene = options.scene
     this.params = options.params
+    this.text_01 = options.text_01
+    this.text_02 = options.text_02
 
     // Set up
     this.container = new Object3D()
@@ -34,11 +38,14 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setSky()
-    this.setHemisphereLight()
-    // this.setPhysic()
-    // this.setFloor()
-    // this.setPerso()
+    this.setHemisphereLig
     this.setPlanet()
+    this.setPhysic()
+    this.setFloor()
+    this.setPerso()
+    this.setButterfly()
+    this.setElmo()
+    this.PlayerEnterPNJArea()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -87,6 +94,7 @@ export default class World {
   setFloor() {
     this.floor = new Floor({
       physic: this.physic,
+      assets: this.assets,
     })
     this.container.add(this.floor.container)
   }
@@ -119,5 +127,74 @@ export default class World {
       params: this.params
     })
     this.container.add(this.planet.container)
+  setButterfly() {
+    this.butterfly = new Butterfly({
+      time: this.time,
+      assets: this.assets
+    })
+    this.container.add(this.butterfly.container)
+  }
+  setElmo() {
+    this.elmo = new Elmo({
+      time: this.time,
+      assets: this.assets
+    })
+    this.container.add(this.elmo.container)
+  }
+  openDiagOne() {
+    document.addEventListener(
+      'keydown',
+      this.handleKeyE.bind(this),
+      false
+    )
+  }
+
+  handleKeyE(event) {
+    if(!this.playerEnteredInElmo) {
+      return
+    }
+    switch (event.code) {
+      case 'KeyE': // e
+        this.text_01.style.opacity = 0
+        if(this.playerEnteredInElmo) {
+          this.interactWithElmo()
+        }
+        break
+    }
+  }
+
+  interactWithElmo() {
+    this.text_02.style.opacity = 1
+  }
+
+  closeDiag() {
+    document.removeEventListener(
+      'keydown',
+      this.handleKeyE, 
+      false
+    )
+  }
+
+  PlayerEnterPNJArea() {
+    this.elmoBB = new Box3().setFromObject(this.elmo.container)
+
+    this.openDiagOne()
+
+    this.time.on('tick', ()=> {
+      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+
+        this.playerEnteredInElmo = this.elmoBB.intersectsBox(this.perso.playerBB)
+
+        if(this.playerEnteredInElmo === true) {
+          this.text_01.style.opacity = 1
+          this.text_02.style.opacity = 0
+          
+        }else{
+          this.text_01.style.opacity = 0
+          this.text_02.style.opacity = 0
+        }
+
+      }
+    })
   }
 }

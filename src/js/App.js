@@ -16,6 +16,8 @@ export default class App {
   constructor(options) {
     // Set options
     this.canvas = options.canvas
+    this.text_01 = options.text_01
+    this.text_02 = options.text_02
 
     // Set up
     this.time = new Time()
@@ -111,6 +113,8 @@ export default class App {
       camera: this.camera,
       scene: this.scene,
       params: this.params
+      text_01: this.text_01,
+      text_02: this.text_02
     })
     // Add world to scene
     this.scene.add(this.world.container)
