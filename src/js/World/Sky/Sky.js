@@ -40,7 +40,7 @@ export default class Skybox {
       exponent: { value: this.exponent },
     }
 
-    this.skyGeo = new SphereBufferGeometry(200, 32, 45)
+    this.skyGeo = new SphereBufferGeometry(250, 32, 45)
     this.skyMat = new ShaderMaterial({
       uniforms: this.uniforms,
       vertexShader: SkyVert,
@@ -69,7 +69,7 @@ export default class Skybox {
       color: 0xf2ebd0,
       intensity: 0.3
     })
-    this.sun.container.position.set(-50, 50,-50)
+    this.sun.container.position.set(-150, 100,-150)
     this.container.add(this.sun.container)
   }
 }

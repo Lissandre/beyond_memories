@@ -6,6 +6,8 @@ import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import Planet from './Planet/Planet'
+import { Plane } from 'cannon-es'
 import Butterfly from './Butterfly/Butterfly'
 import Elmo from './Elmo/Elmo'
 
@@ -17,6 +19,7 @@ export default class World {
     this.assets = options.assets
     this.camera = options.camera
     this.scene = options.scene
+    this.params = options.params
     this.text_01 = options.text_01
     this.text_02 = options.text_02
 
@@ -35,7 +38,8 @@ export default class World {
   init() {
     this.setAmbientLight()
     this.setSky()
-    this.setHemisphereLight()
+    this.setHemisphereLig
+    this.setPlanet()
     this.setPhysic()
     this.setFloor()
     this.setPerso()
@@ -109,13 +113,20 @@ export default class World {
       time: this.time,
       debug: this.debug,
       sphereTopColor: 0x330d75,
-      sphereBottomColor: 0xcfc5b9,
+      sphereBottomColor: 0xdb81a8,
       offset: 20,
       exponent: 2,
     })
     this.container.add(this.sky.container)
   }
 
+  setPlanet() {
+    this.planet = new Planet({
+      time: this.time,
+      assets: this.assets,
+      params: this.params
+    })
+    this.container.add(this.planet.container)
   setButterfly() {
     this.butterfly = new Butterfly({
       time: this.time,
@@ -185,6 +196,5 @@ export default class World {
 
       }
     })
-    
   }
 }

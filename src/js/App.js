@@ -1,4 +1,7 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, FogExp2, PCFSoftShadowMap } from 'three'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -21,19 +24,26 @@ export default class App {
     this.sizes = new Sizes()
     this.assets = new Assets()
     this.params = {
-      fogColor: 0xcfc5b0,
+      fogColor: 0xdb81a8,
+      fogNearColor: 0xfc4848,
+      fogHorizonColor: 0xe4dcff,
+      fogDensity: 0.02,
+      fogNoiseSpeed: 50,
+      fogNoiseFreq: .0012,
+      fogNoiseImpact: 1
     }
 
     this.setConfig()
     this.setRenderer()
     this.setCamera()
     this.setWorld()
+    // this.setAmbientOcclusion()
   }
   setRenderer() {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new Fog(this.params.fogColor, 1, 80)
+    // this.scene.fog = new FogExp2(this.params.fogColor, this.params.fogDensity)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -44,6 +54,7 @@ export default class App {
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
     this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMap.type = PCFSoftShadowMap
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
@@ -101,6 +112,7 @@ export default class App {
       assets: this.assets,
       camera: this.camera,
       scene: this.scene,
+      params: this.params
       text_01: this.text_01,
       text_02: this.text_02
     })
@@ -114,5 +126,28 @@ export default class App {
       this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this.stats.dom)
     }
+  }
+  setAmbientOcclusion() {
+    this.composer = new EffectComposer( this.renderer );
+    this.renderPass = new RenderPass( this.scene, this.camera.camera );
+    this.saoPass = new SAOPass( this.scene, this.camera.camera, false, true );
+    this.saoPass.params.saoBias = 0.5
+    this.saoPass.params.saoIntensity = 0.0015
+    this.saoPass.params.saoScale = 3
+    this.saoPass.params.saoKernelRadius = 10
+    this.saoPass.params.saoMinResolution = 0
+    this.saoPass.params.saoBlur = false
+    this.saoPass.params.saoBlurRadius = 8
+    this.saoPass.params.saoBlurStdDev = 4
+    this.saoPass.params.saoBlurDepthCutoff = 0.01
+    
+    this.composer.addPass( this.renderPass );
+    this.composer.addPass( this.saoPass );
+
+    this.time.on('tick', ()=> {
+      this.debug && this.stats.begin()
+      this.composer.render()
+      this.debug && this.stats.end()
+    })
   }
 }
