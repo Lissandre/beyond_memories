@@ -37,7 +37,7 @@ export default class Time extends EventEmitter {
       this.delta = 60
     }
     // Add trigger event
-    this.trigger('tick')
+    // this.trigger('tick')
   }
   // Cancel animation frame
   stop() {
