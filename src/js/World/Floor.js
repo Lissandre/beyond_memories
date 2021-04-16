@@ -50,37 +50,39 @@ export default class Floor {
       if(child.name === "Plane") {
           child.receiveShadow = true
       }
-  })
-
-  //   this.floor.children[57].material.onBeforeCompile = shader => {
-  //     shader.vertexShader = shader.vertexShader.replace(
-  //       `#include <fog_pars_vertex>`,
-  //       fogParsVert
-  //     )
-  //     shader.vertexShader = shader.vertexShader.replace(
-  //       `#include <fog_vertex>`,
-  //       fogVert
-  //     )
-  //     shader.fragmentShader = shader.fragmentShader.replace(
-  //       `#include <fog_pars_fragment>`,
-  //       fogParsFrag
-  //     )
-  //     shader.fragmentShader = shader.fragmentShader.replace(
-  //       `#include <fog_fragment>`,
-  //       fogFrag
-  //     )
+    })
+    this.floor.traverse( (child) => {
+      if(child.name === 'SOL') {
+    child.material.onBeforeCompile = shader => {
+      shader.vertexShader = shader.vertexShader.replace(
+        `#include <fog_pars_vertex>`,
+        fogParsVert
+      )
+      shader.vertexShader = shader.vertexShader.replace(
+        `#include <fog_vertex>`,
+        fogVert
+      )
+      shader.fragmentShader = shader.fragmentShader.replace(
+        `#include <fog_pars_fragment>`,
+        fogParsFrag
+      )
+      shader.fragmentShader = shader.fragmentShader.replace(
+        `#include <fog_fragment>`,
+        fogFrag
+      )
   
-  //     const uniforms = ({
-  //       fogNearColor: { value: new Color(this.params.fogNearColor) },
-  //       fogNoiseFreq: { value: this.params.fogNoiseFreq },
-  //       fogNoiseSpeed: { value: this.params.fogNoiseSpeed },
-  //       fogNoiseImpact: { value: this.params.fogNoiseImpact },
-  //       time: { value: 0 }
-  //     });
+      const uniforms = ({
+        fogNearColor: { value: new Color(this.params.fogNearColor) },
+        fogNoiseFreq: { value: this.params.fogNoiseFreq },
+        fogNoiseSpeed: { value: this.params.fogNoiseSpeed },
+        fogNoiseImpact: { value: this.params.fogNoiseImpact },
+        time: { value: 0 }
+      });
   
-  //     shader.uniforms = UniformsUtils.merge([shader.uniforms, uniforms])
-  //     this.terrainShader = shader
-  // }
+      shader.uniforms = UniformsUtils.merge([shader.uniforms, uniforms])
+      this.terrainShader = shader
+  }
+    }})
     this.floor.scale.set(0.2, 0.2, 0.2)
     this.container.add(this.floor)
   }
