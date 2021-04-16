@@ -51,8 +51,6 @@ export default class Floor {
       }
   })
 
-    console.log(this.floor.children);
-
     this.floor.children[57].material.onBeforeCompile = shader => {
       shader.vertexShader = shader.vertexShader.replace(
         `#include <fog_pars_vertex>`,
