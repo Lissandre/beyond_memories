@@ -43,8 +43,9 @@ export default class Floor {
     this.floor.position.y = 0.3
 
     this.floor.traverse((child)=> {
-      if(child.name.includes("Cylinder") || child.name.includes("Cube")) {
+      if(child.name.includes("Cylinder") || child.name.includes("Cube") || child.name.includes("Cone")) {
           child.castShadow = true
+          if(child.material){child.material.transparent = true}
       }
       if(child.name === "Plane") {
           child.receiveShadow = true

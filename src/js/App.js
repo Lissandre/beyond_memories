@@ -56,9 +56,11 @@ export default class App {
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
     // Set background color
-    this.renderer.setClearColor(0xfafafa, 1)
+    this.renderer.setClearColor(0xffffff, 0.5)
+    const maxDPR = 2
+    const DPR = Math.min(maxDPR, window.devicePixelRatio)
     // Set renderer pixel ratio & sizes
-    this.renderer.setPixelRatio(window.devicePixelRatio)
+    this.renderer.setPixelRatio(DPR)
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     // Resize renderer on resize event
     this.sizes.on('resize', () => {
