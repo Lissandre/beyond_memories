@@ -16,7 +16,7 @@ export default class Physic {
   }
   setWorld() {
     this.world = new World()
-    this.world.gravity.set(0, -1, 0)
+    this.world.gravity.set(0, -4.4, 0)
     // this.world.broadphase = new SAPBroadphase(this.world)
     this.world.broadphase = new NaiveBroadphase()
     // this.world.solver = new GSSolver()
