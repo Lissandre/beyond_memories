@@ -25,12 +25,12 @@ export default class App {
     this.assets = new Assets()
     this.params = {
       fogColor: 0x64a6e3,
-      fogNearColor: 0x64a6e3,
-      fogHorizonColor: 0x64a6e3,
+      fogNearColor: 0x000000,
+      fogHorizonColor: 0xffffff,
       fogDensity: 0.025,
-      fogNoiseSpeed: 50,
-      fogNoiseFreq: .0012,
-      fogNoiseImpact: 1
+      fogNoiseSpeed: 5,
+      fogNoiseFreq: .005,
+      fogNoiseImpact: 2
     }
 
     this.setConfig()
