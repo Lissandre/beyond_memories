@@ -1,5 +1,7 @@
 import { AxesHelper, Box3, Object3D } from 'three'
 
+import Camera from '../Camera'
+
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
 import Physic from './Physic/Physic'
@@ -8,6 +10,7 @@ import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Elmo from './Elmo/Elmo'
 import VideoScreen from './VideoScreen/VideoScreen'
+
 
 export default class World {
   constructor(options) {
@@ -20,6 +23,8 @@ export default class World {
     this.text_01 = options.text_01
     this.text_02 = options.text_02
     this.video = options.video
+    this.sizes = options.sizes
+    this.renderer = options.renderer
     
     // Set up
     this.container = new Object3D()
@@ -134,7 +139,16 @@ export default class World {
     this.container.add(this.videoScreen.container)
   }
 
-
+  setCameraForVideo() {
+    console.log('create video camera');
+    this.cameraVideo = new Camera({
+      sizes: this.sizes,
+      renderer: this.renderer,
+      debug: this.debug
+    })
+    this.cameraVideo.container.position.set(0,0.1,-12 )
+    this.scene.add(this.cameraVideo.container)
+  }
 
   openDiagOne() {
     document.addEventListener(
@@ -160,6 +174,7 @@ export default class World {
 
   interactWithElmo() {
     this.text_01.style.opacity = 0
+    this.setCameraForVideo()
     this.setVideo()
   }
 
@@ -173,6 +188,7 @@ export default class World {
 
   PlayerEnterPNJArea() {
     this.elmoBB = new Box3().setFromObject(this.elmo.container)
+    
 
     this.openDiagOne()
 
@@ -183,11 +199,12 @@ export default class World {
 
         if(this.playerEnteredInElmo === true) {
           this.text_01.style.opacity = 1
-          
         }else{
           this.text_01.style.opacity = 0
-          this.container.remove(this.videoScreen.container)
-          this.videoScreen.videoLoad.pause()
+          if(this.videoScreen) {
+            this.container.remove(this.videoScreen.container)
+            this.videoScreen.videoLoad.pause()
+          }
         }
 
       }

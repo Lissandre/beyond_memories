@@ -27,8 +27,13 @@ export default class App {
 
     this.setConfig()
     this.setRenderer()
+    this.init()
     this.setCamera()
     this.setWorld()
+  }
+
+  init() {
+    document.addEventListener('keydown', this.handleKeyEscape.bind(this), false)
   }
   setRenderer() {
     // Set scene
@@ -57,11 +62,24 @@ export default class App {
         this.sizes.viewport.height
       )
     })
+    
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
-      this.renderer.render(this.scene, this.camera.camera)
+
+      // console.log(this.world.container);
+      const hasVideoScreen = this.world.container.children.some((child)=>{
+        return child.name === "VideoScreen"
+      })
+      if(hasVideoScreen) {
+        this.renderer.render(this.scene, this.world.cameraVideo.camera)
+      }else {
+        this.renderer.render(this.scene, this.camera.camera)
+        // Redonne la possibilité de le remettre a true (re afficher la cam plan)
+        // this.requestCameraNormal = false
+      }
+
       // }
       this.debug && this.stats.end()
     })
@@ -84,6 +102,7 @@ export default class App {
         })
     }
   }
+
   setCamera() {
     // Create camera instance
     this.camera = new Camera({
@@ -94,6 +113,7 @@ export default class App {
     // Add camera to scene
     this.scene.add(this.camera.container)
   }
+
   setWorld() {
     // Create world instance
     this.world = new World({
@@ -104,7 +124,9 @@ export default class App {
       scene: this.scene,
       text_01: this.text_01,
       text_02: this.text_02,
-      video: this.video
+      video: this.video,
+      sizes: this.sizes,
+      renderer: this.renderer
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -116,5 +138,14 @@ export default class App {
       this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this.stats.dom)
     }
+  }
+
+  handleKeyEscape(event) {
+    switch (event.code) {
+        case 'Escape': // e
+          this.world.container.remove(this.world.videoScreen.container)
+          console.log('escape');
+          break
+      }
   }
 }
