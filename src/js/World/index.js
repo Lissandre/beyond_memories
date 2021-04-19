@@ -7,6 +7,7 @@ import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Elmo from './Elmo/Elmo'
+import VideoScreen from './VideoScreen/VideoScreen'
 
 export default class World {
   constructor(options) {
@@ -18,6 +19,7 @@ export default class World {
     this.scene = options.scene
     this.text_01 = options.text_01
     this.text_02 = options.text_02
+    this.video = options.video
     
     // Set up
     this.container = new Object3D()
@@ -123,6 +125,17 @@ export default class World {
     })
     this.container.add(this.elmo.container)
   }
+
+  setVideo() {
+    this.videoScreen = new VideoScreen({
+      time: this.time,
+      video: this.video
+    })
+    this.container.add(this.videoScreen.container)
+  }
+
+
+
   openDiagOne() {
     document.addEventListener(
       'keydown',
@@ -146,7 +159,8 @@ export default class World {
   }
 
   interactWithElmo() {
-    this.text_02.style.opacity = 1
+    this.text_01.style.opacity = 0
+    this.setVideo()
   }
 
   closeDiag() {
@@ -169,11 +183,11 @@ export default class World {
 
         if(this.playerEnteredInElmo === true) {
           this.text_01.style.opacity = 1
-          this.text_02.style.opacity = 0
           
         }else{
           this.text_01.style.opacity = 0
-          this.text_02.style.opacity = 0
+          this.container.remove(this.videoScreen.container)
+          this.videoScreen.videoLoad.pause()
         }
 
       }

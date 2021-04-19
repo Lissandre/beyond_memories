@@ -15,6 +15,7 @@ export default class App {
     this.canvas = options.canvas
     this.text_01 = options.text_01
     this.text_02 = options.text_02
+    this.video = options.video
 
     // Set up
     this.time = new Time()
@@ -102,7 +103,8 @@ export default class App {
       camera: this.camera,
       scene: this.scene,
       text_01: this.text_01,
-      text_02: this.text_02
+      text_02: this.text_02,
+      video: this.video
     })
     // Add world to scene
     this.scene.add(this.world.container)
