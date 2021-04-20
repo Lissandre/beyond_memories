@@ -1,4 +1,4 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { Color, Fog, Scene, sRGBEncoding, Vector3, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -62,6 +62,8 @@ export default class App {
         this.sizes.viewport.height
       )
     })
+
+    this.lookScreenPos = new Vector3(0,0.1,-12)
     
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
@@ -74,8 +76,10 @@ export default class App {
       })
       if(hasVideoScreen) {
         this.renderer.render(this.scene, this.world.cameraVideo.camera)
+        this.world.cameraVideo.container.position.lerp(this.lookScreenPos, 0.1)
       }else {
-        this.renderer.render(this.scene, this.camera.camera)
+          this.renderer.render(this.scene, this.camera.camera)
+        
         // Redonne la possibilité de le remettre a true (re afficher la cam plan)
         // this.requestCameraNormal = false
       }
@@ -144,6 +148,7 @@ export default class App {
     switch (event.code) {
         case 'Escape': // e
           this.world.container.remove(this.world.videoScreen.container)
+          this.world.videoScreen.videoLoad.pause()
           console.log('escape');
           break
       }

@@ -46,6 +46,7 @@ export default class World {
     this.setHemisphereLight()
     this.setPhysic()
     this.setFloor()
+    this.setCameraForVideo()
     this.setPerso()
     this.setElmo()
     this.PlayerEnterPNJArea()
@@ -106,6 +107,7 @@ export default class World {
       time: this.time,
       assets: this.assets,
       camera: this.camera,
+      cameraVideoScreen: this.cameraVideo,
       physic: this.physic,
       debug: this.debug,
     })
@@ -174,7 +176,6 @@ export default class World {
 
   interactWithElmo() {
     this.text_01.style.opacity = 0
-    this.setCameraForVideo()
     this.setVideo()
   }
 

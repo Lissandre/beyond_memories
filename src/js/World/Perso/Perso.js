@@ -21,6 +21,7 @@ export default class Perso {
     this.time = options.time
     this.assets = options.assets
     this.camera = options.camera
+    this.cameraVideoScreen = options.cameraVideoScreen
     this.physic = options.physic
     this.debug = options.debug
 
@@ -153,6 +154,7 @@ export default class Perso {
         this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
+        this.cameraVideoScreen.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveBackward) {
@@ -165,6 +167,7 @@ export default class Perso {
         this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
+        this.cameraVideoScreen.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveLeft) {
@@ -176,6 +179,7 @@ export default class Perso {
         this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
+        this.cameraVideoScreen.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.moveRight) {
@@ -187,6 +191,7 @@ export default class Perso {
         this.cube.position.copy(oldp)
         this.setPosition()
         this.camera.cameraUpdate(this.perso.position)
+        this.cameraVideoScreen.cameraUpdate(this.perso.position)
         this.lerpOrientation()
       }
       if (this.mouse.grab === true) {
