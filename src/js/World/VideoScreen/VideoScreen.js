@@ -25,7 +25,7 @@ export default class VideoScreen {
         this.isPlayed = true
         this.texture = new VideoTexture(this.videoLoad);
         this.geo = new PlaneGeometry( 2, 1.125 );
-        this.mat = new MeshBasicMaterial( {map: this.texture, transparent: true, opacity: 0.35, color: 0x0000FF} );
+        this.mat = new MeshBasicMaterial( {map: this.texture} );
         this.plane = new Mesh( this.geo, this.mat );
         this.container.add(this.plane)
         this.container.position.set(0,1,-10)
