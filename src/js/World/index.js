@@ -25,6 +25,9 @@ export default class World {
     this.video = options.video
     this.sizes = options.sizes
     this.renderer = options.renderer
+    this.hasVideoScreen = options.hasVideoScreen
+    this.appThis = options.appThis
+
     
     // Set up
     this.container = new Object3D()
@@ -108,8 +111,10 @@ export default class World {
       assets: this.assets,
       camera: this.camera,
       cameraVideoScreen: this.cameraVideo,
+      hasVideoScreen: this.hasVideoScreen,
       physic: this.physic,
       debug: this.debug,
+      appThis: this.appThis
     })
     this.container.add(this.perso.container)
   }

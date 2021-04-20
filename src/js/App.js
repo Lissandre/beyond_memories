@@ -16,6 +16,7 @@ export default class App {
     this.text_01 = options.text_01
     this.text_02 = options.text_02
     this.video = options.video
+    this.hasVideoScreen = false
 
     // Set up
     this.time = new Time()
@@ -71,10 +72,14 @@ export default class App {
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
 
       // console.log(this.world.container);
-      const hasVideoScreen = this.world.container.children.some((child)=>{
-        return child.name === "VideoScreen"
+      this.world.container.children.some((child)=>{
+        if(child.name === "VideoScreen") {
+          this.hasVideoScreen = true
+        } else {
+          this.hasVideoScreen = false
+        }
       })
-      if(hasVideoScreen) {
+      if(this.hasVideoScreen) {
         this.renderer.render(this.scene, this.world.cameraVideo.camera)
         this.world.cameraVideo.container.position.lerp(this.lookScreenPos, 0.1)
       }else {
@@ -130,7 +135,9 @@ export default class App {
       text_02: this.text_02,
       video: this.video,
       sizes: this.sizes,
-      renderer: this.renderer
+      renderer: this.renderer,
+      hasVideoScreen: this.hasVideoScreen,
+      appThis: this 
     })
     // Add world to scene
     this.scene.add(this.world.container)

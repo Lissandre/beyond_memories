@@ -22,8 +22,11 @@ export default class Perso {
     this.assets = options.assets
     this.camera = options.camera
     this.cameraVideoScreen = options.cameraVideoScreen
+    this.appThis = options.appThis
+    this.hasVideoScreen = options.hasVideoScreen
     this.physic = options.physic
     this.debug = options.debug
+
 
     // Set up
     this.container = new Object3D()
@@ -144,99 +147,103 @@ export default class Perso {
   setMovements() {
     let vec = new Vector3()
     this.time.on('tick', () => {
-      if (this.moveForward) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        vec.crossVectors(this.perso.up, vec)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, this.params.frontSpeed)
-        this.playerBB.setFromObject(this.cube)
-        this.body.position.copy(oldp)
-        this.cube.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.cameraVideoScreen.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
-      }
-      if (this.moveBackward) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        vec.crossVectors(this.perso.up, vec)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, -this.params.frontSpeed)
-        this.playerBB.setFromObject(this.cube)
-        this.body.position.copy(oldp)
-        this.cube.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.cameraVideoScreen.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
-      }
-      if (this.moveLeft) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, -this.params.sideSpeed)
-        this.playerBB.setFromObject(this.cube)
-        this.body.position.copy(oldp)
-        this.cube.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.cameraVideoScreen.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
-      }
-      if (this.moveRight) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, this.params.sideSpeed)
-        this.playerBB.setFromObject(this.cube)
-        this.body.position.copy(oldp)
-        this.cube.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.cameraVideoScreen.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
-      }
-      if (this.mouse.grab === true) {
-        this.speed = 0
-        this.speedY = 0
-        this.speed = -this.mouse.delta.x * this.params.cameraSpeedX
-        this.speedY = this.mouse.delta.y * this.params.cameraSpeedY
-      } else if (
-        this.mouse.grab === false &&
-        (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)
-      ) {
-        Math.sign(this.speed) * this.speed - this.params.deceleration > 0
-          ? (this.speed -= Math.sign(this.speed) * this.params.deceleration)
-          : (this.speed = 0)
-        Math.sign(this.speedY) * this.speedY - this.params.deceleration > 0
-          ? (this.speedY -= Math.sign(this.speedY) * this.params.deceleration)
-          : (this.speedY = 0)
-      }
-      if (this.speedY) {
-        if (
-          this.camera.camera.position.y + this.speedY >
-          this.params.cameraMaxY
-        ) {
-          this.camera.camera.position.y = this.params.cameraMaxY
-          this.speedY = 0
-        } else if (
-          this.camera.camera.position.y + this.speedY <
-          this.params.cameraMinY
-        ) {
-          this.camera.camera.position.y = this.params.cameraMinY
-          this.speedY = 0
-        } else {
-          this.camera.camera.position.y += this.speedY
+      if(this.appThis.hasVideoScreen === false) {
+        if (this.moveForward) {
+          vec.setFromMatrixColumn(this.perso.matrix, 0)
+          vec.crossVectors(this.perso.up, vec)
+          let oldp = new Vector3().copy(this.body.position)
+          oldp.addScaledVector(vec, this.params.frontSpeed)
+          this.playerBB.setFromObject(this.cube)
+          this.body.position.copy(oldp)
+          this.cube.position.copy(oldp)
+          this.setPosition()
+          this.camera.cameraUpdate(this.perso.position)
+          this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.lerpOrientation()
         }
-      }
-      this.camera.camera.lookAt(this.camera.container.position)
-      this.deltaRotationQuaternion = new Quaternion().setFromEuler(
-        new Euler(0, this.toRadians(this.speed), 0, 'XYZ')
-      )
-      this.camera.container.quaternion.multiplyQuaternions(
-        this.deltaRotationQuaternion,
-        this.camera.container.quaternion
-      )
-      if (this.perso.position != this.body.position) {
-        this.setPosition()
+        if (this.moveBackward) {
+          vec.setFromMatrixColumn(this.perso.matrix, 0)
+          vec.crossVectors(this.perso.up, vec)
+          let oldp = new Vector3().copy(this.body.position)
+          oldp.addScaledVector(vec, -this.params.frontSpeed)
+          this.playerBB.setFromObject(this.cube)
+          this.body.position.copy(oldp)
+          this.cube.position.copy(oldp)
+          this.setPosition()
+          this.camera.cameraUpdate(this.perso.position)
+          this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.lerpOrientation()
+        }
+        if (this.moveLeft) {
+          vec.setFromMatrixColumn(this.perso.matrix, 0)
+          let oldp = new Vector3().copy(this.body.position)
+          oldp.addScaledVector(vec, -this.params.sideSpeed)
+          this.playerBB.setFromObject(this.cube)
+          this.body.position.copy(oldp)
+          this.cube.position.copy(oldp)
+          this.setPosition()
+          this.camera.cameraUpdate(this.perso.position)
+          this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.lerpOrientation()
+        }
+        if (this.moveRight) {
+          vec.setFromMatrixColumn(this.perso.matrix, 0)
+          let oldp = new Vector3().copy(this.body.position)
+          oldp.addScaledVector(vec, this.params.sideSpeed)
+          this.playerBB.setFromObject(this.cube)
+          this.body.position.copy(oldp)
+          this.cube.position.copy(oldp)
+          this.setPosition()
+          this.camera.cameraUpdate(this.perso.position)
+          this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.lerpOrientation()
+        }
+        if (this.mouse.grab === true) {
+          this.speed = 0
+          this.speedY = 0
+          this.speed = -this.mouse.delta.x * this.params.cameraSpeedX
+          this.speedY = this.mouse.delta.y * this.params.cameraSpeedY
+        } else if (
+          this.mouse.grab === false &&
+          (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)
+        ) {
+          Math.sign(this.speed) * this.speed - this.params.deceleration > 0
+            ? (this.speed -= Math.sign(this.speed) * this.params.deceleration)
+            : (this.speed = 0)
+          Math.sign(this.speedY) * this.speedY - this.params.deceleration > 0
+            ? (this.speedY -= Math.sign(this.speedY) * this.params.deceleration)
+            : (this.speedY = 0)
+        }
+        if (this.speedY) {
+          if (
+            this.camera.camera.position.y + this.speedY >
+            this.params.cameraMaxY
+          ) {
+            this.camera.camera.position.y = this.params.cameraMaxY
+            this.speedY = 0
+          } else if (
+            this.camera.camera.position.y + this.speedY <
+            this.params.cameraMinY
+          ) {
+            this.camera.camera.position.y = this.params.cameraMinY
+            this.speedY = 0
+          } else {
+            this.camera.camera.position.y += this.speedY
+          }
+        }
+        this.camera.camera.lookAt(this.camera.container.position)
+        this.deltaRotationQuaternion = new Quaternion().setFromEuler(
+          new Euler(0, this.toRadians(this.speed), 0, 'XYZ')
+        )
+        this.camera.container.quaternion.multiplyQuaternions(
+          this.deltaRotationQuaternion,
+          this.camera.container.quaternion
+        )
+        if (this.perso.position != this.body.position) {
+          this.setPosition()
+        }
+      } else {
+        return
       }
     })
   }
