@@ -173,7 +173,9 @@ export default class World {
       case 'KeyE': // e
         this.text_01.style.opacity = 0
         if(this.playerEnteredInElmo) {
-          this.interactWithElmo()
+          if(this.appThis.hasVideoScreen === false) {
+            this.interactWithElmo()
+          }
         }
         break
     }
