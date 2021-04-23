@@ -9,6 +9,8 @@ import Assets from '@tools/Loader'
 import Camera from './Camera'
 import World from '@world/index'
 
+import data from '../data/object.json'
+
 export default class App {
   constructor(options) {
     // Set options
@@ -17,6 +19,9 @@ export default class App {
     this.text_02 = options.text_02
     this.video = options.video
     this.hasVideoScreen = false
+    this.openInventory = options.openInventory
+    this.closeInventory = options.closeInventory
+    this.body = options.body
 
     // Set up
     this.time = new Time()
@@ -31,6 +36,8 @@ export default class App {
     this.init()
     this.setCamera()
     this.setWorld()
+    this.openInventoryMethod()
+    this.closeInventoryMethod()
   }
 
   init() {
@@ -73,7 +80,7 @@ export default class App {
 
       // console.log(this.world.container);
       this.world.container.children.some((child)=>{
-        if(child.name === "VideoScreen") {
+        if(child.name === data.monde_1[1].name) {
           this.hasVideoScreen = true
         } else {
           this.hasVideoScreen = false
@@ -159,5 +166,17 @@ export default class App {
           console.log('escape');
           break
       }
+  }
+
+  openInventoryMethod() {
+    this.openInventory.addEventListener('click', ()=> {
+      this.body.classList.add('open_inventory')
+    })
+  }
+
+  closeInventoryMethod() {
+    this.closeInventory.addEventListener('click', ()=> {
+      this.body.classList.remove('open_inventory')
+    })
   }
 }

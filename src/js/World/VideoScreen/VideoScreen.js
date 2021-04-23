@@ -1,5 +1,6 @@
 import { Object3D, PlaneGeometry, MeshBasicMaterial, Mesh, VideoTexture } from 'three'
 import video from '@textures/video.mp4'
+import data from '../../../data/object.json'
 
 export default class VideoScreen {
     constructor(options) {
@@ -7,10 +8,15 @@ export default class VideoScreen {
         this.time = options.time
         this.video = options.video
 
-        this.container = new Object3D()
-        this.container.name = "VideoScreen"
+        this.data = data.monde_1[1]
 
+        this.container = new Object3D()
+        this.container.name = this.data.name
         this.isPlayed = false
+
+
+        this.tabObject = [this.data]
+        console.log(this.tabObject);
 
         this.setPlane()
     

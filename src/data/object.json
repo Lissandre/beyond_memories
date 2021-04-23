@@ -1,0 +1,24 @@
+{
+    "monde_1": {
+        "0": {
+            "id": 0,
+            "mesh": "elmo",
+            "name": "elmo_statue",
+            "description": "Elmo en format statue pour interagir avec",
+            "type": "object",
+            "links": {
+                "image": "src/assets/objects/elmo.png"
+            }
+        },
+        "1": {
+            "id": 1,
+            "name": "pizza_video",
+            "description": "Fameux meme internet avec une pizza qui danse",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "src/assets/objects/elmo.png"
+            }
+        }
+    }
+}
