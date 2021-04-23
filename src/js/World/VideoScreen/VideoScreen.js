@@ -13,6 +13,7 @@ export default class VideoScreen {
         this.container = new Object3D()
         this.container.name = this.data.name
         this.isPlayed = false
+        this.isCollected = false
 
 
         this.tabObject = [this.data]
@@ -27,7 +28,6 @@ export default class VideoScreen {
         console.log(document.querySelector('.video'));
         this.videoLoad.src = video;
         this.videoLoad.load();
-        this.videoLoad.play();
         this.isPlayed = true
         this.texture = new VideoTexture(this.videoLoad);
         this.geo = new PlaneGeometry( 2, 1.125 );

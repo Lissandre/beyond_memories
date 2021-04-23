@@ -34,6 +34,7 @@ export default class World {
     this.container.name = 'World'
     
     this.startText = false
+    this.playerInventory = []
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -50,6 +51,7 @@ export default class World {
     this.setPhysic()
     this.setFloor()
     this.setCameraForVideo()
+    this.setVideo()
     this.setPerso()
     this.setElmo()
     this.PlayerEnterPNJArea()
@@ -143,7 +145,6 @@ export default class World {
       time: this.time,
       video: this.video
     })
-    this.container.add(this.videoScreen.container)
   }
 
   setCameraForVideo() {
@@ -163,6 +164,11 @@ export default class World {
       this.handleKeyE.bind(this),
       false
     )
+    document.addEventListener(
+      'keydown',
+      this.handleKeyF.bind(this),
+      false
+    )
   }
 
   handleKeyE(event) {
@@ -173,8 +179,26 @@ export default class World {
       case 'KeyE': // e
         this.text_01.style.opacity = 0
         if(this.playerEnteredInElmo) {
-          if(this.appThis.hasVideoScreen === false) {
+          if(this.appThis.hasVideoScreen === false && this.videoScreen.isCollected === false) {
             this.interactWithElmo()
+          }
+        }
+        break
+    }
+  }
+
+  handleKeyF(event) {
+    if(!this.playerEnteredInElmo) {
+      return
+    }
+    switch (event.code) {
+      case 'KeyF': // f
+        this.text_01.style.opacity = 0
+        if(this.playerEnteredInElmo) {
+          if(this.videoScreen.isCollected === false){
+            this.collecteObject()
+          }else {
+            return
           }
         }
         break
@@ -183,13 +207,30 @@ export default class World {
 
   interactWithElmo() {
     this.text_01.style.opacity = 0
-    this.setVideo()
+    this.container.add(this.videoScreen.container)
+    this.videoScreen.videoLoad.play()
+  }
+
+  collecteObject() {
+    this.text_01.style.opacity = 0
+    if(this.videoScreen.isCollected === false){
+      this.videoScreen.isCollected = true
+      this.container.remove(this.videoScreen.container)
+      this.videoScreen.videoLoad.pause()
+      this.playerInventory.push(this.videoScreen.data)
+      console.log(this.playerInventory);
+    }
   }
 
   closeDiag() {
     document.removeEventListener(
       'keydown',
       this.handleKeyE, 
+      false
+    )
+    document.removeEventListener(
+      'keydown',
+      this.handleKeyF, 
       false
     )
   }
