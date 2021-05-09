@@ -17,7 +17,6 @@ export default class VideoScreen {
 
 
         this.tabObject = [this.data]
-        console.log(this.tabObject);
 
         this.setPlane()
     
