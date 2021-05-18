@@ -17,7 +17,7 @@
             "type": "media",
             "links": {
                 "media": "../src/textures/video.mp4",
-                "image": "../src/assets/object/pizza.gif"
+                "image": "./assets/object/pizza.gif"
             }
         }
     }

@@ -27,7 +27,8 @@ module.exports = {
       patterns: [
         { from: 'static', to: '' },
         { from: '*.json', to: 'assets/fonts', context: "src/fonts", noErrorOnMissing: true },
-        { from: 'node_modules/three/examples/js/libs/draco/', to: './draco' }
+        { from: 'node_modules/three/examples/js/libs/draco/', to: './draco' },
+        { from: 'src/assets/object', to: 'assets/object'}
       ]
     }),
     new HtmlWebpackPlugin({
