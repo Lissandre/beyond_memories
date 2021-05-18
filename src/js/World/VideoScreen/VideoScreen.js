@@ -17,14 +17,12 @@ export default class VideoScreen {
 
 
         this.tabObject = [this.data]
-
         this.setPlane()
     
     }
 
     setPlane() {
         this.videoLoad = this.video;
-        console.log(document.querySelector('.video'));
         this.videoLoad.src = video;
         this.videoLoad.load();
         this.isPlayed = true
@@ -43,11 +41,9 @@ export default class VideoScreen {
               if(this.isPlayed === true) {
                 this.videoLoad.pause()
                 this.isPlayed = false
-                console.log(this.isPlayed);
               }else {
                 this.videoLoad.play()
                 this.isPlayed = true
-                console.log(this.isPlayed);
               }
               break
           }

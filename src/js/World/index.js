@@ -27,6 +27,7 @@ export default class World {
     this.renderer = options.renderer
     this.hasVideoScreen = options.hasVideoScreen
     this.appThis = options.appThis
+    this.itemsIventory = options.itemsInventory
 
     
     // Set up
@@ -148,7 +149,6 @@ export default class World {
   }
 
   setCameraForVideo() {
-    console.log('create video camera');
     this.cameraVideo = new Camera({
       sizes: this.sizes,
       renderer: this.renderer,
@@ -218,8 +218,33 @@ export default class World {
       this.container.remove(this.videoScreen.container)
       this.videoScreen.videoLoad.pause()
       this.playerInventory.push(this.videoScreen.data)
-      console.log(this.playerInventory);
+      console.log(this.playerInventory)
+      this.createItemCrad()
     }
+  }
+
+  createItemCrad() {
+    let item = document.createElement("div")
+    item.classList.add('inventory_content_items_item')
+
+    let item_imageContainer = document.createElement("div")
+    item_imageContainer.classList.add("item_pic")
+    let item_image = document.createElement("img")
+    item_image.setAttribute("src", this.videoScreen.data.links.image)
+    item_imageContainer.appendChild(item_image)
+
+    let item_textContainer = document.createElement("div")
+    item_textContainer.classList.add('item_texts')
+    let item_name = document.createElement("p")
+    item_name.textContent = this.videoScreen.data.name
+    let item_description = document.createElement("p")
+    item_description.textContent = this.videoScreen.data.description
+    item_textContainer.appendChild(item_name)
+    item_textContainer.appendChild(item_description)
+    
+    item.appendChild(item_imageContainer)
+    item.appendChild(item_textContainer)
+    this.itemsIventory.appendChild(item)
   }
 
   closeDiag() {

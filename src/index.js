@@ -8,5 +8,6 @@ new App({
   video: document.querySelector('.video'),
   openInventory: document.querySelector('.js_inventoryBtn'),
   closeInventory: document.querySelector('.js_closeInventory'),
-  body: document.querySelector('#_body')
+  body: document.querySelector('#_body'),
+  itemsInventory: document.querySelector('[data-inventory-items]')
 })

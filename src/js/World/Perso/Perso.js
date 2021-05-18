@@ -72,7 +72,6 @@ export default class Perso {
     this.cube = new Mesh( this.geometry, this.material )
     this.cube.position.set(0,0.5,0)
     this.playerBB = new Box3().setFromObject(this.cube)
-    console.log(this.cube);
     this.container.add(this.cube)
 }
   setListeners() {
@@ -268,7 +267,6 @@ export default class Perso {
     this.size.z *= 0.5
     this.calcBox.getCenter(this.center)
     // this.shape = new Sphere(this.size.z*10)
-    console.log(this.perso);
     threeToCannon(this.perso.children[0].children[1], {
       type: threeToCannon.Type.SPHERE,
     })

@@ -23,6 +23,8 @@ export default class App {
     this.closeInventory = options.closeInventory
     this.body = options.body
 
+    this.itemsInventory = options.itemsInventory
+
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
@@ -144,7 +146,8 @@ export default class App {
       sizes: this.sizes,
       renderer: this.renderer,
       hasVideoScreen: this.hasVideoScreen,
-      appThis: this 
+      appThis: this,
+      itemsInventory: this.itemsInventory
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -163,7 +166,6 @@ export default class App {
         case 'Escape': // e
           this.world.container.remove(this.world.videoScreen.container)
           this.world.videoScreen.videoLoad.pause()
-          console.log('escape');
           break
       }
   }
