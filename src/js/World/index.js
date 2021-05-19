@@ -214,16 +214,21 @@ export default class World {
   collecteObject() {
     this.text_01.style.opacity = 0
     if(this.videoScreen.isCollected === false){
-      this.videoScreen.isCollected = true
-      this.container.remove(this.videoScreen.container)
-      this.videoScreen.videoLoad.pause()
-      this.playerInventory.push(this.videoScreen.data)
-      console.log(this.playerInventory)
-      this.createItemCrad()
+      if(this.playerInventory.length <= 10) {
+        this.videoScreen.isCollected = true
+        this.videoScreen.videoLoad.pause()
+        this.playerInventory.push(this.videoScreen.data)
+        console.log(this.playerInventory)
+        this.videoScreen.container.visible = false
+        this.createItemCrad()
+      }else {
+        console.log('there is too much items in your inventory');
+      }
     }
   }
 
   createItemCrad() {
+    
     let item = document.createElement("div")
     item.classList.add('inventory_content_items_item')
 
@@ -241,10 +246,37 @@ export default class World {
     item_description.textContent = this.videoScreen.data.description
     item_textContainer.appendChild(item_name)
     item_textContainer.appendChild(item_description)
+
+    let buttonDelete = document.createElement("button")
+    buttonDelete.classList.add("item_button")
+    let spanL = document.createElement("span")
+    let spanR = document.createElement("span")
+    spanL.classList.add("button_bar")
+    spanR.classList.add("button_bar")
+    spanL.classList.add("leftBar")
+    spanR.classList.add("rightBar")
+    buttonDelete.dataset.dataJs = "js_deleteObject"
+    buttonDelete.appendChild(spanL)
+    buttonDelete.appendChild(spanR)
+    buttonDelete.addEventListener("click", this.deleteItemCard.bind(this))
+
     
+    item.appendChild(buttonDelete)
     item.appendChild(item_imageContainer)
     item.appendChild(item_textContainer)
     this.itemsIventory.appendChild(item)
+  }
+
+  deleteItemCard(event) {
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+    if(this.videoScreen.isCollected === true) {
+      this.videoScreen.container.visible = true
+      this.videoScreen.isCollected = false
+      let positionInInventory = this.playerInventory.indexOf(this.videoScreen.data.id)
+      this.playerInventory.splice(positionInInventory, 1)
+      console.log(this.playerInventory);
+    }
+    
   }
 
   closeDiag() {
