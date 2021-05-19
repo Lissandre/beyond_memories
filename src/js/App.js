@@ -22,6 +22,7 @@ export default class App {
     this.openInventory = options.openInventory
     this.closeInventory = options.closeInventory
     this.body = options.body
+    this.screenShot = options.screenShot
 
     this.itemsInventory = options.itemsInventory
 
@@ -147,7 +148,9 @@ export default class App {
       renderer: this.renderer,
       hasVideoScreen: this.hasVideoScreen,
       appThis: this,
-      itemsInventory: this.itemsInventory
+      itemsInventory: this.itemsInventory,
+      screenShot: this.screenShot,
+      body: this.body
     })
     // Add world to scene
     this.scene.add(this.world.container)

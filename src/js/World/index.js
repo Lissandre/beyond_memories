@@ -10,6 +10,7 @@ import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Elmo from './Elmo/Elmo'
 import VideoScreen from './VideoScreen/VideoScreen'
+import CanvasResult from './CanvasResult/CanvasResult'
 
 
 export default class World {
@@ -28,6 +29,8 @@ export default class World {
     this.hasVideoScreen = options.hasVideoScreen
     this.appThis = options.appThis
     this.itemsIventory = options.itemsInventory
+    this.screenShot = options.screenShot
+    this.body = options.body
 
     
     // Set up
@@ -55,6 +58,7 @@ export default class World {
     this.setVideo()
     this.setPerso()
     this.setElmo()
+    this.screenCanvas()
     this.PlayerEnterPNJArea()
   }
   setLoader() {
@@ -157,6 +161,16 @@ export default class World {
     this.cameraVideo.container.position.set(0,0.1,-12 )
     this.scene.add(this.cameraVideo.container)
   }
+
+  screenCanvas() {
+    this.screenShot.addEventListener('click', ()=> {
+      this.CanvasResult = new CanvasResult({
+        playerInventory: this.playerInventory,
+        body: this.body
+      })
+    })
+  }
+
 
   openDiagOne() {
     document.addEventListener(
