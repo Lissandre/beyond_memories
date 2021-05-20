@@ -5,6 +5,7 @@ export default class CanvasResult {
         this.body = options.body
         
         this.createCanvas()
+        this.drawCanvas()
     }
 
     createCanvas() {
@@ -13,11 +14,6 @@ export default class CanvasResult {
         canvasField.width = 1920
         canvasField.height = 1080
         this.body.appendChild(canvasField)
-        console.log('create canvas');
-        // setTimeout(function() {
-        //     let canvas = document.querySelector('.js_canvasResult')
-        //     let context = canvas.getContext('2d')
-        // }, 500)
         
 
         // this.playerInventory.forEach(element => {
@@ -29,5 +25,22 @@ export default class CanvasResult {
         // });
     }
 
+    drawCanvas() {
+        this.canvas = document.querySelector('.js_canvasResult')
+        let context = this.canvas.getContext('2d')
+        this.canvasRect = this.canvas.getBoundingClientRect()
+        console.log(this.canvasRect);
+        context.fillStyle = '#000000';
+        context.fillRect(0, 0, 1920, 1080);
+        this.playerInventory.forEach(element => {
+            this.base_image = new Image()
+            this.base_image.src = element.links.image
+            this.base_image.onload = function() {
+                // this.context.drawImage(this.base_image, (Math.random() * 100), (Math.random()*100))
+                context.drawImage(this.base_image, 0, 0)
+                console.log(context);
+            }
+        });
+    }
    
 }
