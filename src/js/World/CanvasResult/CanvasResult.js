@@ -3,6 +3,8 @@ export default class CanvasResult {
 
         this.playerInventory = options.playerInventory
         this.body = options.body
+
+        this.base_image
         
         this.createCanvas()
         this.drawCanvas()
@@ -14,15 +16,10 @@ export default class CanvasResult {
         canvasField.width = 1920
         canvasField.height = 1080
         this.body.appendChild(canvasField)
-        
 
-        // this.playerInventory.forEach(element => {
-        //     let base_image = new Image()
-        //     base_image.src = element.data.links.image
-        //     base_image.onload = function() {
-        //         context.drawImage(base_image, (Math.random() * 100), (Math.random()*100))
-        //     }
-        // });
+        setTimeout(()=> {
+            this.body.removeChild(canvasField)
+        },2000)
     }
 
     drawCanvas() {
@@ -32,15 +29,28 @@ export default class CanvasResult {
         console.log(this.canvasRect);
         context.fillStyle = '#000000';
         context.fillRect(0, 0, 1920, 1080);
+        this.logo = new Image()
+        this.logo.src = "./assets/object/logo_beyond.png"
+        this.logo.onload = ()=>{
+            context.drawImage(this.logo, 0, 0 )
+        }
         this.playerInventory.forEach(element => {
             this.base_image = new Image()
             this.base_image.src = element.links.image
-            this.base_image.onload = function() {
-                // this.context.drawImage(this.base_image, (Math.random() * 100), (Math.random()*100))
-                context.drawImage(this.base_image, 0, 0)
-                console.log(context);
+            this.imageRect = this.base_image.getBoundingClientRect()
+            this.base_image.onload = ()=>{
+                context.drawImage(this.base_image, (Math.random() * 1200), (Math.random()*500))
+                // context.drawImage(this.base_image, 0, 0)
             }
         });
+
+        setTimeout(()=>{
+            let link = document.createElement('a');
+            link.download = `Beyond_Memories_Your_Childhood.png`;
+            link.href = this.canvas.toDataURL()
+            link.click();
+        }, 1000)
+
     }
    
 }
