@@ -4,6 +4,8 @@ import {
   Vector3,
   Quaternion,
   Euler,
+  AnimationUtils,
+  AnimationMixer
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
@@ -20,12 +22,28 @@ export default class Perso {
 
     // Set up
     this.container = new Object3D()
+
     this.playerCollider = new Capsule(new Vector3(0, 0, 0), new Vector3(0, 1.5, 0), 0.35)
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
     this.GRAVITY = 30
     this.speedP = 0.005
     this.clock = new Clock()
+
+    this.crossFadeControls = []
+    this.currentBaseAction = 'idle'
+    this.allActions = []
+    this.baseActions = {
+      idle: { weight: 1 },
+      walk: { weight: 0 },
+      run: { weight: 0 }
+    }
+    this.additiveActions = {
+      sneak_pose: { weight: 0 },
+      sad_pose: { weight: 0 },
+      agree: { weight: 0 },
+      headShake: { weight: 0 }
+    }
 
     this.mouse = new Mouse()
     this.moveForward = false
@@ -34,17 +52,12 @@ export default class Perso {
     this.moveRight = false
     this.rotation = 0
     this.speed = 0
-    this.canJump = false
     this.params = {
       deceleration: 0.12,
-      sideSpeed: 0.06,
-      frontSpeed: 0.1,
-      jumpForce: 180,
       cameraSpeedX: 0.1,
       cameraSpeedY: 0.01,
       cameraMaxY: 3,
       cameraMinY: 0.5,
-      persoMass: 35,
       lerpSpeed: 0.005,
     }
 
@@ -52,6 +65,7 @@ export default class Perso {
     this.setListeners()
     this.setMovements()
     this.setDebug()
+    this.setAnimations()
   }
   setPerso() {
     this.perso = this.assets.models.Xbot.scene
@@ -59,7 +73,6 @@ export default class Perso {
     this.perso.children[0].rotation.set(0, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
-    console.log(this.assets.models.elmo);
   }
   setListeners() {
     document.addEventListener(
@@ -126,6 +139,10 @@ export default class Perso {
             this.run = false
             break
         }
+        if (this.currentBaseAction != 'idle' && this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['idle'].action, 1.5 )
+          this.baseActions['idle'].action.setEffectiveTimeScale( 0.0005 )
+        }
       },
       false
     )
@@ -135,18 +152,34 @@ export default class Perso {
       if (this.moveForward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
         this.lerpOrientation()
+        if (this.currentBaseAction != 'run') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
+          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        }
       }
       if (this.moveBackward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( this.speedP * this.time.delta ) )
         this.lerpOrientation()
+        if (this.currentBaseAction != 'run') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
+          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        }
       }
       if (this.moveLeft) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
         this.lerpOrientation()
+        if (this.currentBaseAction != 'run') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
+          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        }
       }
       if (this.moveRight) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( - this.speedP * this.time.delta ) )
         this.lerpOrientation()
+        if (this.currentBaseAction != 'run') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
+          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        }
       }
       if (this.mouse.grab === true) {
         this.speed = 0
@@ -301,201 +334,111 @@ export default class Perso {
     }
   }
 
-  // setAnimations() {
-  //   const crossFadeControls = []
-
-  //     let currentBaseAction = 'idle'
-  //     const allActions = []
-  //     const baseActions = {
-  //       idle: { weight: 1 },
-  //       walk: { weight: 0 },
-  //       run: { weight: 0 }
-  //     }
-  //     const additiveActions = {
-  //       sneak_pose: { weight: 0 },
-  //       sad_pose: { weight: 0 },
-  //       agree: { weight: 0 },
-  //       headShake: { weight: 0 }
-  //     }
-  //     let panelSettings, numAnimations
-
-  //     const animations = gltf.animations;
-  //         mixer = new THREE.AnimationMixer( this.assets.models.elmo )
-
-  //         numAnimations = animations.length
-
-  //         for ( let i = 0; i !== numAnimations; ++ i ) {
-
-  //           let clip = animations[ i ]
-  //           const name = clip.name
-
-  //           if ( baseActions[ name ] ) {
-
-  //             const action = mixer.clipAction( clip )
-  //             this.activateAction( action )
-  //             baseActions[ name ].action = action
-  //             allActions.push( action )
-
-  //           } else if ( additiveActions[ name ] ) {
-
-  //             // Make the clip additive and remove the reference frame
-
-  //             THREE.AnimationUtils.makeClipAdditive( clip )
-
-  //             if ( clip.name.endsWith( '_pose' ) ) {
-
-  //               clip = THREE.AnimationUtils.subclip( clip, clip.name, 2, 3, 30 )
-
-  //             }
-
-  //             const action = mixer.clipAction( clip )
-  //             this.activateAction( action )
-  //             additiveActions[ name ].action = action
-  //             allActions.push( action )
-
-  //           }
-
-  //         }
-  //         this.animate()
-
-  // }
-  // activateAction( action ) {
-
-  //   const clip = action.getClip();
-  //   const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
-  //   this.setWeight( action, settings.weight );
-  //   action.play();
-
-  // }
-  // prepareCrossFade( startAction, endAction, duration ) {
-
-  //   // If the current action is 'idle', execute the crossfade immediately;
-  //   // else wait until the current action has finished its current loop
-
-  //   if ( currentBaseAction === 'idle' || ! startAction || ! endAction ) {
-
-  //     this.executeCrossFade( startAction, endAction, duration );
-
-  //   } else {
-
-  //     this.synchronizeCrossFade( startAction, endAction, duration );
-
-  //   }
-
-  //   // Update control colors
-
-  //   if ( endAction ) {
-
-  //     const clip = endAction.getClip();
-  //     currentBaseAction = clip.name;
-
-  //   } else {
-
-  //     currentBaseAction = 'None';
-
-  //   }
-
-  //   crossFadeControls.forEach( function ( control ) {
-
-  //     const name = control.property;
-
-  //     if ( name === currentBaseAction ) {
-
-  //       control.setActive();
-
-  //     } else {
-
-  //       control.setInactive();
-
-  //     }
-
-  //   } );
-
-  // }
-
-  // synchronizeCrossFade( startAction, endAction, duration ) {
-
-  //   mixer.addEventListener( 'loop', onLoopFinished );
-
-  //   function onLoopFinished( event ) {
-
-  //     if ( event.action === startAction ) {
-
-  //       mixer.removeEventListener( 'loop', onLoopFinished );
-
-  //       this.executeCrossFade( startAction, endAction, duration );
-
-  //     }
-
-  //   }
-
-  // }
-
-  // executeCrossFade( startAction, endAction, duration ) {
-
-  //   // Not only the start action, but also the end action must get a weight of 1 before fading
-  //   // (concerning the start action this is already guaranteed in this place)
-
-  //   if ( endAction ) {
-
-  //     this.setWeight( endAction, 1 );
-  //     endAction.time = 0;
-
-  //     if ( startAction ) {
-
-  //       // Crossfade with warping
-
-  //       startAction.crossFadeTo( endAction, duration, true );
-
-  //     } else {
-
-  //       // Fade in
-
-  //       endAction.fadeIn( duration );
-
-  //     }
-
-  //   } else {
-
-  //     // Fade out
-
-  //     startAction.fadeOut( duration );
-
-  //   }
-
-  // }
-
-  // // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
-  // // the start action's timeScale to ((start animation's duration) / (end animation's duration))
-
-  // setWeight( action, weight ) {
-
-  //   action.enabled = true;
-  //   action.setEffectiveTimeScale( 1 );
-  //   action.setEffectiveWeight( weight );
-
-  // }
-  // animate() {
-
-  //   // Render loop
-
-  //   requestAnimationFrame( animate );
-
-  //   for ( let i = 0; i !== numAnimations; ++ i ) {
-
-  //     const action = allActions[ i ];
-  //     const clip = action.getClip();
-  //     const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
-  //     settings.weight = action.getEffectiveWeight();
-
-  //   }
-
-  //   // Get the time elapsed since the last frame, used for mixer update
-
-  //   const mixerUpdateDelta = clock.getDelta();
-
-  //   // Update the animation mixer, the stats panel, and render this frame
-
-  //   mixer.update( mixerUpdateDelta );
-  // }
+  setAnimations() {
+    const animations = this.assets.models.Xbot.animations;
+    this.mixer = new AnimationMixer( this.assets.models.Xbot.scene )
+    this.numAnimations = animations.length
+    for ( let i = 0; i !== this.numAnimations; ++ i ) {
+      let clip = animations[ i ]
+      const name = clip.name
+      if ( this.baseActions[ name ] ) {
+        const action = this.mixer.clipAction( clip )
+        this.activateAction( action )
+        this.baseActions[ name ].action = action
+        this.allActions.push( action )
+      } else if ( this.additiveActions[ name ] ) {
+        // Make the clip additive and remove the reference frame
+        AnimationUtils.makeClipAdditive( clip )
+        if ( clip.name.endsWith( '_pose' ) ) {
+          clip = AnimationUtils.subclip( clip, clip.name, 2, 3, 30 )
+        }
+        const action = this.mixer.clipAction( clip )
+        this.activateAction( action )
+        this.additiveActions[ name ].action = action
+        this.allActions.push( action )
+      }
+    }
+    this.animate()
+  }
+  activateAction( action ) {
+    const clip = action.getClip();
+    const settings = this.baseActions[ clip.name ] || this.additiveActions[ clip.name ];
+    this.setWeight( action, settings.weight );
+    action.play();
+  }
+  prepareCrossFade( startAction, endAction, duration ) {
+    // If the current action is 'idle', execute the crossfade immediately;
+    // else wait until the current action has finished its current loop
+    if ( this.currentBaseAction === 'idle' || ! startAction || ! endAction ) {
+      this.executeCrossFade( startAction, endAction, duration );
+    } else {
+      this.synchronizeCrossFade( startAction, endAction, duration );
+    }
+    // Update control colors
+    if ( endAction ) {
+      const clip = endAction.getClip();
+      this.currentBaseAction = clip.name;
+    } else {
+      this.currentBaseAction = 'None';
+    }
+    this.crossFadeControls.forEach( function ( control ) {
+      const name = control.property;
+      if ( name === this.currentBaseAction ) {
+        control.setActive();
+      } else {
+        control.setInactive();
+      }
+    } );
+  }
+  synchronizeCrossFade( startAction, endAction, duration ) {
+    this.mixer.addEventListener( 'loop', onLoopFinished );
+    const that = this
+    function onLoopFinished( event ) {
+      if ( event.action === startAction ) {
+        that.mixer.removeEventListener( 'loop', onLoopFinished );
+        that.executeCrossFade( startAction, endAction, duration );
+      }
+    }
+  }
+  executeCrossFade( startAction, endAction, duration ) {
+    // Not only the start action, but also the end action must get a weight of 1 before fading
+    // (concerning the start action this is already guaranteed in this place)
+    if ( endAction ) {
+      this.setWeight( endAction, 1 );
+      endAction.time = 0;
+      if ( startAction ) {
+        // Crossfade with warping
+        startAction.crossFadeTo( endAction, duration, true );
+      } else {
+        // Fade in
+        endAction.fadeIn( duration );
+      }
+    } else {
+      // Fade out
+      startAction.fadeOut( duration );
+    }
+  }
+  // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
+  // the start action's timeScale to ((start animation's duration) / (end animation's duration))
+  setWeight( action, weight ) {
+    action.enabled = true;
+    action.setEffectiveTimeScale( 1 );
+    action.setEffectiveWeight( weight );
+  }
+  animate() {
+    // Render loop
+    this.time.on('tick', () => {
+    // requestAnimationFrame(this.animate())
+      for ( let i = 0; i !== this.numAnimations; ++ i ) {
+        const action = this.allActions[ i ];
+        const clip = action.getClip();
+        const settings = this.baseActions[ clip.name ] || this.additiveActions[ clip.name ];
+        settings.weight = action.getEffectiveWeight();
+      }
+      // Get the time elapsed since the last frame, used for this.mixer update
+      const mixerUpdateDelta = this.time.delta/1500;
+      // Update the animation this.mixer, the stats panel, and render this frame
+      this.mixer.update( mixerUpdateDelta );
+    })
+  }
 }
