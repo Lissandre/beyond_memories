@@ -140,8 +140,7 @@ export default class Perso {
             break
         }
         if (this.currentBaseAction != 'IDLE' && this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['IDLE'].action, 0.5 )
-          this.baseActions['IDLE'].action.setEffectiveTimeScale( 0.0005 )
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['IDLE'].action, 1.2 )
         }
       },
       false
@@ -344,6 +343,7 @@ export default class Perso {
       if ( this.baseActions[ name ] ) {
         const action = this.mixer.clipAction( clip )
         this.activateAction( action )
+        action.setEffectiveTimeScale( 0.2 )
         this.baseActions[ name ].action = action
         this.allActions.push( action )
       } else if ( this.additiveActions[ name ] ) {
@@ -369,7 +369,7 @@ export default class Perso {
   prepareCrossFade( startAction, endAction, duration ) {
     // If the current action is 'idle', execute the crossfade immediately;
     // else wait until the current action has finished its current loop
-    if ( this.currentBaseAction === 'idle' || ! startAction || ! endAction ) {
+    if ( this.currentBaseAction === 'IDLE' || ! startAction || ! endAction ) {
       this.executeCrossFade( startAction, endAction, duration );
     } else {
       this.synchronizeCrossFade( startAction, endAction, duration );
@@ -416,6 +416,9 @@ export default class Perso {
     } else {
       // Fade out
       startAction.fadeOut( duration );
+    }
+    if (endAction._clip.name == 'IDLE') {
+      endAction.setEffectiveTimeScale( 0.2 )
     }
   }
   // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
