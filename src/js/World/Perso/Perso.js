@@ -44,7 +44,6 @@ export default class Perso {
     }
 
     this.setPerso()
-    this.setPhysic()
     this.setListeners()
     this.setMovements()
     this.setDebug()
