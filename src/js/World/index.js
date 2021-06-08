@@ -2,7 +2,6 @@ import { AxesHelper, Object3D } from 'three'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
-import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
@@ -32,7 +31,6 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPhysic()
     this.setFloor()
     this.setPerso()
   }
@@ -73,16 +71,8 @@ export default class World {
     })
     this.container.add(this.light.container)
   }
-  setPhysic() {
-    this.physic = new Physic({
-      time: this.time,
-      debug: this.debug,
-      scene: this.scene,
-    })
-  }
   setFloor() {
     this.floor = new Floor({
-      physic: this.physic,
       assets: this.assets,
     })
     this.container.add(this.floor.container)
@@ -92,7 +82,6 @@ export default class World {
       time: this.time,
       assets: this.assets,
       camera: this.camera,
-      physic: this.physic,
       debug: this.debug,
     })
     this.container.add(this.perso.container)

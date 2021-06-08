@@ -9,8 +9,6 @@ import {
   Euler,
 } from 'three'
 import * as THREE from 'three'
-import { threeToCannon } from 'three-to-cannon'
-import { Body, Vec3, Sphere } from 'cannon-es'
 import Mouse from '@tools/Mouse'
 // import { TweenMax } from 'gsap'
 
@@ -20,7 +18,6 @@ export default class Perso {
     this.time = options.time
     this.assets = options.assets
     this.camera = options.camera
-    this.physic = options.physic
     this.debug = options.debug
 
     // Set up
@@ -133,42 +130,12 @@ export default class Perso {
     let vec = new Vector3()
     this.time.on('tick', () => {
       if (this.moveForward) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        vec.crossVectors(this.perso.up, vec)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, this.params.frontSpeed)
-        this.body.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
       }
       if (this.moveBackward) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        vec.crossVectors(this.perso.up, vec)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, -this.params.frontSpeed)
-        this.body.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
       }
       if (this.moveLeft) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, -this.params.sideSpeed)
-        this.body.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
       }
       if (this.moveRight) {
-        vec.setFromMatrixColumn(this.perso.matrix, 0)
-        let oldp = new Vector3().copy(this.body.position)
-        oldp.addScaledVector(vec, this.params.sideSpeed)
-        this.body.position.copy(oldp)
-        this.setPosition()
-        this.camera.cameraUpdate(this.perso.position)
-        this.lerpOrientation()
       }
       if (this.mouse.grab === true) {
         this.speed = 0
@@ -211,9 +178,6 @@ export default class Perso {
         this.deltaRotationQuaternion,
         this.camera.container.quaternion
       )
-      if (this.perso.position != this.body.position) {
-        this.setPosition()
-      }
     })
   }
   lerpOrientation() {
@@ -225,48 +189,6 @@ export default class Perso {
   }
   toRadians(angle) {
     return angle * (Math.PI / 180)
-  }
-  setPhysic() {
-    this.size = new Vector3()
-    this.center = new Vector3()
-    this.calcBox = new Box3().setFromObject(this.container)
-
-    this.calcBox.getSize(this.size)
-    this.size.x *= 0.5
-    this.size.y *= 0.5
-    this.size.z *= 0.5
-    this.calcBox.getCenter(this.center)
-    // this.shape = new Sphere(this.size.z*10)
-    console.log(this.perso);
-    threeToCannon(this.perso.children[0].children[1], {
-      type: threeToCannon.Type.SPHERE,
-    })
-    this.body = new Body({
-      mass: 0,
-      position: this.center,
-      shape: this.shape,
-      allowSleep: false,
-      angularDamping: 1,
-      material: this.physic.groundMaterial,
-    })
-    this.physic.world.addBody(this.body)
-
-    this.body.addEventListener('collide', (e) => {
-      let contactNormal = new Vec3()
-      let upAxis = new Vec3(0, 1, 0)
-      let contact = e.contact
-      if (contact.bi.id == this.body.id) contact.ni.negate(contactNormal)
-      else contactNormal.copy(contact.ni)
-      if (contactNormal.dot(upAxis) > 0.5) this.canJump = true
-      if (!this.canJump) this.body.allowSleep = false
-    })
-  }
-  setPosition() {
-    this.perso.position.set(
-      this.body.position.x - this.center.x,
-      this.body.position.y - this.center.y,
-      this.body.position.z - this.center.z
-    )
   }
   setDebug() {
     if (this.debug) {
@@ -327,9 +249,6 @@ export default class Perso {
         .step(10)
     }
   }
-
-
-
 
   setAnimations() {
     const crossFadeControls = []
