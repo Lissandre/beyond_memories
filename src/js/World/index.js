@@ -1,4 +1,5 @@
 import { AxesHelper, Object3D } from 'three'
+import { Octree } from 'three/examples/jsm/math/Octree'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -17,6 +18,7 @@ export default class World {
 
     // Set up
     this.container = new Object3D()
+    this.worldOctree = new Octree()
     this.container.name = 'World'
 
     if (this.debug) {
@@ -76,6 +78,7 @@ export default class World {
       assets: this.assets,
     })
     this.container.add(this.floor.container)
+    this.worldOctree.fromGraphNode(this.scene)
   }
   setPerso() {
     this.perso = new Perso({
@@ -83,6 +86,7 @@ export default class World {
       assets: this.assets,
       camera: this.camera,
       debug: this.debug,
+      worldOctree: this.worldOctree,
     })
     this.container.add(this.perso.container)
   }

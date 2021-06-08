@@ -1,16 +1,13 @@
 import {
-  // BoxBufferGeometry,
-  Box3,
-  // Mesh,
-  // MeshLambertMaterial,
+  Clock,
   Object3D,
   Vector3,
   Quaternion,
   Euler,
 } from 'three'
-import * as THREE from 'three'
+import { Capsule } from 'three/examples/jsm/math/Capsule'
+
 import Mouse from '@tools/Mouse'
-// import { TweenMax } from 'gsap'
 
 export default class Perso {
   constructor(options) {
@@ -19,9 +16,17 @@ export default class Perso {
     this.assets = options.assets
     this.camera = options.camera
     this.debug = options.debug
+    this.worldOctree = options.worldOctree
 
     // Set up
     this.container = new Object3D()
+    this.playerCollider = new Capsule(new Vector3(0, 0, 0), new Vector3(0, 1.5, 0), 0.35)
+    this.playerVelocity = new Vector3()
+    this.playerDirection = new Vector3()
+    this.GRAVITY = 30
+    this.speedP = 0.005
+    this.clock = new Clock()
+
     this.mouse = new Mouse()
     this.moveForward = false
     this.moveBackward = false
@@ -84,11 +89,11 @@ export default class Perso {
             this.run = true
             break
           case 'Space': // space
-            if (this.canJump) {
+            if (this.playerOnFloor) {
               // this.body.allowSleep = false
-              this.body.applyImpulse(new Vec3(0, this.params.jumpForce, 0))
+              this.playerVelocity.y = 8;
             }
-            this.canJump = false
+            this.playerOnFloor = false
             break
         }
       },
@@ -126,15 +131,22 @@ export default class Perso {
     )
   }
   setMovements() {
-    let vec = new Vector3()
     this.time.on('tick', () => {
       if (this.moveForward) {
+        this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
+        this.lerpOrientation()
       }
       if (this.moveBackward) {
+        this.playerVelocity.add( this.getForwardVector().multiplyScalar( this.speedP * this.time.delta ) )
+        this.lerpOrientation()
       }
       if (this.moveLeft) {
+        this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
+        this.lerpOrientation()
       }
       if (this.moveRight) {
+        this.playerVelocity.add( this.getSideVector().multiplyScalar( - this.speedP * this.time.delta ) )
+        this.lerpOrientation()
       }
       if (this.mouse.grab === true) {
         this.speed = 0
@@ -177,17 +189,57 @@ export default class Perso {
         this.deltaRotationQuaternion,
         this.camera.container.quaternion
       )
+
+      const delta = Math.min( 0.1, this.clock.getDelta() )
+      this.updatePlayer(delta)
     })
   }
   lerpOrientation() {
-    const baseQuat = new Quaternion().copy(this.body.quaternion)
-    if ( !baseQuat.equals( this.camera.container.quaternion ) ) {
+    const baseQuat = new Quaternion().copy(this.camera.container.quaternion)
+    if ( !baseQuat.equals( this.perso.quaternion ) ) {
       const step = this.params.lerpSpeed * this.time.delta
       this.perso.quaternion.rotateTowards( this.camera.container.quaternion, step )
     }
   }
   toRadians(angle) {
     return angle * (Math.PI / 180)
+  }
+  playerCollitions() {
+    const result = this.worldOctree.capsuleIntersect( this.playerCollider )
+    this.playerOnFloor = false
+    if ( result ) {
+      this.playerOnFloor = result.normal.y > 0
+      if ( ! this.playerOnFloor ) {
+        this.playerVelocity.addScaledVector( result.normal, - result.normal.dot( this.playerVelocity ) )
+      }
+      this.playerCollider.translate( result.normal.multiplyScalar( result.depth ) )
+    }
+  }
+  updatePlayer(delta) {
+    if ( this.playerOnFloor ) {
+      const damping = Math.exp( - 3 * delta ) - 1
+      this.playerVelocity.addScaledVector( this.playerVelocity, damping )
+    } else {
+      this.playerVelocity.y -= this.GRAVITY * delta
+    }
+    const deltaPosition = this.playerVelocity.clone().multiplyScalar( delta )
+    this.playerCollider.translate( deltaPosition )
+    this.playerCollitions()
+    this.camera.container.position.copy( this.playerCollider.start )
+    this.perso.position.set(this.camera.container.position.x, this.camera.container.position.y - 0.35, this.camera.container.position.z)
+  }
+  getForwardVector() {
+    this.camera.container.getWorldDirection( this.playerDirection )
+    this.playerDirection.y = 0
+    this.playerDirection.normalize()
+    return this.playerDirection
+  }
+  getSideVector() {
+    this.camera.container.getWorldDirection( this.playerDirection )
+    this.playerDirection.y = 0
+    this.playerDirection.normalize()
+    this.playerDirection.cross( this.camera.container.up )
+    return this.playerDirection
   }
   setDebug() {
     if (this.debug) {
@@ -249,201 +301,201 @@ export default class Perso {
     }
   }
 
-  setAnimations() {
-    const crossFadeControls = []
+  // setAnimations() {
+  //   const crossFadeControls = []
 
-      let currentBaseAction = 'idle'
-      const allActions = []
-      const baseActions = {
-        idle: { weight: 1 },
-        walk: { weight: 0 },
-        run: { weight: 0 }
-      }
-      const additiveActions = {
-        sneak_pose: { weight: 0 },
-        sad_pose: { weight: 0 },
-        agree: { weight: 0 },
-        headShake: { weight: 0 }
-      }
-      let panelSettings, numAnimations
+  //     let currentBaseAction = 'idle'
+  //     const allActions = []
+  //     const baseActions = {
+  //       idle: { weight: 1 },
+  //       walk: { weight: 0 },
+  //       run: { weight: 0 }
+  //     }
+  //     const additiveActions = {
+  //       sneak_pose: { weight: 0 },
+  //       sad_pose: { weight: 0 },
+  //       agree: { weight: 0 },
+  //       headShake: { weight: 0 }
+  //     }
+  //     let panelSettings, numAnimations
 
-      const animations = gltf.animations;
-          mixer = new THREE.AnimationMixer( this.assets.models.elmo )
+  //     const animations = gltf.animations;
+  //         mixer = new THREE.AnimationMixer( this.assets.models.elmo )
 
-          numAnimations = animations.length
+  //         numAnimations = animations.length
 
-          for ( let i = 0; i !== numAnimations; ++ i ) {
+  //         for ( let i = 0; i !== numAnimations; ++ i ) {
 
-            let clip = animations[ i ]
-            const name = clip.name
+  //           let clip = animations[ i ]
+  //           const name = clip.name
 
-            if ( baseActions[ name ] ) {
+  //           if ( baseActions[ name ] ) {
 
-              const action = mixer.clipAction( clip )
-              this.activateAction( action )
-              baseActions[ name ].action = action
-              allActions.push( action )
+  //             const action = mixer.clipAction( clip )
+  //             this.activateAction( action )
+  //             baseActions[ name ].action = action
+  //             allActions.push( action )
 
-            } else if ( additiveActions[ name ] ) {
+  //           } else if ( additiveActions[ name ] ) {
 
-              // Make the clip additive and remove the reference frame
+  //             // Make the clip additive and remove the reference frame
 
-              THREE.AnimationUtils.makeClipAdditive( clip )
+  //             THREE.AnimationUtils.makeClipAdditive( clip )
 
-              if ( clip.name.endsWith( '_pose' ) ) {
+  //             if ( clip.name.endsWith( '_pose' ) ) {
 
-                clip = THREE.AnimationUtils.subclip( clip, clip.name, 2, 3, 30 )
+  //               clip = THREE.AnimationUtils.subclip( clip, clip.name, 2, 3, 30 )
 
-              }
+  //             }
 
-              const action = mixer.clipAction( clip )
-              this.activateAction( action )
-              additiveActions[ name ].action = action
-              allActions.push( action )
+  //             const action = mixer.clipAction( clip )
+  //             this.activateAction( action )
+  //             additiveActions[ name ].action = action
+  //             allActions.push( action )
 
-            }
+  //           }
 
-          }
-          this.animate()
+  //         }
+  //         this.animate()
 
-  }
-  activateAction( action ) {
+  // }
+  // activateAction( action ) {
 
-    const clip = action.getClip();
-    const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
-    this.setWeight( action, settings.weight );
-    action.play();
+  //   const clip = action.getClip();
+  //   const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
+  //   this.setWeight( action, settings.weight );
+  //   action.play();
 
-  }
-  prepareCrossFade( startAction, endAction, duration ) {
+  // }
+  // prepareCrossFade( startAction, endAction, duration ) {
 
-    // If the current action is 'idle', execute the crossfade immediately;
-    // else wait until the current action has finished its current loop
+  //   // If the current action is 'idle', execute the crossfade immediately;
+  //   // else wait until the current action has finished its current loop
 
-    if ( currentBaseAction === 'idle' || ! startAction || ! endAction ) {
+  //   if ( currentBaseAction === 'idle' || ! startAction || ! endAction ) {
 
-      this.executeCrossFade( startAction, endAction, duration );
+  //     this.executeCrossFade( startAction, endAction, duration );
 
-    } else {
+  //   } else {
 
-      this.synchronizeCrossFade( startAction, endAction, duration );
+  //     this.synchronizeCrossFade( startAction, endAction, duration );
 
-    }
+  //   }
 
-    // Update control colors
+  //   // Update control colors
 
-    if ( endAction ) {
+  //   if ( endAction ) {
 
-      const clip = endAction.getClip();
-      currentBaseAction = clip.name;
+  //     const clip = endAction.getClip();
+  //     currentBaseAction = clip.name;
 
-    } else {
+  //   } else {
 
-      currentBaseAction = 'None';
+  //     currentBaseAction = 'None';
 
-    }
+  //   }
 
-    crossFadeControls.forEach( function ( control ) {
+  //   crossFadeControls.forEach( function ( control ) {
 
-      const name = control.property;
+  //     const name = control.property;
 
-      if ( name === currentBaseAction ) {
+  //     if ( name === currentBaseAction ) {
 
-        control.setActive();
+  //       control.setActive();
 
-      } else {
+  //     } else {
 
-        control.setInactive();
+  //       control.setInactive();
 
-      }
+  //     }
 
-    } );
+  //   } );
 
-  }
+  // }
 
-  synchronizeCrossFade( startAction, endAction, duration ) {
+  // synchronizeCrossFade( startAction, endAction, duration ) {
 
-    mixer.addEventListener( 'loop', onLoopFinished );
+  //   mixer.addEventListener( 'loop', onLoopFinished );
 
-    function onLoopFinished( event ) {
+  //   function onLoopFinished( event ) {
 
-      if ( event.action === startAction ) {
+  //     if ( event.action === startAction ) {
 
-        mixer.removeEventListener( 'loop', onLoopFinished );
+  //       mixer.removeEventListener( 'loop', onLoopFinished );
 
-        this.executeCrossFade( startAction, endAction, duration );
+  //       this.executeCrossFade( startAction, endAction, duration );
 
-      }
+  //     }
 
-    }
+  //   }
 
-  }
+  // }
 
-  executeCrossFade( startAction, endAction, duration ) {
+  // executeCrossFade( startAction, endAction, duration ) {
 
-    // Not only the start action, but also the end action must get a weight of 1 before fading
-    // (concerning the start action this is already guaranteed in this place)
+  //   // Not only the start action, but also the end action must get a weight of 1 before fading
+  //   // (concerning the start action this is already guaranteed in this place)
 
-    if ( endAction ) {
+  //   if ( endAction ) {
 
-      this.setWeight( endAction, 1 );
-      endAction.time = 0;
+  //     this.setWeight( endAction, 1 );
+  //     endAction.time = 0;
 
-      if ( startAction ) {
+  //     if ( startAction ) {
 
-        // Crossfade with warping
+  //       // Crossfade with warping
 
-        startAction.crossFadeTo( endAction, duration, true );
+  //       startAction.crossFadeTo( endAction, duration, true );
 
-      } else {
+  //     } else {
 
-        // Fade in
+  //       // Fade in
 
-        endAction.fadeIn( duration );
+  //       endAction.fadeIn( duration );
 
-      }
+  //     }
 
-    } else {
+  //   } else {
 
-      // Fade out
+  //     // Fade out
 
-      startAction.fadeOut( duration );
+  //     startAction.fadeOut( duration );
 
-    }
+  //   }
 
-  }
+  // }
 
-  // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
-  // the start action's timeScale to ((start animation's duration) / (end animation's duration))
+  // // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
+  // // the start action's timeScale to ((start animation's duration) / (end animation's duration))
 
-  setWeight( action, weight ) {
+  // setWeight( action, weight ) {
 
-    action.enabled = true;
-    action.setEffectiveTimeScale( 1 );
-    action.setEffectiveWeight( weight );
+  //   action.enabled = true;
+  //   action.setEffectiveTimeScale( 1 );
+  //   action.setEffectiveWeight( weight );
 
-  }
-  animate() {
+  // }
+  // animate() {
 
-    // Render loop
+  //   // Render loop
 
-    requestAnimationFrame( animate );
+  //   requestAnimationFrame( animate );
 
-    for ( let i = 0; i !== numAnimations; ++ i ) {
+  //   for ( let i = 0; i !== numAnimations; ++ i ) {
 
-      const action = allActions[ i ];
-      const clip = action.getClip();
-      const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
-      settings.weight = action.getEffectiveWeight();
+  //     const action = allActions[ i ];
+  //     const clip = action.getClip();
+  //     const settings = baseActions[ clip.name ] || additiveActions[ clip.name ];
+  //     settings.weight = action.getEffectiveWeight();
 
-    }
+  //   }
 
-    // Get the time elapsed since the last frame, used for mixer update
+  //   // Get the time elapsed since the last frame, used for mixer update
 
-    const mixerUpdateDelta = clock.getDelta();
+  //   const mixerUpdateDelta = clock.getDelta();
 
-    // Update the animation mixer, the stats panel, and render this frame
+  //   // Update the animation mixer, the stats panel, and render this frame
 
-    mixer.update( mixerUpdateDelta );
-  }
+  //   mixer.update( mixerUpdateDelta );
+  // }
 }

@@ -1,10 +1,8 @@
 import {
-  Box3,
   Object3D,
   Mesh,
   BoxBufferGeometry,
   MeshLambertMaterial,
-  Vector3,
   RepeatWrapping
 } from 'three'
 
@@ -28,7 +26,7 @@ export default class Floor {
       new MeshLambertMaterial({ map: this.assets.textures.floor })
     )
     this.floor.rotateX(-Math.PI / 2)
-    this.floor.position.y = -0.05
+    this.floor.position.y = 0
     this.floor.receiveShadow = true
     this.container.add(this.floor)
   }
