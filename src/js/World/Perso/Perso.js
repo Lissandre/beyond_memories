@@ -31,18 +31,18 @@ export default class Perso {
     this.clock = new Clock()
 
     this.crossFadeControls = []
-    this.currentBaseAction = 'idle'
+    this.currentBaseAction = 'IDLE'
     this.allActions = []
     this.baseActions = {
-      idle: { weight: 1 },
-      walk: { weight: 0 },
-      run: { weight: 0 }
+      IDLE: { weight: 1 },
+      WALKING: { weight: 0 },
+      RUNNING: { weight: 0 }
     }
     this.additiveActions = {
-      sneak_pose: { weight: 0 },
-      sad_pose: { weight: 0 },
-      agree: { weight: 0 },
-      headShake: { weight: 0 }
+      // sneak_pose: { weight: 0 },
+      // sad_pose: { weight: 0 },
+      // agree: { weight: 0 },
+      // headShake: { weight: 0 }
     }
 
     this.mouse = new Mouse()
@@ -70,7 +70,7 @@ export default class Perso {
   setPerso() {
     this.perso = this.assets.models.Xbot.scene
     this.perso.scale.set(0.5, 0.5, 0.5)
-    this.perso.children[0].rotation.set(0, Math.PI, 0)
+    this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
   }
@@ -139,9 +139,9 @@ export default class Perso {
             this.run = false
             break
         }
-        if (this.currentBaseAction != 'idle' && this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['idle'].action, 1.5 )
-          this.baseActions['idle'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'IDLE' && this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['IDLE'].action, 0.5 )
+          this.baseActions['IDLE'].action.setEffectiveTimeScale( 0.0005 )
         }
       },
       false
@@ -152,33 +152,33 @@ export default class Perso {
       if (this.moveForward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'run') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
-          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'RUNNING') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
         }
       }
       if (this.moveBackward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'run') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
-          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'RUNNING') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
         }
       }
       if (this.moveLeft) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'run') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
-          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'RUNNING') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
         }
       }
       if (this.moveRight) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( - this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'run') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['run'].action, 0.8 )
-          // this.baseActions['run'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'RUNNING') {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
         }
       }
       if (this.mouse.grab === true) {
