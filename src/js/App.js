@@ -19,6 +19,7 @@ export default class App {
     this.text_02 = options.text_02
     this.video = options.video
     this.hasVideoScreen = false
+    this.watchCar = false
     this.openInventory = options.openInventory
     this.closeInventory = options.closeInventory
     this.body = options.body
@@ -75,6 +76,7 @@ export default class App {
     })
 
     this.lookScreenPos = new Vector3(0,0.1,-12)
+    this.lookCarPos = new Vector3(5,5,-10)
     
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
@@ -92,7 +94,12 @@ export default class App {
       if(this.hasVideoScreen) {
         this.renderer.render(this.scene, this.world.cameraVideo.camera)
         this.world.cameraVideo.container.position.lerp(this.lookScreenPos, 0.1)
-      }else {
+      }else if(this.watchCar){
+        this.renderer.render(this.scene, this.world.cameraCar.camera)
+        this.world.cameraCar.container.position.lerp(this.lookCarPos, 0.1)
+        this.world.cameraCar.camera.lookAt(this.world.car.container.position)
+      }
+      else {
           this.renderer.render(this.scene, this.camera.camera)
         
         // Redonne la possibilité de le remettre a true (re afficher la cam plan)
@@ -147,6 +154,7 @@ export default class App {
       sizes: this.sizes,
       renderer: this.renderer,
       hasVideoScreen: this.hasVideoScreen,
+      watchCar: this.watchCar,
       appThis: this,
       itemsInventory: this.itemsInventory,
       screenShot: this.screenShot,
@@ -169,6 +177,9 @@ export default class App {
         case 'Escape': // e
           this.world.container.remove(this.world.videoScreen.container)
           this.world.videoScreen.videoLoad.pause()
+          if(this.watchCar) {
+            this.watchCar = false
+          }
           break
       }
   }

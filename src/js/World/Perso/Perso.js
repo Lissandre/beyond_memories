@@ -22,8 +22,10 @@ export default class Perso {
     this.assets = options.assets
     this.camera = options.camera
     this.cameraVideoScreen = options.cameraVideoScreen
+    this.cameraCar = options.cameraCar
     this.appThis = options.appThis
     this.hasVideoScreen = options.hasVideoScreen
+    this.watchCar = options.watchCar
     this.physic = options.physic
     this.debug = options.debug
 
@@ -146,7 +148,7 @@ export default class Perso {
   setMovements() {
     let vec = new Vector3()
     this.time.on('tick', () => {
-      if(this.appThis.hasVideoScreen === false) {
+      if(this.appThis.hasVideoScreen === false && this.appThis.watchCar === false) {
         if (this.moveForward) {
           vec.setFromMatrixColumn(this.perso.matrix, 0)
           vec.crossVectors(this.perso.up, vec)
@@ -158,6 +160,7 @@ export default class Perso {
           this.setPosition()
           this.camera.cameraUpdate(this.perso.position)
           this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.cameraCar.cameraUpdate(this.perso.position)
           this.lerpOrientation()
         }
         if (this.moveBackward) {
@@ -171,6 +174,7 @@ export default class Perso {
           this.setPosition()
           this.camera.cameraUpdate(this.perso.position)
           this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.cameraCar.cameraUpdate(this.perso.position)
           this.lerpOrientation()
         }
         if (this.moveLeft) {
@@ -183,6 +187,7 @@ export default class Perso {
           this.setPosition()
           this.camera.cameraUpdate(this.perso.position)
           this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.cameraCar.cameraUpdate(this.perso.position)
           this.lerpOrientation()
         }
         if (this.moveRight) {
@@ -195,6 +200,7 @@ export default class Perso {
           this.setPosition()
           this.camera.cameraUpdate(this.perso.position)
           this.cameraVideoScreen.cameraUpdate(this.perso.position)
+          this.cameraCar.cameraUpdate(this.perso.position)
           this.lerpOrientation()
         }
         if (this.mouse.grab === true) {

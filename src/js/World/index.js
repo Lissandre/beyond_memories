@@ -11,6 +11,7 @@ import Skybox from './Sky/Sky'
 import Elmo from './Elmo/Elmo'
 import VideoScreen from './VideoScreen/VideoScreen'
 import CanvasResult from './CanvasResult/CanvasResult'
+import RCcar from './RCcar/RCcar'
 
 
 export default class World {
@@ -27,6 +28,7 @@ export default class World {
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.hasVideoScreen = options.hasVideoScreen
+    this.watchCar = options.watchCar
     this.appThis = options.appThis
     this.itemsIventory = options.itemsInventory
     this.screenShot = options.screenShot
@@ -52,14 +54,17 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
+    this.setCameraForVideo()
     this.setPhysic()
     this.setFloor()
-    this.setCameraForVideo()
     this.setVideo()
+    this.setCar()
+    this.setCameraForCar()
     this.setPerso()
     this.setElmo()
     this.screenCanvas()
     this.PlayerEnterPNJArea()
+    this.PlayerEnterCarArea()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -118,7 +123,9 @@ export default class World {
       assets: this.assets,
       camera: this.camera,
       cameraVideoScreen: this.cameraVideo,
+      cameraCar: this.cameraCar,
       hasVideoScreen: this.hasVideoScreen,
+      watchCar: this.watchCar,
       physic: this.physic,
       debug: this.debug,
       appThis: this.appThis
@@ -145,6 +152,15 @@ export default class World {
     this.container.add(this.elmo.container)
   }
 
+  setCar() {
+    this.car = new RCcar({
+      time: this.time,
+      assets: this.assets
+    })
+    this.container.add(this.car.container)
+    console.log(this.car);
+  }
+
   setVideo() {
     this.videoScreen = new VideoScreen({
       time: this.time,
@@ -160,6 +176,16 @@ export default class World {
     })
     this.cameraVideo.container.position.set(0,0.1,-12 )
     this.scene.add(this.cameraVideo.container)
+  }
+
+  setCameraForCar() {
+    this.cameraCar = new Camera({
+      sizes: this.sizes,
+      renderer: this.renderer,
+      debug: this.debug
+    })
+    this.cameraCar.container.position.set(5,2,-10 )
+    this.scene.add(this.cameraCar.container)
   }
 
   screenCanvas() {
@@ -186,15 +212,21 @@ export default class World {
   }
 
   handleKeyE(event) {
-    if(!this.playerEnteredInElmo) {
-      return
-    }
+    // if(!this.playerEnteredInElmo ) {
+    //   return
+    // }
     switch (event.code) {
       case 'KeyE': // e
         this.text_01.style.opacity = 0
         if(this.playerEnteredInElmo) {
           if(this.appThis.hasVideoScreen === false && this.videoScreen.isCollected === false) {
             this.interactWithElmo()
+          }
+        }
+        if(this.playerEnteredInCar) {
+          console.log(this.appThis.watchCar);
+          if(this.appThis.watchCar === false) {
+            this.interactWithCar()
           }
         }
         break
@@ -223,6 +255,12 @@ export default class World {
     this.text_01.style.opacity = 0
     this.container.add(this.videoScreen.container)
     this.videoScreen.videoLoad.play()
+  }
+
+  interactWithCar() {
+    this.text_01.style.opacity = 0
+    this.appThis.watchCar = true
+    console.log(this.appThis.watchCar);
   }
 
   collecteObject() {
@@ -325,6 +363,28 @@ export default class World {
             this.container.remove(this.videoScreen.container)
             this.videoScreen.videoLoad.pause()
           }
+        }
+
+      }
+    })
+    
+  }
+
+  PlayerEnterCarArea() {
+    this.carBB = new Box3().setFromObject(this.car.container)
+    
+
+    this.openDiagOne()
+
+    this.time.on('tick', ()=> {
+      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+
+        this.playerEnteredInCar = this.carBB.intersectsBox(this.perso.playerBB)
+
+        if(this.playerEnteredInCar === true) {
+          this.text_01.style.opacity = 1
+        }else{
+          this.text_01.style.opacity = 0
         }
 
       }
