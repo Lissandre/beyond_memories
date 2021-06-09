@@ -50,6 +50,7 @@ export default class Perso {
     this.moveBackward = false
     this.moveLeft = false
     this.moveRight = false
+    this.run = false
     this.rotation = 0
     this.speed = 0
     this.params = {
@@ -69,7 +70,6 @@ export default class Perso {
   }
   setPerso() {
     this.perso = this.assets.models.Xbot.scene
-    this.perso.scale.set(0.5, 0.5, 0.5)
     this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
@@ -100,10 +100,13 @@ export default class Perso {
             break
           case 'ShiftLeft':
             this.run = true
+            if (this.currentBaseAction != 'IDLE' && this.currentBaseAction != 'RUNNING' && (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true)) {
+              this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.2 )
+              this.speedP = 0.01
+            }
             break
           case 'Space': // space
             if (this.playerOnFloor) {
-              // this.body.allowSleep = false
               this.playerVelocity.y = 8;
             }
             this.playerOnFloor = false
@@ -139,8 +142,12 @@ export default class Perso {
             this.run = false
             break
         }
-        if (this.currentBaseAction != 'IDLE' && this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+        if (this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
           this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['IDLE'].action, 1.2 )
+          this.speedP = 0.005
+        } else if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'IDLE' && this.run == false && (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true)) {
+          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.3 )
+          this.speedP = 0.005
         }
       },
       false
@@ -151,33 +158,49 @@ export default class Perso {
       if (this.moveForward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'RUNNING') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+          if (this.run) {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+            this.speedP = 0.01
+          } else {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+          }
         }
       }
       if (this.moveBackward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'RUNNING') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+          if (this.run) {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+            this.speedP = 0.01
+          } else {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+          }
         }
       }
       if (this.moveLeft) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'RUNNING') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+          if (this.run) {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+            this.speedP = 0.01
+          } else {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+          }
         }
       }
       if (this.moveRight) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( - this.speedP * this.time.delta ) )
         this.lerpOrientation()
-        if (this.currentBaseAction != 'RUNNING') {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-          // this.baseActions['RUNNING'].action.setEffectiveTimeScale( 0.0005 )
+        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+          if (this.run) {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+            this.speedP = 0.01
+          } else {
+            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+          }
         }
       }
       if (this.mouse.grab === true) {

@@ -37,8 +37,8 @@ export default class Camera {
   setPosition() {
     // Set camera position
     this.camera.position.x = 0
-    this.camera.position.y = 5
-    this.camera.position.z = 3.5
+    this.camera.position.y = 7
+    this.camera.position.z = 7.5
     this.cameraUpdate(this.container.position)
   }
   cameraUpdate(position) {
