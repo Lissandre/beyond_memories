@@ -1,8 +1,9 @@
 import { AxesHelper, Box3, Object3D } from 'three'
+import { AxesHelper, Object3D } from 'three'
+import { Octree } from 'three/examples/jsm/math/Octree'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
-import Physic from './Physic/Physic'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
@@ -21,6 +22,7 @@ export default class World {
     
     // Set up
     this.container = new Object3D()
+    this.worldOctree = new Octree()
     this.container.name = 'World'
     
     this.startText = false
@@ -37,7 +39,6 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPhysic()
     this.setFloor()
     this.setPerso()
     this.setElmo()
@@ -80,27 +81,20 @@ export default class World {
     })
     this.container.add(this.light.container)
   }
-  setPhysic() {
-    this.physic = new Physic({
-      time: this.time,
-      debug: this.debug,
-      scene: this.scene,
-    })
-  }
   setFloor() {
     this.floor = new Floor({
-      physic: this.physic,
       assets: this.assets,
     })
     this.container.add(this.floor.container)
+    this.worldOctree.fromGraphNode(this.scene)
   }
   setPerso() {
     this.perso = new Perso({
       time: this.time,
       assets: this.assets,
       camera: this.camera,
-      physic: this.physic,
       debug: this.debug,
+      worldOctree: this.worldOctree,
     })
     this.container.add(this.perso.container)
   }
