@@ -19,6 +19,10 @@ export default class Sun {
     createSun() {
         this.light = new DirectionalLight(this.color, this.intensity)
         this.light.castShadow = true
+        this.light.shadow.camera.top = 100
+        this.light.shadow.camera.bottom = -100
+        this.light.shadow.camera.left = -100
+        this.light.shadow.camera.right = 100
         this.target = new Vector3(0, 0, 0)
         // this.light.target = this.target
 

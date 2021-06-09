@@ -78,7 +78,7 @@ export default class World {
       assets: this.assets,
     })
     this.container.add(this.floor.container)
-    this.worldOctree.fromGraphNode(this.assets.models.LOWPOLYWORLD.scene)
+    this.worldOctree.fromGraphNode(this.assets.models.MAP_RESIZED_LOWPOLY.scene)
   }
   setPerso() {
     this.perso = new Perso({
@@ -94,8 +94,8 @@ export default class World {
     this.sky = new Skybox({
       time: this.time,
       debug: this.debug,
-      sphereTopColor: 0x330d75,
-      sphereBottomColor: 0xcfc5b9,
+      sphereTopColor: 0xaaddff,
+      sphereBottomColor: 0xbbeeff,
       offset: 20,
       exponent: 2,
     })
