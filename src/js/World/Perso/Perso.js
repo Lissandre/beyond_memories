@@ -112,6 +112,10 @@ export default class Perso {
             this.playerOnFloor = false
             break
         }
+        if (this.hasRotated) {
+          this.lerpOrientation()
+          this.hasRotated = false
+        }
       },
       false
     )
@@ -157,7 +161,6 @@ export default class Perso {
     this.time.on('tick', () => {
       if (this.moveForward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
-        this.lerpOrientation()
         if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
           if (this.run) {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
@@ -167,9 +170,8 @@ export default class Perso {
           }
         }
       }
-      if (this.moveBackward) {
+      if (this.moveBackward) {;
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( this.speedP * this.time.delta ) )
-        this.lerpOrientation()
         if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
           if (this.run) {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
@@ -180,20 +182,20 @@ export default class Perso {
         }
       }
       if (this.moveLeft) {
-        this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
-        this.lerpOrientation()
-        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
-          if (this.run) {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-            this.speedP = 0.01
-          } else {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
-          }
-        }
+        this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.6 * this.speedP))
+
+        // this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
+        // if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+        //   if (this.run) {
+        //     this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+        //     this.speedP = 0.01
+        //   } else {
+        //     this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+        //   }
+        // }
       }
       if (this.moveRight) {
         this.playerVelocity.add( this.getSideVector().multiplyScalar( - this.speedP * this.time.delta ) )
-        this.lerpOrientation()
         if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
           if (this.run) {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
@@ -208,6 +210,10 @@ export default class Perso {
         this.speedY = 0
         this.speed = -this.mouse.delta.x * this.params.cameraSpeedX
         this.speedY = this.mouse.delta.y * this.params.cameraSpeedY
+        if (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true) {
+          this.lerpOrientation()
+          this.hasRotated = true
+        }
       } else if (
         this.mouse.grab === false &&
         (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)
@@ -218,6 +224,10 @@ export default class Perso {
         Math.sign(this.speedY) * this.speedY - this.params.deceleration > 0
           ? (this.speedY -= Math.sign(this.speedY) * this.params.deceleration)
           : (this.speedY = 0)
+        if (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true) {
+          this.lerpOrientation()
+          this.hasRotated = true
+        }
       }
       if (this.speedY) {
         if (
@@ -335,24 +345,6 @@ export default class Perso {
         .min(0)
         .max(1)
         .step(0.001)
-      this.debugFolder
-        .add(this.params, 'frontSpeed')
-        .name('Front Speed')
-        .min(0)
-        .max(1)
-        .step(0.02)
-      this.debugFolder
-        .add(this.params, 'sideSpeed')
-        .name('Side Speed')
-        .min(0)
-        .max(1)
-        .step(0.02)
-      this.debugFolder
-        .add(this.params, 'jumpForce')
-        .name('Jump Force')
-        .min(0)
-        .max(300)
-        .step(10)
     }
   }
 

@@ -13,7 +13,18 @@ export default class Floor {
     this.setFloor()
   }
   setFloor() {
-    this.floor = this.assets.models.LOWPOLYWORLD.scene
+    this.floor = this.assets.models.MAP_RESIZED.scene
+    this.floor.traverse((child) => {
+      if (child.name.includes('Cone')) {
+        child.castShadow = true
+        if (child.material.name === 'LEAVES') {
+          child.material.transparent = true
+        }
+      }
+      if (child.name.includes('SOL')) {
+        child.receiveShadow = true
+      }
+    })
     // this.floor.scale.set(0.2, 0.2, 0.2)
     this.container.add(this.floor)
   }
