@@ -160,6 +160,8 @@ export default class World {
       assets: this.assets,
       cameraCar: this.cameraCar,
       worldOctree: this.worldOctree,
+      watchCar: this.watchCar,
+      appThis: this.appThis
     })
     this.container.add(this.car.container)
     console.log(this.car);
