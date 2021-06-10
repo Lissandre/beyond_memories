@@ -76,7 +76,7 @@ export default class App {
     })
 
     this.lookScreenPos = new Vector3(0,0.1,-12)
-    this.lookCarPos = new Vector3(5,5,-10)
+    this.lookCarPos = new Vector3(0,5,-13.5)
     
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {

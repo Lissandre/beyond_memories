@@ -12,14 +12,14 @@ import { Body, Box, Vec3 } from 'cannon-es'
 export default class Floor {
   constructor(options) {
     // Set options
-    this.physic = options.physic
+    // this.physic = options.physic
     this.assets = options.assets
 
     // Set up
     this.container = new Object3D()
 
     this.setFloor()
-    this.setPhysic()
+    // this.setPhysic()
   }
   setFloor() {
     this.assets.textures.floor.repeat.set(10, 10);

@@ -1,4 +1,5 @@
 import { AxesHelper, Box3, Object3D } from 'three'
+import { Octree } from 'three/examples/jsm/math/Octree'
 
 import Camera from '../Camera'
 
@@ -37,6 +38,7 @@ export default class World {
     
     // Set up
     this.container = new Object3D()
+    this.worldOctree = new Octree()
     this.container.name = 'World'
     
     this.startText = false
@@ -58,8 +60,8 @@ export default class World {
     this.setPhysic()
     this.setFloor()
     this.setVideo()
-    this.setCar()
     this.setCameraForCar()
+    this.setCar()
     this.setPerso()
     this.setElmo()
     this.screenCanvas()
@@ -112,10 +114,10 @@ export default class World {
   }
   setFloor() {
     this.floor = new Floor({
-      physic: this.physic,
       assets: this.assets,
     })
     this.container.add(this.floor.container)
+    this.worldOctree.fromGraphNode(this.scene)
   }
   setPerso() {
     this.perso = new Perso({
@@ -155,7 +157,9 @@ export default class World {
   setCar() {
     this.car = new RCcar({
       time: this.time,
-      assets: this.assets
+      assets: this.assets,
+      cameraCar: this.cameraCar,
+      worldOctree: this.worldOctree,
     })
     this.container.add(this.car.container)
     console.log(this.car);
