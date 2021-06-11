@@ -182,35 +182,21 @@ export default class Perso {
         }
       }
       if (this.moveLeft) {
-        this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.6 * this.speedP))
-
-        // this.playerVelocity.add( this.getSideVector().multiplyScalar( this.speedP * this.time.delta ) )
-        // if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
-        //   if (this.run) {
-        //     this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-        //     this.speedP = 0.01
-        //   } else {
-        //     this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
-        //   }
-        // }
+        this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.1 * this.speedP))
+        const step = this.params.lerpSpeed * this.time.delta
+        this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
       }
       if (this.moveRight) {
-        this.playerVelocity.add( this.getSideVector().multiplyScalar( - this.speedP * this.time.delta ) )
-        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
-          if (this.run) {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
-            this.speedP = 0.01
-          } else {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
-          }
-        }
+        this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * -Math.PI * 0.1 * this.speedP))
+        const step = this.params.lerpSpeed * this.time.delta
+        this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
       }
       if (this.mouse.grab === true) {
         this.speed = 0
         this.speedY = 0
         this.speed = -this.mouse.delta.x * this.params.cameraSpeedX
         this.speedY = this.mouse.delta.y * this.params.cameraSpeedY
-        if (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true) {
+        if (this.moveForward == true || this.moveBackward == true) {
           this.lerpOrientation()
           this.hasRotated = true
         }
@@ -224,7 +210,7 @@ export default class Perso {
         Math.sign(this.speedY) * this.speedY - this.params.deceleration > 0
           ? (this.speedY -= Math.sign(this.speedY) * this.params.deceleration)
           : (this.speedY = 0)
-        if (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true) {
+        if (this.moveForward == true || this.moveBackward == true) {
           this.lerpOrientation()
           this.hasRotated = true
         }
@@ -294,16 +280,16 @@ export default class Perso {
     this.perso.position.set(this.camera.container.position.x, this.camera.container.position.y - 0.35, this.camera.container.position.z)
   }
   getForwardVector() {
-    this.camera.container.getWorldDirection( this.playerDirection )
+    this.perso.getWorldDirection( this.playerDirection )
     this.playerDirection.y = 0
     this.playerDirection.normalize()
     return this.playerDirection
   }
   getSideVector() {
-    this.camera.container.getWorldDirection( this.playerDirection )
+    this.perso.getWorldDirection( this.playerDirection )
     this.playerDirection.y = 0
     this.playerDirection.normalize()
-    this.playerDirection.cross( this.camera.container.up )
+    this.playerDirection.cross( this.perso.up )
     return this.playerDirection
   }
   setDebug() {
@@ -347,7 +333,6 @@ export default class Perso {
         .step(0.001)
     }
   }
-
   setAnimations() {
     const animations = this.assets.models.Xbot.animations;
     this.mixer = new AnimationMixer( this.assets.models.Xbot.scene )
