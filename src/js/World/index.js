@@ -278,6 +278,8 @@ export default class World {
         this.playerInventory.push(this.videoScreen.data)
         console.log(this.playerInventory)
         this.videoScreen.container.visible = false
+        this.container.remove(this.videoScreen.container)
+        this.hasVideoScreen = false
         this.createItemCrad()
       }else {
         console.log('there is too much items in your inventory');
