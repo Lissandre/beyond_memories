@@ -15,6 +15,7 @@ export default class Floor {
 
     // Set up
     this.container = new Object3D()
+    this.container.name = "MAP"
 
     this.terrainShader
 
@@ -32,6 +33,9 @@ export default class Floor {
         }
       }
       if (child.name.includes('SOL')) {
+        child.receiveShadow = true
+      }
+      if (child.name.includes('HOUSE')) {
         child.receiveShadow = true
       }
     })

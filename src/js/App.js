@@ -1,4 +1,7 @@
-import { Color, FogExp2, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { Color, FogExp2, Scene, sRGBEncoding, Vector3, WebGLRenderer } from 'three'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -7,6 +10,7 @@ import Time from '@tools/Time'
 import Assets from '@tools/Loader'
 
 import Camera from './Camera'
+import IntroCamera from './IntroCamera'
 import World from '@world/index'
 
 export default class App {
@@ -28,10 +32,14 @@ export default class App {
       fogNoiseImpact: 2
     }
 
+    this.isIntro = false
+
     this.setConfig()
     this.setRenderer()
     this.setCamera()
+    this.setIntroCam()
     this.setWorld()
+    // this.setAmbientOcclusion()
   }
   setRenderer() {
     // Set scene
@@ -60,11 +68,17 @@ export default class App {
         this.sizes.viewport.height
       )
     })
+
+    
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
-      this.renderer.render(this.scene, this.camera.camera)
+        if(this.isIntro) {
+          this.renderer.render(this.scene, this.introCam.camera)
+        } else {
+          this.renderer.render(this.scene, this.camera.camera)
+        }
       // }
       this.debug && this.stats.end()
     })
@@ -95,10 +109,21 @@ export default class App {
     this.camera = new Camera({
       sizes: this.sizes,
       renderer: this.renderer,
-      debug: this.debug,
+      debug: this.debug
     })
     // Add camera to scene
     this.scene.add(this.camera.container)
+  }
+
+  setIntroCam() {
+    // Create camera instance
+    this.introCam = new IntroCamera({
+      sizes: this.sizes,
+      renderer: this.renderer,
+      debug: this.debug,
+    })
+    // Add camera to scene
+    this.scene.add(this.introCam.container)
   }
   setWorld() {
     // Create world instance
@@ -120,5 +145,29 @@ export default class App {
       this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this.stats.dom)
     }
+  }
+
+  setAmbientOcclusion() {
+    this.composer = new EffectComposer( this.renderer );
+    this.renderPass = new RenderPass( this.scene, this.camera.camera );
+    this.saoPass = new SAOPass( this.scene, this.camera.camera, false, true );
+    this.saoPass.params.saoBias = 0.5
+    this.saoPass.params.saoIntensity = 0.0015
+    this.saoPass.params.saoScale = 3
+    this.saoPass.params.saoKernelRadius = 10
+    this.saoPass.params.saoMinResolution = 0
+    this.saoPass.params.saoBlur = false
+    this.saoPass.params.saoBlurRadius = 8
+    this.saoPass.params.saoBlurStdDev = 4
+    this.saoPass.params.saoBlurDepthCutoff = 0.01
+    
+    this.composer.addPass( this.renderPass );
+    this.composer.addPass( this.saoPass );
+
+    this.time.on('tick', ()=> {
+      this.debug && this.stats.begin()
+      this.composer.render()
+      this.debug && this.stats.end()
+    })
   }
 }

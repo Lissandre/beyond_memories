@@ -7,6 +7,8 @@ export default class Camera {
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.debug = options.debug
+    this.position = options.position
+    this.lookAtCam = options.lookAtCam
 
     // Set up
     this.container = new Object3D()
@@ -36,14 +38,20 @@ export default class Camera {
   }
   setPosition() {
     // Set camera position
-    this.camera.position.x = 0
-    this.camera.position.y = 7
-    this.camera.position.z = 7.5
-    this.cameraUpdate(this.container.position)
+    console.log(this.position);
+    if(this.position === undefined) {
+      this.camera.position.x = 0
+      this.camera.position.y = 7
+      this.camera.position.z = 7.5
+      this.cameraUpdate(this.container.position)
+    } else {
+      this.camera.position.set(this.position)
+      this.camera.lookAt(this.lookAtCam)
+    }
   }
   cameraUpdate(position) {
-    this.container.position.copy(position)
-    this.camera.lookAt(this.container.position)
+      this.container.position.copy(position)
+      this.camera.lookAt(this.container.position)
   }
   setOrbitControls() {
     // Set orbit control
