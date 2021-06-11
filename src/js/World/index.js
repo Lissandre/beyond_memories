@@ -15,6 +15,7 @@ export default class World {
     this.assets = options.assets
     this.camera = options.camera
     this.scene = options.scene
+    this.fogParams = options.fogParams
 
     // Set up
     this.container = new Object3D()
@@ -76,6 +77,9 @@ export default class World {
   setFloor() {
     this.floor = new Floor({
       assets: this.assets,
+      fogParams: this.fogParams,
+      time: this.time,
+      debug: this.debugFolder
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.MAP_RESIZED_LOWPOLY.scene)

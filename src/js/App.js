@@ -1,4 +1,4 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { Color, FogExp2, Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -18,8 +18,14 @@ export default class App {
     this.time = new Time()
     this.sizes = new Sizes()
     this.assets = new Assets()
-    this.params = {
-      fogColor: 0xcfc5b0,
+    this.fogParams = {
+      fogColor: 0x64a6e3,
+      fogNearColor: 0x000000,
+      fogHorizonColor: 0xffffff,
+      fogDensity: 0.025,
+      fogNoiseSpeed: 0,
+      fogNoiseFreq: .005,
+      fogNoiseImpact: 2
     }
 
     this.setConfig()
@@ -31,7 +37,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new Fog(this.params.fogColor, 1, 80)
+    this.scene.fog = new FogExp2(this.fogParams.fogColor, this.fogParams.fogDensity)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -73,12 +79,15 @@ export default class App {
       //   .min(0)
       //   .max(1)
       //   .step(0.01)
-      folder
-        .addColor(this.params, 'fogColor')
+      this.debugFolder = this.debug.addFolder('FogColor')
+      this.debugFolder
+        .addColor(this.fogParams, 'fogColor')
         .name('Fog Color')
         .onChange(() => {
-          this.scene.fog.color = new Color(this.params.fogColor)
+          this.scene.fog.color = new Color(this.fogParams.fogColor)
         })
+      
+
     }
   }
   setCamera() {
@@ -99,6 +108,7 @@ export default class App {
       assets: this.assets,
       camera: this.camera,
       scene: this.scene,
+      fogParams: this.fogParams,
     })
     // Add world to scene
     this.scene.add(this.world.container)
