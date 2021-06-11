@@ -112,10 +112,6 @@ export default class Perso {
             this.playerOnFloor = false
             break
         }
-        if (this.hasRotated) {
-          this.lerpOrientation()
-          this.hasRotated = false
-        }
       },
       false
     )
@@ -169,9 +165,15 @@ export default class Perso {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
           }
         }
+        this.lerpOrientation()
       }
-      if (this.moveBackward) {;
-        this.playerVelocity.add( this.getForwardVector().multiplyScalar( this.speedP * this.time.delta ) )
+      if (this.moveBackward) {
+        const step = this.params.lerpSpeed * this.time.delta
+        this.quat = new Quaternion()
+        this.camera.container.quaternion.clone(this.quat)
+        this.quat.multiplyQuaternions(this.camera.container.quaternion, this.quat)
+        this.perso.quaternion.rotateTowards( this.quat.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)), step )
+        this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
         if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
           if (this.run) {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
@@ -180,26 +182,35 @@ export default class Perso {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
           }
         }
+        // this.lerpOrientation()
       }
       if (this.moveLeft) {
-        this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.1 * this.speedP))
-        const step = this.params.lerpSpeed * this.time.delta
-        this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
+        if (this.moveBackward) {
+          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.1 * this.speedP))
+          const step = this.params.lerpSpeed * this.time.delta
+          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step/10 )
+        } else {
+          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.1 * this.speedP))
+          const step = this.params.lerpSpeed * this.time.delta
+          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
+        }
       }
       if (this.moveRight) {
-        this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * -Math.PI * 0.1 * this.speedP))
-        const step = this.params.lerpSpeed * this.time.delta
-        this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
+        if (this.moveBackward) {
+          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * - Math.PI * 0.1 * this.speedP))
+          const step = this.params.lerpSpeed * this.time.delta
+          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step/10 )
+        } else {
+          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * - Math.PI * 0.1 * this.speedP))
+          const step = this.params.lerpSpeed * this.time.delta
+          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
+        }
       }
       if (this.mouse.grab === true) {
         this.speed = 0
         this.speedY = 0
         this.speed = -this.mouse.delta.x * this.params.cameraSpeedX
         this.speedY = this.mouse.delta.y * this.params.cameraSpeedY
-        if (this.moveForward == true || this.moveBackward == true) {
-          this.lerpOrientation()
-          this.hasRotated = true
-        }
       } else if (
         this.mouse.grab === false &&
         (Math.abs(this.speed) > 0 || Math.abs(this.speedY) > 0)
@@ -210,10 +221,6 @@ export default class Perso {
         Math.sign(this.speedY) * this.speedY - this.params.deceleration > 0
           ? (this.speedY -= Math.sign(this.speedY) * this.params.deceleration)
           : (this.speedY = 0)
-        if (this.moveForward == true || this.moveBackward == true) {
-          this.lerpOrientation()
-          this.hasRotated = true
-        }
       }
       if (this.speedY) {
         if (
