@@ -146,10 +146,10 @@ export default class Perso {
             this.run = false
             break
         }
-        if (this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+        if (this.moveForward == false && this.moveBackward == false) {
           this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['IDLE'].action, 1.2 )
           this.speedP = 0.005
-        } else if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'IDLE' && this.run == false && (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true)) {
+        } else if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'IDLE' && this.run == false && (this.moveForward == true || this.moveBackward == true)) {
           this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.3 )
           this.speedP = 0.005
         }
