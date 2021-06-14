@@ -1,5 +1,5 @@
 import { Object3D, PerspectiveCamera } from 'three'
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export default class Camera {
   constructor(options) {
@@ -15,7 +15,7 @@ export default class Camera {
 
     this.setCamera()
     this.setPosition()
-    // this.setOrbitControls()
+    this.setOrbitControls()
   }
   setCamera() {
     // Create camera

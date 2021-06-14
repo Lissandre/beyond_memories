@@ -34,7 +34,7 @@ export default class World {
     this.setSky()
     this.setHemisphereLight()
     this.setFloor()
-    this.setPerso()
+    // this.setPerso()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')

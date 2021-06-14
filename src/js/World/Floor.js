@@ -1,5 +1,6 @@
 import {
   Object3D,
+  MeshLambertMaterial
 } from 'three'
 
 export default class Floor {
@@ -9,10 +10,17 @@ export default class Floor {
 
     // Set up
     this.container = new Object3D()
+    this.container.name = "map"
 
     this.setFloor()
   }
   setFloor() {
+    // this.assets.textures.water.repeat.set(10, 10);
+    // this.assets.textures.water.wrapS = RepeatWrapping;
+    // this.assets.textures.water.wrapT = RepeatWrapping;
+
+    this.texture = new MeshLambertMaterial({ map: this.assets.textures.water })
+
     this.floor = this.assets.models.MAP.scene
     this.floor.traverse((child) => {
       if (child.name.includes('Cone')) {
@@ -35,6 +43,12 @@ export default class Floor {
       }
       if (child.name.includes('SOL')) {
         child.receiveShadow = true
+      }
+      if (child.name.includes('ARMOIR')) {
+        child.castShadow = true
+      }
+      if(child.name.includes('EAU')) {
+        child.material= this.texture
       }
     })
     // this.floor.scale.set(0.2, 0.2, 0.2)
