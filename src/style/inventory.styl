@@ -1,0 +1,91 @@
+// Inventory style
+.open_inventory
+  .inventory_container
+    
+    transform: translateY(0)
+
+.inventory 
+  position absolute
+  bottom: 5%
+  left: 2%
+
+.inventory_button
+    background-color transparent
+    border none
+    cursor: pointer
+
+    svg
+        overflow: visible
+
+    .anime_goesUp,
+    .anime_rotLeft,
+    .anime_rotRight
+        transition: .3s ease-in-out
+        transform-origin: center
+
+    // .anime_rotLeft,
+    // .anime_rotRight
+    //     transform-origin: center
+
+    // .anime_rotLeft
+    //     transform: translateY(-20px) rotate(-15deg)
+
+    // .anime_rotRight
+    //     transform: translateX(-5px) rotate(15deg)
+    &:hover 
+        .anime_goesUp
+            transform: translateY(-20px)
+
+
+.inventory_container
+  width: 100%
+  height: 100%
+  position: absolute
+  display flex
+  background-color #BCBCBC
+  align-items: center
+  transform: translateY(100%)
+  transition: .3s ease-in-out
+
+  &_screenShot
+	  position absolute
+	  bottom: 5%
+	  right: 10%
+	  z-index 9999
+
+  &_close
+    position absolute
+    top: 2%
+    right: 2%
+
+.inventory_content
+  margin auto
+
+.inventory_content_items
+  display flex
+  flex-flow row nowrap
+  align-items: flex-start
+  justify-content: space-between
+
+  &_item
+    width: 300px
+    height: 500px
+    border: 2px solid white
+    padding: 20px 40px
+    border-radius: 20px
+    display: flex
+    flex-flow column nowrap
+    align-items: center
+    justify-content: space-around
+
+  .item_pic
+    width: 100%
+    height: 300px
+    overflow: hidden
+
+    img
+      width: 100%
+
+  .item_texts
+    text-align center
+
