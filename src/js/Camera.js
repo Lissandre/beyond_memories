@@ -38,7 +38,6 @@ export default class Camera {
   }
   setPosition() {
     // Set camera position
-    console.log(this.position);
     if(this.position === undefined) {
       this.camera.position.x = 0
       this.camera.position.y = 7

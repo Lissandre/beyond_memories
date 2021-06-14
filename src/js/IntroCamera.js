@@ -36,10 +36,10 @@ export default class IntroCamera {
   }
   setPosition() {
     // Set camera position
-      this.camera.position.x = 30
-      this.camera.position.y = 5
-      this.camera.position.z = 30
-      this.camera.lookAt(0,0,0)
+      this.camera.position.x = 65
+      this.camera.position.y = 10
+      this.camera.position.z = -50
+      this.camera.lookAt(-30,0,0)
   }
   
 }

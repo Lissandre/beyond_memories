@@ -17,6 +17,7 @@ export default class App {
   constructor(options) {
     // Set options
     this.canvas = options.canvas
+    this.startB = options.startB
 
     // Set up
     this.time = new Time()
@@ -32,14 +33,18 @@ export default class App {
       fogNoiseImpact: 2
     }
 
-    this.isIntro = false
-
+    this.isIntro = true
+    this.isOutro = false
+    
     this.setConfig()
     this.setRenderer()
     this.setCamera()
-    this.setIntroCam()
     this.setWorld()
+    this.setIntroCam()
+    this.startExperience()
     // this.setAmbientOcclusion()
+
+    this.camera.container.position.set(this.introCam.container.position)
   }
   setRenderer() {
     // Set scene
@@ -69,18 +74,30 @@ export default class App {
       )
     })
 
-    
+    this.camPersoPos = new Vector3()
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
+        // console.log(this.isIntro);
         if(this.isIntro) {
           this.renderer.render(this.scene, this.introCam.camera)
         } else {
-          this.renderer.render(this.scene, this.camera.camera)
+          if(this.isOutro === false) {
+            this.introCam.camera.position.lerp(this.camera.camera.position, 0.006)
+            this.introCam.camera.lookAt(this.world.perso.container.position)
+            this.renderer.render(this.scene, this.introCam.camera)
+          }
+          setTimeout(()=>{
+            console.log('oui');
+            this.isOutro = true
+            this.renderer.render(this.scene, this.camera.camera)
+            this.scene.remove(this.introCam.container)
+            
+          }, 6000)
         }
-      // }
-      this.debug && this.stats.end()
+        // }
+        this.debug && this.stats.end()
     })
 
     if (this.debug) {
@@ -145,6 +162,15 @@ export default class App {
       this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this.stats.dom)
     }
+  }
+
+  startExperience() {
+    this.startB.addEventListener('click', ()=> {
+      if(this.isIntro === true) {
+        this.isIntro = false
+        this.startB.style.display = 'none'
+      }
+    })
   }
 
   setAmbientOcclusion() {
