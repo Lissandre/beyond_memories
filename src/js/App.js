@@ -1,4 +1,4 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import { Color, Fog, PCFSoftShadowMap, Scene, sRGBEncoding, WebGLRenderer } from 'three'
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -42,6 +42,7 @@ export default class App {
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
     this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMap.type = PCFSoftShadowMap
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes

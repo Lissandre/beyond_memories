@@ -69,7 +69,7 @@ export default class Skybox {
       color: 0xffffff,
       intensity: 0.7
     })
-    this.sun.container.position.set(-50, 50,-50)
+    this.sun.container.position.set(-70, 70,-70)
     this.container.add(this.sun.container)
   }
 }
