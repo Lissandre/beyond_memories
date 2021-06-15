@@ -23,7 +23,7 @@ export default class Perso {
     // Set up
     this.container = new Object3D()
 
-    this.playerCollider = new Capsule(new Vector3(0, 0, 0), new Vector3(0, 1.5, 0), 0.35)
+    this.playerCollider = new Capsule(new Vector3(0, 2, 0), new Vector3(0, 3.5, 0), 0.35)
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
     this.GRAVITY = 30
@@ -73,6 +73,7 @@ export default class Perso {
     this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
+    this.perso.position.set(0,0, 3)
   }
   setListeners() {
     document.addEventListener(

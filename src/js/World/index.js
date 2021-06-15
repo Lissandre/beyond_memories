@@ -78,7 +78,7 @@ export default class World {
       assets: this.assets,
     })
     this.container.add(this.floor.container)
-    this.worldOctree.fromGraphNode(this.assets.models.MAP_LOWPOLY.scene)
+    this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
   }
   setPerso() {
     this.perso = new Perso({
