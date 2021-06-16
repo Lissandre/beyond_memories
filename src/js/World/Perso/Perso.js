@@ -36,7 +36,8 @@ export default class Perso {
     this.baseActions = {
       IDLE: { weight: 1 },
       WALKING: { weight: 0 },
-      RUNNING: { weight: 0 }
+      RUNNING: { weight: 0 },
+      JUMP: { weight: 0 }
     }
     this.additiveActions = {
       // sneak_pose: { weight: 0 },
@@ -70,6 +71,7 @@ export default class Perso {
   }
   setPerso() {
     this.perso = this.assets.models.Xbot.scene
+    console.log(this.assets.models.Xbot);
     this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
@@ -108,6 +110,11 @@ export default class Perso {
             break
           case 'Space': // space
             if (this.playerOnFloor) {
+              // if (this.currentBaseAction != 'WALKING' || this.currentBaseAction != 'RUNNING') {
+              //   this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, -0.2 )
+              // } else {
+                this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, 0 )
+              // }
               this.playerVelocity.y = 8;
             }
             this.playerOnFloor = false

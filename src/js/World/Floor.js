@@ -4,7 +4,8 @@ import {
   Vector2,
   Color,
   ShaderMaterial,
-  DoubleSide
+  DoubleSide,
+  FrontSide
 } from 'three'
 
 import WaterFrag from '@shaders/WaterFrag.frag'
