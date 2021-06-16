@@ -60,7 +60,9 @@ export default class Floor {
 
     this.setFloor()
     this.animateWater()
-    this.setDebug()
+    if(this.debug) {
+      this.setDebug()
+    }
   }
 
   animateWater() {

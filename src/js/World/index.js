@@ -7,6 +7,9 @@ import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Water from './Water/Water'
+import BoxObjectManager from './BoxObject/BoxObjectManager'
+
+import Data from '../../data/data.json'
 
 export default class World {
   constructor(options) {
@@ -36,7 +39,9 @@ export default class World {
     this.setHemisphereLight()
     this.setFloor()
     // this.setWater()
-    // this.setPerso()
+    this.setPerso()
+    this.setBoxObjectManager()
+    this.PlayerEnterObjectArea()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -113,4 +118,36 @@ export default class World {
     })
     this.container.add(this.water.container)
   }
+
+  setBoxObjectManager() {
+    this.boxObjectManager = new BoxObjectManager({
+      time: this.time,
+      debug: this.debug,
+      assets: this.assets
+    })
+    this.container.add(this.boxObjectManager.container)
+  }
+
+  PlayerEnterObjectArea() {
+    console.log(this.boxObjectManager.boxesArr);
+    
+    this.time.on('tick', ()=> {
+      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+
+        this.boxObjectManager.boxesArr.forEach(element => {
+          
+          this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
+          if(this.playerenteredInObject === true) {
+            // console.log('enter in object');
+            console.log(Data.monde_1[element.child.name]);
+          }else{
+          }
+        });
+        
+
+      }
+    })
+    
+  }
+
 }

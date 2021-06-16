@@ -5,7 +5,12 @@ import {
   Quaternion,
   Euler,
   AnimationUtils,
-  AnimationMixer
+  AnimationMixer,
+  BoxGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Box3,
+  Box3Helper
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
@@ -63,6 +68,7 @@ export default class Perso {
     }
 
     this.setPerso()
+    this.setCollider()
     this.setListeners()
     this.setMovements()
     this.setDebug()
@@ -74,6 +80,17 @@ export default class Perso {
     this.perso.castShadow = true
     this.container.add(this.perso)
   }
+
+  setCollider() {
+    this.geometry = new BoxGeometry( 1, 1, 1 );
+    this.material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
+    this.cube = new Mesh( this.geometry, this.material )
+    this.cube.position.set(0,0.5,0)
+    this.playerBB = new Box3().setFromObject(this.cube)
+    const helper = new Box3Helper( this.playerBB, 0xffff00 );
+    this.container.add(this.cube, helper)
+}
+
   setListeners() {
     document.addEventListener(
       'keydown',
@@ -157,6 +174,8 @@ export default class Perso {
     this.time.on('tick', () => {
       if (this.moveForward) {
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
+        this.cube.position.copy(this.perso.position)
+        this.playerBB.setFromObject(this.cube)
         if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
           if (this.run) {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
@@ -174,6 +193,8 @@ export default class Perso {
         this.quat.multiplyQuaternions(this.camera.container.quaternion, this.quat)
         this.perso.quaternion.rotateTowards( this.quat.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)), step )
         this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
+        this.cube.position.copy(this.perso.position)
+        this.playerBB.setFromObject(this.cube)
         if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
           if (this.run) {
             this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )

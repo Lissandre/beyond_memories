@@ -1,0 +1,133 @@
+{
+    "monde_1": {
+        "mod_starwars": {
+            "id": 0,
+            "name": "X-wings StarWars",
+            "description": "la desc du truc star wars",
+            "type": "object",
+            "links": {
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_mario": {
+            "id": 1,
+            "name": "Champignon Mario",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_skate": {
+            "id": 2,
+            "name": "Tech Deck",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_barbecue": {
+            "id": 3,
+            "name": "Barbecue avec papa",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_macdo": {
+            "id": 4,
+            "name": "Happy Meal",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_cabane": {
+            "id": 5,
+            "name": "Cabane",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_peche": {
+            "id": 6,
+            "name": "Pêche",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_pelle": {
+            "id": 7,
+            "name": "Pelle",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_jurassic": {
+            "id": 8,
+            "name": "Jurassic Park",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_bandicoot": {
+            "id": 9,
+            "name": "Crash Bandicoot",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_tortue": {
+            "id": 10,
+            "name": "Tortue",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_totoro": {
+            "id": 11,
+            "name": "Totoro",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        },
+        "mod_pokemon": {
+            "id": 12,
+            "name": "Pokémon",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "media": "../src/textures/video.mp4",
+                "image": "./assets/object/pizza.gif"
+            }
+        }
+    }
+}
