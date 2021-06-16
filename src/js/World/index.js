@@ -6,6 +6,7 @@ import HemisphereLightSource from './Lights/HemisphereLight'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
+import Water from './Water/Water'
 
 export default class World {
   constructor(options) {
@@ -34,7 +35,8 @@ export default class World {
     this.setSky()
     this.setHemisphereLight()
     this.setFloor()
-    // this.setPerso()
+    // this.setWater()
+    this.setPerso()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -76,6 +78,8 @@ export default class World {
   setFloor() {
     this.floor = new Floor({
       assets: this.assets,
+      time: this.time,
+      debug: this.debug
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -100,5 +104,13 @@ export default class World {
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+
+  setWater() {
+    this.water = new Water({
+      time: this.time,
+      debug: this.debug
+    })
+    this.container.add(this.water.container)
   }
 }
