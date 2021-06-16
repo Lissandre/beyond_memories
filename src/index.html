@@ -7,11 +7,26 @@
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
     <title>Beyond Memories</title>
 </head>
-<body>
+<body id="_body">
     <div class="loadScreen">
       <h1 class="load">0%</h1>
       <div class="progressBar">
         <div class="progress"></div>
+      </div>
+    </div>
+    <div class="inventory">
+      <button class="inventory_button intBTN js_inventoryBtn">inventory</button>
+    </div>
+    <div class="inventory_container">
+      <div class="inventory_content">
+        <div class="inventory_content_items" data-inventory-items>
+        </div>
+      </div>
+      <div class="inventory_container_close">
+        <button class="js_closeInventory">close</button>
+      </div>
+      <div class="inventory_container_screenShot">
+        <button class="js_screenShot">Get a memory</button>
       </div>
     </div>
     <canvas id="_canvas"></canvas>

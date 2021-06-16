@@ -19,11 +19,15 @@ export default class World {
     this.assets = options.assets
     this.camera = options.camera
     this.scene = options.scene
+    this.itemsIventory = options.itemsInventory
+    this.body = options.body
 
     // Set up
     this.container = new Object3D()
     this.worldOctree = new Octree()
     this.container.name = 'World'
+
+    this.playerInventory = []
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -128,8 +132,171 @@ export default class World {
     this.container.add(this.boxObjectManager.container)
   }
 
+
+
+
+  openDiagOne() {
+    document.addEventListener(
+      'keydown',
+      this.handleKeyE.bind(this),
+      false
+    )
+    console.log('open diag oui');
+    // document.addEventListener(
+    //   'keydown',
+    //   this.handleKeyF.bind(this),
+    //   false
+    // )
+  }
+
+  handleKeyE(event) {
+    // if(!this.playerEnteredInElmo ) {
+    //   return
+    // }
+    switch (event.code) {
+      case 'KeyE': // e
+      if(this.elementEntered !== null) {
+          this.collecteObject()
+        }
+        break
+    }
+  }
+
+  // handleKeyF(event) {
+  //   if(!this.playerenteredInObject) {
+  //     return
+  //   }
+  //   switch (event.code) {
+  //     case 'KeyF': // f
+  //       this.text_01.style.opacity = 0
+  //       if(this.playerenteredInObject) {
+  //         if(this.videoScreen.isCollected === false){
+  //           this.collecteObject()
+  //         }else {
+  //           return
+  //         }
+  //       }
+  //       break
+  //   }
+  // }
+
+  interactWithElmo() {
+    this.text_01.style.opacity = 0
+    this.container.add(this.videoScreen.container)
+    this.videoScreen.videoLoad.play()
+  }
+
+  interactWithCar() {
+    this.text_01.style.opacity = 0
+    this.appThis.watchCar = true
+    console.log(this.appThis.watchCar);
+  }
+
+  collecteObject() {
+    if(this.elementEntered.isCollected === false) {
+      if(this.playerInventory.length < 8) {
+       
+        this.elementEntered.isCollected = true
+        this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
+        console.log(this.playerInventory)
+        this.createItemCrad()
+      }else {
+        console.log('trop d\'item mon pote')
+      }
+    }
+      
+  }
+
+    // if(this.videoScreen.isCollected === false){
+    //   if(this.playerInventory.length < 8) {
+    //     this.videoScreen.isCollected = true
+    //     this.videoScreen.videoLoad.pause()
+    //     this.playerInventory.push(this.videoScreen.data)
+    //     console.log(this.playerInventory)
+    //     this.videoScreen.container.visible = false
+    //     this.createItemCrad()
+    //   }else {
+    //     console.log('there is too much items in your inventory');
+    //   }
+    // }
+  // }
+
+  createItemCrad() {
+    
+    let item = document.createElement("div")
+    item.classList.add('inventory_content_items_item')
+
+    let item_imageContainer = document.createElement("div")
+    item_imageContainer.classList.add("item_pic")
+    let item_image = document.createElement("img")
+    item_image.setAttribute("src", Data.monde_1[this.elementEntered.child.name].links.image)
+    item_imageContainer.appendChild(item_image)
+
+    let item_textContainer = document.createElement("div")
+    item_textContainer.classList.add('item_texts')
+    let item_name = document.createElement("p")
+    item_name.textContent = Data.monde_1[this.elementEntered.child.name].name
+    let item_description = document.createElement("p")
+    item_description.textContent = Data.monde_1[this.elementEntered.child.name].description
+    item_textContainer.appendChild(item_name)
+    item_textContainer.appendChild(item_description)
+
+    let buttonDelete = document.createElement("button")
+    buttonDelete.classList.add("item_button")
+    let spanL = document.createElement("span")
+    let spanR = document.createElement("span")
+    spanL.classList.add("button_bar")
+    spanR.classList.add("button_bar")
+    spanL.classList.add("leftBar")
+    spanR.classList.add("rightBar")
+    buttonDelete.dataset.dataJs = "js_deleteObject"
+    buttonDelete.appendChild(spanL)
+    buttonDelete.appendChild(spanR)
+    buttonDelete.addEventListener("click", this.deleteItemCard.bind(this))
+
+    
+    item.appendChild(buttonDelete)
+    item.appendChild(item_imageContainer)
+    item.appendChild(item_textContainer)
+    this.itemsIventory.appendChild(item)
+  }
+
+  deleteItemCard(event) {
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+    if(this.elementEntered.isCollected === true) {
+      this.elementEntered.isCollected = false
+      let positionInInventory = this.playerInventory.indexOf(Data.monde_1[this.elementEntered.id])
+      this.playerInventory.splice(positionInInventory, 1)
+      console.log(this.playerInventory);
+    }
+    
+  }
+
+  closeDiag() {
+    document.removeEventListener(
+      'keydown',
+      this.handleKeyE, 
+      false
+    )
+    document.removeEventListener(
+      'keydown',
+      this.handleKeyF, 
+      false
+    )
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   PlayerEnterObjectArea() {
-    console.log(this.boxObjectManager.boxesArr);
     
     this.time.on('tick', ()=> {
       if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
@@ -137,10 +304,17 @@ export default class World {
         this.boxObjectManager.boxesArr.forEach(element => {
           
           this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
+          
           if(this.playerenteredInObject === true) {
             // console.log('enter in object');
+            this.elementEntered = element
+            this.openDiagOne()
             console.log(Data.monde_1[element.child.name]);
           }else{
+          }
+
+          if(this.playerenteredInObject !== true && this.elementEntered === element) {
+            this.elementEntered = null
           }
         });
         

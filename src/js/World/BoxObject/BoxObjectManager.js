@@ -1,5 +1,6 @@
 import { Object3D } from 'three'
 import BoxObjectVanilla from './BoxObjectVanilla'
+import BoxObjectInteractif from './BoxObjectInteractif'
 
 export default class BoxObjectManager {
 
@@ -30,6 +31,15 @@ export default class BoxObjectManager {
                 // console.log(this.boxesArr);
                 this.container.add(this.boxObjectVanilla.container)
             }
+            if (child.name.includes('modInt_')) {
+                this.boxObjectVanilla = new BoxObjectInteractif({
+                    child: child
+                })
+                this.boxesArr.push(this.boxObjectVanilla)
+                // console.log(this.boxesArr);
+                this.container.add(this.boxObjectVanilla.container)
+            }
+            
         })
 
     }

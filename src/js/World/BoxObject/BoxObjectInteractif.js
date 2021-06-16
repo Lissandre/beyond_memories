@@ -1,7 +1,7 @@
 
 import { Object3D, BoxGeometry, MeshBasicMaterial, Mesh, Vector3, Quaternion, Box3, Box3Helper } from 'three'
 
-export default class BoxObjectVanilla {
+export default class BoxObjectInteractif {
 
     
     constructor(options) {
@@ -14,8 +14,6 @@ export default class BoxObjectVanilla {
         this.size = new Vector3()
         this.tempSize = new Vector3()
         this.quaternionstarW = new Quaternion()
-
-        this.isCollected = false
         
         this.setCollider()
     }
@@ -24,14 +22,10 @@ export default class BoxObjectVanilla {
 
         if(this.child.isMesh) {
             this.child.geometry.boundingBox.getSize(this.size)
-            if(this.child.name === "mod_starwars"){
-                this.size = new Vector3(50,50,50)
-            }
+            
         }else {
             this.size = new Vector3(8,8,8)
-            if(this.child.name === "mod_skate"){
-                this.size = new Vector3(20,20,20)
-            }
+            
         }
         this.geometry = new BoxGeometry( this.size.x, this.size.y, this.size.z );
         this.material = new MeshBasicMaterial( {color: 0x0000ff, wireframe: true} );

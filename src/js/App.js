@@ -14,6 +14,11 @@ export default class App {
     // Set options
     this.canvas = options.canvas
 
+    this.openInventory = options.openInventory
+    this.closeInventory = options.closeInventory
+    this.body = options.body
+    this.itemsInventory = options.itemsInventory
+
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
@@ -26,6 +31,8 @@ export default class App {
     this.setRenderer()
     this.setCamera()
     this.setWorld()
+    this.openInventoryMethod()
+    this.closeInventoryMethod()
   }
   setRenderer() {
     // Set scene
@@ -99,6 +106,8 @@ export default class App {
       assets: this.assets,
       camera: this.camera,
       scene: this.scene,
+      itemsInventory: this.itemsInventory,
+      body: this.body
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -110,5 +119,17 @@ export default class App {
       this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this.stats.dom)
     }
+  }
+
+  openInventoryMethod() {
+    this.openInventory.addEventListener('click', ()=> {
+      this.body.classList.add('open_inventory')
+    })
+  }
+
+  closeInventoryMethod() {
+    this.closeInventory.addEventListener('click', ()=> {
+      this.body.classList.remove('open_inventory')
+    })
   }
 }
