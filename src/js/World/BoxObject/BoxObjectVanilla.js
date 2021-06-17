@@ -9,7 +9,7 @@ export default class BoxObjectVanilla {
         this.child = options.child
 
         this.container = new Object3D()
-        this.container.name = "objectCollider"
+        this.container.name = this.child.name
 
         this.size = new Vector3()
         this.tempSize = new Vector3()

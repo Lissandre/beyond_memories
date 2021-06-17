@@ -46,6 +46,7 @@ export default class World {
     this.setPerso()
     this.setBoxObjectManager()
     this.PlayerEnterObjectArea()
+    // console.log(this.boxObjectManager.boxesArr);
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -127,7 +128,8 @@ export default class World {
     this.boxObjectManager = new BoxObjectManager({
       time: this.time,
       debug: this.debug,
-      assets: this.assets
+      assets: this.assets,
+      Data: Data
     })
     this.container.add(this.boxObjectManager.container)
   }
@@ -141,7 +143,7 @@ export default class World {
       this.handleKeyE.bind(this),
       false
     )
-    console.log('open diag oui');
+    // console.log('open diag oui');
     // document.addEventListener(
     //   'keydown',
     //   this.handleKeyF.bind(this),
@@ -250,6 +252,7 @@ export default class World {
     spanL.classList.add("leftBar")
     spanR.classList.add("rightBar")
     buttonDelete.dataset.dataJs = "js_deleteObject"
+    buttonDelete.dataset.object = Data.monde_1[this.elementEntered.child.name].data_object
     buttonDelete.appendChild(spanL)
     buttonDelete.appendChild(spanR)
     buttonDelete.addEventListener("click", this.deleteItemCard.bind(this))
@@ -262,14 +265,13 @@ export default class World {
   }
 
   deleteItemCard(event) {
-    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
-    if(this.elementEntered.isCollected === true) {
-      this.elementEntered.isCollected = false
-      let positionInInventory = this.playerInventory.indexOf(Data.monde_1[this.elementEntered.id])
-      this.playerInventory.splice(positionInInventory, 1)
+      event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+      this.playerInventory = this.playerInventory.filter((element) => {
+        
+        return element.data_object !== event.target.dataset.object
+      })
+      this.boxObjectManager.boxesArr[event.target.dataset.object].isCollected = false
       console.log(this.playerInventory);
-    }
-    
   }
 
   closeDiag() {
@@ -285,38 +287,30 @@ export default class World {
     )
   }
 
-
-
-
-
-
-
-
-
-
-
-
   PlayerEnterObjectArea() {
     
     this.time.on('tick', ()=> {
       if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
 
-        this.boxObjectManager.boxesArr.forEach(element => {
-          
+
+        for (const elementName in this.boxObjectManager.boxesArr) {
+          const element = this.boxObjectManager.boxesArr[elementName];
+          // console.log(element);
           this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
           
           if(this.playerenteredInObject === true) {
             // console.log('enter in object');
             this.elementEntered = element
             this.openDiagOne()
-            console.log(Data.monde_1[element.child.name]);
+            // console.log(Data.monde_1[element.child.name]);
           }else{
           }
 
           if(this.playerenteredInObject !== true && this.elementEntered === element) {
             this.elementEntered = null
           }
-        });
+          
+        }
         
 
       }

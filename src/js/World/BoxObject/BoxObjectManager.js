@@ -12,7 +12,7 @@ export default class BoxObjectManager {
         this.debug = options.debug
         this.assets = options.assets
 
-        this.boxesArr = []
+        this.boxesArr = {}
 
         this.container = new Object3D()
         
@@ -26,16 +26,19 @@ export default class BoxObjectManager {
             if (child.name.includes('mod_')) {
                 this.boxObjectVanilla = new BoxObjectVanilla({
                     child: child
+
                 })
-                this.boxesArr.push(this.boxObjectVanilla)
+                const name = child.name
+                this.boxesArr[name] = this.boxObjectVanilla
                 // console.log(this.boxesArr);
                 this.container.add(this.boxObjectVanilla.container)
             }
             if (child.name.includes('modInt_')) {
-                this.boxObjectVanilla = new BoxObjectInteractif({
+                this.boxObjectInt = new BoxObjectInteractif({
                     child: child
                 })
-                this.boxesArr.push(this.boxObjectVanilla)
+                const name = child.name
+                this.boxesArr[name] = this.boxObjectInt
                 // console.log(this.boxesArr);
                 this.container.add(this.boxObjectVanilla.container)
             }
