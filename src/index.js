@@ -7,4 +7,5 @@ new App({
   closeInventory: document.querySelector('.js_closeInventory'),
   body: document.querySelector('#_body'),
   itemsInventory: document.querySelector('[data-inventory-items]'),
+  screenShot: document.querySelector('.js_screenShot')
 })

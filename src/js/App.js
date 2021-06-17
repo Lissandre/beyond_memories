@@ -1,10 +1,10 @@
-import {
-  Color,
-  PCFSoftShadowMap,
-  Scene,
-  sRGBEncoding,
-  WebGLRenderer,
-} from 'three'
+import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap } from 'three'
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -24,6 +24,7 @@ export default class App {
     this.closeInventory = options.closeInventory
     this.body = options.body
     this.itemsInventory = options.itemsInventory
+    this.screenShot = options.screenShot
 
     // Set up
     this.time = new Time()
@@ -32,6 +33,19 @@ export default class App {
     this.params = {
       fogColor: 0xcfc5b0,
     }
+
+
+    this.composer 
+    this.effectFXAA 
+    this.outlinePass;
+    this.outLineParams = {
+      edgeStrength: 3.0,
+      edgeGlow: 0.0,
+      edgeThickness: 1.0,
+      pulsePeriod: 0,
+      rotate: false,
+      usePatternTexture: false
+    };
 
     this.setConfig()
     this.setRenderer()
@@ -114,7 +128,8 @@ export default class App {
       camera: this.camera,
       scene: this.scene,
       itemsInventory: this.itemsInventory,
-      body: this.body,
+      screenShot: this.screenShot,
+      body: this.body
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -138,5 +153,21 @@ export default class App {
     this.closeInventory.addEventListener('click', () => {
       this.body.classList.remove('open_inventory')
     })
+  }
+
+  composerCreator() {
+    this.composer = new EffectComposer( this.renderer );
+
+    this.renderPass = new RenderPass( this.scene, this.camera );
+    this.composer.addPass( this.renderPass );
+
+    this.outlinePass = new OutlinePass( new Vector2( window.innerWidth, window.innerHeight ), this.scene, this.camera );
+    this.composer.addPass( this.outlinePass );
+
+    this.effectFXAA = new ShaderPass( FXAAShader );
+    this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+    this.composer.addPass( this.effectFXAA );
+
+    // window.addEventListener( 'resize', onWindowResize );
   }
 }

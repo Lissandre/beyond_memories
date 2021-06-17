@@ -8,6 +8,7 @@ import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Water from './Water/Water'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
+import CanvasResult from './CanvasResult/CanvasResult'
 
 import Data from '../../data/data.json'
 
@@ -21,6 +22,7 @@ export default class World {
     this.scene = options.scene
     this.itemsIventory = options.itemsInventory
     this.body = options.body
+    this.screenShot = options.screenShot
 
     // Set up
     this.container = new Object3D()
@@ -46,6 +48,7 @@ export default class World {
     this.setPerso()
     this.setBoxObjectManager()
     this.PlayerEnterObjectArea()
+    this.screenCanvas()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -128,13 +131,26 @@ export default class World {
       time: this.time,
       debug: this.debug,
       assets: this.assets,
+      Data: Data
     })
     this.container.add(this.boxObjectManager.container)
   }
 
+  screenCanvas() {
+    this.screenShot.addEventListener('click', ()=> {
+      this.CanvasResult = new CanvasResult({
+        playerInventory: this.playerInventory,
+        body: this.body
+      })
+    })
+  }
+
   openDiagOne() {
-    document.addEventListener('keydown', this.handleKeyE.bind(this), false)
-    // console.log('open diag oui');
+    document.addEventListener(
+      'keydown',
+      this.handleKeyE.bind(this),
+      false
+    )
     // document.addEventListener(
     //   'keydown',
     //   this.handleKeyF.bind(this),
@@ -182,7 +198,6 @@ export default class World {
   interactWithCar() {
     this.text_01.style.opacity = 0
     this.appThis.watchCar = true
-    // console.log(this.appThis.watchCar);
   }
 
   collecteObject() {
@@ -198,19 +213,6 @@ export default class World {
     }
   }
 
-  // if(this.videoScreen.isCollected === false){
-  //   if(this.playerInventory.length < 8) {
-  //     this.videoScreen.isCollected = true
-  //     this.videoScreen.videoLoad.pause()
-  //     this.playerInventory.push(this.videoScreen.data)
-  //     console.log(this.playerInventory)
-  //     this.videoScreen.container.visible = false
-  //     this.createItemCrad()
-  //   }else {
-  //     console.log('there is too much items in your inventory');
-  //   }
-  // }
-  // }
 
   createItemCrad() {
     let item = document.createElement('div')
@@ -235,15 +237,16 @@ export default class World {
     item_textContainer.appendChild(item_name)
     item_textContainer.appendChild(item_description)
 
-    let buttonDelete = document.createElement('button')
-    buttonDelete.classList.add('item_button')
-    let spanL = document.createElement('span')
-    let spanR = document.createElement('span')
-    spanL.classList.add('button_bar')
-    spanR.classList.add('button_bar')
-    spanL.classList.add('leftBar')
-    spanR.classList.add('rightBar')
-    buttonDelete.dataset.dataJs = 'js_deleteObject'
+    let buttonDelete = document.createElement("button")
+    buttonDelete.classList.add("item_button")
+    let spanL = document.createElement("span")
+    let spanR = document.createElement("span")
+    spanL.classList.add("button_bar")
+    spanR.classList.add("button_bar")
+    spanL.classList.add("leftBar")
+    spanR.classList.add("rightBar")
+    buttonDelete.dataset.dataJs = "js_deleteObject"
+    buttonDelete.dataset.object = Data.monde_1[this.elementEntered.child.name].data_object
     buttonDelete.appendChild(spanL)
     buttonDelete.appendChild(spanR)
     buttonDelete.addEventListener('click', this.deleteItemCard.bind(this))
@@ -255,15 +258,13 @@ export default class World {
   }
 
   deleteItemCard(event) {
-    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
-    if (this.elementEntered.isCollected === true) {
-      this.elementEntered.isCollected = false
-      let positionInInventory = this.playerInventory.indexOf(
-        Data.monde_1[this.elementEntered.id]
-      )
-      this.playerInventory.splice(positionInInventory, 1)
-      console.log(this.playerInventory)
-    }
+      event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+      this.playerInventory = this.playerInventory.filter((element) => {
+        
+        return element.data_object !== event.target.dataset.object
+      })
+      this.boxObjectManager.boxesArr[event.target.dataset.object].isCollected = false
+      console.log(this.playerInventory);
   }
 
   closeDiag() {
@@ -272,23 +273,19 @@ export default class World {
   }
 
   PlayerEnterObjectArea() {
-    this.time.on('tick', () => {
-      if (
-        this.perso.moveForward ||
-        this.perso.moveBackward ||
-        this.perso.moveLeft ||
-        this.perso.moveRight
-      ) {
-        this.boxObjectManager.boxesArr.forEach((element) => {
-          this.playerenteredInObject = element.objectBB.intersectsBox(
-            this.perso.playerBB
-          )
+    
+    this.time.on('tick', ()=> {
+      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
 
-          if (this.playerenteredInObject === true) {
-            // console.log('enter in object');
+
+        for (const elementName in this.boxObjectManager.boxesArr) {
+          const element = this.boxObjectManager.boxesArr[elementName];
+          this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
+          
+          if(this.playerenteredInObject === true) {
             this.elementEntered = element
             this.openDiagOne()
-            // console.log(Data.monde_1[element.child.name]);
+          }else{
           }
 
           if (
@@ -297,7 +294,8 @@ export default class World {
           ) {
             this.elementEntered = null
           }
-        })
+          
+        }
       }
     })
   }

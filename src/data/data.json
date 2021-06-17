@@ -3,130 +3,131 @@
         "mod_starwars": {
             "id": 0,
             "name": "X-wings StarWars",
+            "data_object": "mod_starwars",
             "description": "la desc du truc star wars",
             "type": "object",
             "links": {
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/XWING.png"
             }
         },
         "mod_mario": {
             "id": 1,
             "name": "Champignon Mario",
+            "data_object": "mod_mario",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/MARIO.png"
             }
         },
         "mod_skate": {
             "id": 2,
             "name": "Tech Deck",
+            "data_object": "mod_skate",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/SKATE.png"
             }
         },
         "mod_barbecue": {
             "id": 3,
             "name": "Barbecue avec papa",
+            "data_object": "mod_barbecue",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/BBQ.png"
             }
         },
         "mod_macdo": {
             "id": 4,
             "name": "Happy Meal",
+            "data_object": "mod_macdo",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/MACDO.png"
             }
         },
         "mod_cabane": {
             "id": 5,
             "name": "Cabane",
+            "data_object": "mod_cabane",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/CABANE.png"
             }
         },
         "mod_peche": {
             "id": 6,
             "name": "Pêche",
+            "data_object": "mod_peche",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/PECHE.png"
             }
         },
         "mod_pelle": {
             "id": 7,
             "name": "Pelle",
+            "data_object": "mod_pelle",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/PELLE.png"
             }
         },
         "mod_jurassic": {
             "id": 8,
             "name": "Jurassic Park",
+            "data_object": "mod_jurassic",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/JURASSIC.png"
             }
         },
         "mod_bandicoot": {
             "id": 9,
             "name": "Crash Bandicoot",
+            "data_object": "mod_bandicoot",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/CRASH.png"
             }
         },
         "mod_tortue": {
             "id": 10,
             "name": "Tortue",
+            "data_object": "mod_tortue",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/BAC_A_SABLE.png"
             }
         },
         "mod_totoro": {
             "id": 11,
             "name": "Totoro",
+            "data_object": "mod_totoro",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/TOTORO.png"
             }
         },
         "mod_pokemon": {
             "id": 12,
             "name": "Pokémon",
+            "data_object": "mod_pokemon",
             "description": "la desc du truc",
             "type": "media",
             "links": {
-                "media": "../src/textures/video.mp4",
-                "image": "./assets/object/pizza.gif"
+                "image": "./assets/POKEMON.png"
             }
         }
     }

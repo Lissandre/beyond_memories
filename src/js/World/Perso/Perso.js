@@ -82,6 +82,7 @@ export default class Perso {
     this.setAnimations()
   }
   setPerso() {
+
     this.perso = this.assets.models.EDDIE.scene
     console.log(this.assets.models.EDDIE);
     this.perso.children[0].rotation.set(-Math.PI / 2, Math.PI, 0)

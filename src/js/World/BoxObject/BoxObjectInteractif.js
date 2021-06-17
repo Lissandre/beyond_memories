@@ -23,6 +23,7 @@ export default class BoxObjectInteractif {
     this.setCollider()
   }
 
+
   setCollider() {
     if (this.child.isMesh) {
       this.child.geometry.boundingBox.getSize(this.size)
