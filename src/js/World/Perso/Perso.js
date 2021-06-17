@@ -11,6 +11,7 @@ import {
   Mesh,
   Box3,
   Box3Helper,
+  LoopOnce,
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
@@ -126,18 +127,13 @@ export default class Perso {
           case 'KeyD': // d
             this.moveRight = true
             break
-          case 'KeyC':
-            this.shift = true
-            break
           case 'ShiftLeft':
             this.run = true
             if (
               this.currentBaseAction != 'IDLE' &&
               this.currentBaseAction != 'RUNNING' &&
               (this.moveForward == true ||
-                this.moveBackward == true ||
-                this.moveLeft == true ||
-                this.moveRight == true)
+                this.moveBackward == true)
             ) {
               this.prepareCrossFade(
                 this.baseActions[this.currentBaseAction].action,
@@ -149,15 +145,20 @@ export default class Perso {
             break
           case 'Space': // space
             if (this.playerOnFloor) {
-              // if (this.currentBaseAction != 'WALKING' || this.currentBaseAction != 'RUNNING') {
-              //   this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, -0.2 )
-              // } else {
+              // this.baseActions['JUMP'].action.loop = LoopOnce
+              this.temp = this.currentBaseAction
               this.prepareCrossFade(
                 this.baseActions[this.currentBaseAction].action,
                 this.baseActions['JUMP'].action,
                 0
               )
-              // }
+              // setTimeout(() => {
+                this.prepareCrossFade(
+                  this.baseActions['JUMP'].action,
+                  this.baseActions[this.temp].action,
+                  1.3
+                )
+              // }, 1.9)
               this.playerVelocity.y = 8
             }
             this.playerOnFloor = false
@@ -186,14 +187,11 @@ export default class Perso {
           case 'KeyD': // d
             this.moveRight = false
             break
-          case 'KeyC':
-            this.shift = false
-            break
           case 'ShiftLeft':
             this.run = false
             break
         }
-        if (this.moveForward == false && this.moveBackward == false) {
+        if (this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
           this.prepareCrossFade(
             this.baseActions[this.currentBaseAction].action,
             this.baseActions['IDLE'].action,
@@ -521,11 +519,11 @@ export default class Perso {
   prepareCrossFade(startAction, endAction, duration) {
     // If the current action is 'idle', execute the crossfade immediately;
     // else wait until the current action has finished its current loop
-    if (this.currentBaseAction === 'IDLE' || !startAction || !endAction) {
+    // if (this.currentBaseAction === 'JUMP') {
+    //   this.synchronizeCrossFade(startAction, endAction, duration)
+    // } else {
       this.executeCrossFade(startAction, endAction, duration)
-    } else {
-      this.synchronizeCrossFade(startAction, endAction, duration)
-    }
+    // }
     // Update control colors
     if (endAction) {
       const clip = endAction.getClip()
