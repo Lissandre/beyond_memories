@@ -41,7 +41,6 @@ export default class BoxObjectVanilla {
         this.objectBB = new Box3().setFromObject(this.cube)
         const helper = new Box3Helper( this.objectBB, 0xff0000 );
         this.container.add(this.cube, helper)
-        // console.log(this.child);
     }
 
 

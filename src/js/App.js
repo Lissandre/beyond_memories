@@ -1,4 +1,4 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFShadowMap } from 'three'
+import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
@@ -23,6 +23,7 @@ export default class App {
     this.closeInventory = options.closeInventory
     this.body = options.body
     this.itemsInventory = options.itemsInventory
+    this.screenShot = options.screenShot
 
     // Set up
     this.time = new Time()
@@ -126,6 +127,7 @@ export default class App {
       camera: this.camera,
       scene: this.scene,
       itemsInventory: this.itemsInventory,
+      screenShot: this.screenShot,
       body: this.body
     })
     // Add world to scene

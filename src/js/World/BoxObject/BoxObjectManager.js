@@ -30,7 +30,6 @@ export default class BoxObjectManager {
                 })
                 const name = child.name
                 this.boxesArr[name] = this.boxObjectVanilla
-                // console.log(this.boxesArr);
                 this.container.add(this.boxObjectVanilla.container)
             }
             if (child.name.includes('modInt_')) {
@@ -39,7 +38,6 @@ export default class BoxObjectManager {
                 })
                 const name = child.name
                 this.boxesArr[name] = this.boxObjectInt
-                // console.log(this.boxesArr);
                 this.container.add(this.boxObjectVanilla.container)
             }
             

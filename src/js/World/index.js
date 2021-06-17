@@ -8,6 +8,7 @@ import Perso from './Perso/Perso'
 import Skybox from './Sky/Sky'
 import Water from './Water/Water'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
+import CanvasResult from './CanvasResult/CanvasResult'
 
 import Data from '../../data/data.json'
 
@@ -21,6 +22,7 @@ export default class World {
     this.scene = options.scene
     this.itemsIventory = options.itemsInventory
     this.body = options.body
+    this.screenShot = options.screenShot
 
     // Set up
     this.container = new Object3D()
@@ -46,7 +48,7 @@ export default class World {
     this.setPerso()
     this.setBoxObjectManager()
     this.PlayerEnterObjectArea()
-    // console.log(this.boxObjectManager.boxesArr);
+    this.screenCanvas()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -134,6 +136,16 @@ export default class World {
     this.container.add(this.boxObjectManager.container)
   }
 
+  screenCanvas() {
+    this.screenShot.addEventListener('click', ()=> {
+      this.CanvasResult = new CanvasResult({
+        playerInventory: this.playerInventory,
+        body: this.body
+      })
+    })
+  }
+
+
 
 
 
@@ -143,7 +155,6 @@ export default class World {
       this.handleKeyE.bind(this),
       false
     )
-    // console.log('open diag oui');
     // document.addEventListener(
     //   'keydown',
     //   this.handleKeyF.bind(this),
@@ -191,7 +202,6 @@ export default class World {
   interactWithCar() {
     this.text_01.style.opacity = 0
     this.appThis.watchCar = true
-    console.log(this.appThis.watchCar);
   }
 
   collecteObject() {
@@ -214,11 +224,9 @@ export default class World {
     //     this.videoScreen.isCollected = true
     //     this.videoScreen.videoLoad.pause()
     //     this.playerInventory.push(this.videoScreen.data)
-    //     console.log(this.playerInventory)
     //     this.videoScreen.container.visible = false
     //     this.createItemCrad()
     //   }else {
-    //     console.log('there is too much items in your inventory');
     //   }
     // }
   // }
@@ -295,14 +303,11 @@ export default class World {
 
         for (const elementName in this.boxObjectManager.boxesArr) {
           const element = this.boxObjectManager.boxesArr[elementName];
-          // console.log(element);
           this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
           
           if(this.playerenteredInObject === true) {
-            // console.log('enter in object');
             this.elementEntered = element
             this.openDiagOne()
-            // console.log(Data.monde_1[element.child.name]);
           }else{
           }
 
