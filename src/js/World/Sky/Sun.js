@@ -21,10 +21,10 @@ export default class Sun {
         this.light.castShadow = true
         // this.light.shadow.mapSize.width = 2048; // default
         // this.light.shadow.mapSize.height = 2048; // default
-        this.light.shadow.camera.top = 100
-        this.light.shadow.camera.bottom = -100
-        this.light.shadow.camera.left = -100
-        this.light.shadow.camera.right = 100
+        this.light.shadow.camera.top = 150
+        this.light.shadow.camera.bottom = -150
+        this.light.shadow.camera.left = -150
+        this.light.shadow.camera.right = 150
         this.target = new Vector3(0, 0, 0)
         // this.light.target = this.target
 

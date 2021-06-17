@@ -28,7 +28,7 @@ export default class Perso {
     // Set up
     this.container = new Object3D()
 
-    this.playerCollider = new Capsule(new Vector3(0, 0, 0), new Vector3(0, 1.5, 0), 0.35)
+    this.playerCollider = new Capsule(new Vector3(0, 2, 0), new Vector3(0, 3.5, 0), 0.35)
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
     this.GRAVITY = 30
@@ -41,7 +41,8 @@ export default class Perso {
     this.baseActions = {
       IDLE: { weight: 1 },
       WALKING: { weight: 0 },
-      RUNNING: { weight: 0 }
+      RUNNING: { weight: 0 },
+      JUMP: { weight: 0 }
     }
     this.additiveActions = {
       // sneak_pose: { weight: 0 },
@@ -76,9 +77,11 @@ export default class Perso {
   }
   setPerso() {
     this.perso = this.assets.models.Xbot.scene
+    console.log(this.assets.models.Xbot);
     this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
     this.perso.castShadow = true
     this.container.add(this.perso)
+    this.perso.position.set(0,0, 3)
   }
 
   setCollider() {
@@ -124,6 +127,11 @@ export default class Perso {
             break
           case 'Space': // space
             if (this.playerOnFloor) {
+              // if (this.currentBaseAction != 'WALKING' || this.currentBaseAction != 'RUNNING') {
+              //   this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, -0.2 )
+              // } else {
+                this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, 0 )
+              // }
               this.playerVelocity.y = 8;
             }
             this.playerOnFloor = false

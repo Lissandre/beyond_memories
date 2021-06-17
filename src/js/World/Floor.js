@@ -4,7 +4,8 @@ import {
   Vector2,
   Color,
   ShaderMaterial,
-  DoubleSide
+  DoubleSide,
+  FrontSide
 } from 'three'
 
 import WaterFrag from '@shaders/WaterFrag.frag'
@@ -79,11 +80,11 @@ export default class Floor {
 
     this.texture = new MeshLambertMaterial({ map: this.assets.textures.water })
 
-    this.floor = this.assets.models.MAP.scene
+    this.floor = this.assets.models.MAP_NOT_CONVERTED3.scene
     this.floor.traverse((child) => {
-      if (child.name.includes('Cone')) {
+      if (child.name.includes('Cone') || child.name.includes('Cylinder') || child.name.includes('Cube')) {
         child.castShadow = true
-        if (child.material.name.includes('LEAVES')) {
+        if (child.material.name.includes('LEAVES') || child.material.name.includes('Leaf') || child.material.name.includes('rock') || child.material.name.includes('WOOD')) {
           child.material.transparent = true
         }
       }
@@ -93,11 +94,8 @@ export default class Floor {
           child.material.transparent = true
         }
       }
-      if (child.name.includes('Cube')) {
-        if (child.material.name.includes('Leaf')) {
-          child.castShadow = true
-          child.material.transparent = true
-        }
+      if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
+        child.castShadow = true
       }
       if (child.name.includes('SOL')) {
         child.receiveShadow = true
@@ -105,7 +103,16 @@ export default class Floor {
       if (child.name.includes('ARMOIR')) {
         child.castShadow = true
       }
+      if (child.name.includes('CLOUD')) {
+        child.castShadow = true
+      }
+      if (child.name.includes('ROCHER_MASSIF')) {
+        child.castShadow = true
+        child.receiveShadow = true
+        child.material.side = FrontSide
+      }
       if(child.name.includes('EAU')) {
+        child.material = this.texture
         child.material = material
       }
     })
@@ -114,61 +121,63 @@ export default class Floor {
   }
 
   setDebug() {
-    this.debugFolder = this.debug.addFolder('Water')
-    this.debugFolder
-        .add(material.uniforms.uBigWavesElevation, 'value')
-        .name('elevation of the water')
-        .min(-10)
-        .max(10)
-        .step(0.1)
-    this.debugFolder
-        .add(material.uniforms.uHeightWave, 'value')
-        .name('height of waves')
-        .min(0)
-        .max(10)
-        .step(0.001)
-    this.debugFolder
-        .add(material.uniforms.uBigWavesSpeed, 'value')
-        .name('speed of the water')
-        .min(0)
-        .max(0.001)
-        .step(0.000001)
-    this.debugFolder
-        .add(material.uniforms.uBigWavesFrequency.value, 'x')
-        .name('X frequency of the water')
-        .min(-10)
-        .max(10)
-        .step(0.1)
-    this.debugFolder
-        .add(material.uniforms.uBigWavesFrequency.value, 'y')
-        .name('Y frequency of the water')
-        .min(-10)
-        .max(10)
-        .step(0.1)
-    this.debugFolder
-        .addColor(debugObject, 'depthColor')
-        .name('Depth Color')
-        .onChange(() => {
-            material.uniforms.uDepthColor.value.set(debugObject.depthColor)
-          })
-    this.debugFolder
-        .addColor(debugObject, 'surfaceColor')
-        .name('Surface Color')
-        .onChange(() => {
-            material.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor)
-          })
-    this.debugFolder
-        .add(material.uniforms.uColorOffset, 'value')
-        .name('color offset')
-        .min(0)
-        .max(2)
-        .step(0.001)
-    this.debugFolder
-        .add(material.uniforms.uColorMultiplier, 'value')
-        .name('color multiplier')
-        .min(0)
-        .max(10)
-        .step(0.01)
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('Water')
+      this.debugFolder
+          .add(material.uniforms.uBigWavesElevation, 'value')
+          .name('elevation of the water')
+          .min(-10)
+          .max(10)
+          .step(0.1)
+      this.debugFolder
+          .add(material.uniforms.uHeightWave, 'value')
+          .name('height of waves')
+          .min(0)
+          .max(10)
+          .step(0.001)
+      this.debugFolder
+          .add(material.uniforms.uBigWavesSpeed, 'value')
+          .name('speed of the water')
+          .min(0)
+          .max(0.001)
+          .step(0.000001)
+      this.debugFolder
+          .add(material.uniforms.uBigWavesFrequency.value, 'x')
+          .name('X frequency of the water')
+          .min(-10)
+          .max(10)
+          .step(0.1)
+      this.debugFolder
+          .add(material.uniforms.uBigWavesFrequency.value, 'y')
+          .name('Y frequency of the water')
+          .min(-10)
+          .max(10)
+          .step(0.1)
+      this.debugFolder
+          .addColor(debugObject, 'depthColor')
+          .name('Depth Color')
+          .onChange(() => {
+              material.uniforms.uDepthColor.value.set(debugObject.depthColor)
+            })
+      this.debugFolder
+          .addColor(debugObject, 'surfaceColor')
+          .name('Surface Color')
+          .onChange(() => {
+              material.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor)
+            })
+      this.debugFolder
+          .add(material.uniforms.uColorOffset, 'value')
+          .name('color offset')
+          .min(0)
+          .max(2)
+          .step(0.001)
+      this.debugFolder
+          .add(material.uniforms.uColorMultiplier, 'value')
+          .name('color multiplier')
+          .min(0)
+          .max(10)
+          .step(0.01)
+    }
         
   }
 }
