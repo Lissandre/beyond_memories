@@ -88,7 +88,7 @@ export default class World {
     this.floor = new Floor({
       assets: this.assets,
       time: this.time,
-      debug: this.debug
+      debug: this.debug,
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -118,7 +118,7 @@ export default class World {
   setWater() {
     this.water = new Water({
       time: this.time,
-      debug: this.debug
+      debug: this.debug,
     })
     this.container.add(this.water.container)
   }
@@ -127,20 +127,13 @@ export default class World {
     this.boxObjectManager = new BoxObjectManager({
       time: this.time,
       debug: this.debug,
-      assets: this.assets
+      assets: this.assets,
     })
     this.container.add(this.boxObjectManager.container)
   }
 
-
-
-
   openDiagOne() {
-    document.addEventListener(
-      'keydown',
-      this.handleKeyE.bind(this),
-      false
-    )
+    document.addEventListener('keydown', this.handleKeyE.bind(this), false)
     // console.log('open diag oui');
     // document.addEventListener(
     //   'keydown',
@@ -155,7 +148,7 @@ export default class World {
     // }
     switch (event.code) {
       case 'KeyE': // e
-      if(this.elementEntered !== null) {
+        if (this.elementEntered !== null) {
           this.collecteObject()
         }
         break
@@ -193,68 +186,68 @@ export default class World {
   }
 
   collecteObject() {
-    if(this.elementEntered.isCollected === false) {
-      if(this.playerInventory.length < 8) {
-       
+    if (this.elementEntered.isCollected === false) {
+      if (this.playerInventory.length < 8) {
         this.elementEntered.isCollected = true
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
         console.log(this.playerInventory)
         this.createItemCrad()
-      }else {
-        console.log('trop d\'item mon pote')
+      } else {
+        console.log("trop d'item mon pote")
       }
     }
-      
   }
 
-    // if(this.videoScreen.isCollected === false){
-    //   if(this.playerInventory.length < 8) {
-    //     this.videoScreen.isCollected = true
-    //     this.videoScreen.videoLoad.pause()
-    //     this.playerInventory.push(this.videoScreen.data)
-    //     console.log(this.playerInventory)
-    //     this.videoScreen.container.visible = false
-    //     this.createItemCrad()
-    //   }else {
-    //     console.log('there is too much items in your inventory');
-    //   }
-    // }
+  // if(this.videoScreen.isCollected === false){
+  //   if(this.playerInventory.length < 8) {
+  //     this.videoScreen.isCollected = true
+  //     this.videoScreen.videoLoad.pause()
+  //     this.playerInventory.push(this.videoScreen.data)
+  //     console.log(this.playerInventory)
+  //     this.videoScreen.container.visible = false
+  //     this.createItemCrad()
+  //   }else {
+  //     console.log('there is too much items in your inventory');
+  //   }
+  // }
   // }
 
   createItemCrad() {
-    
-    let item = document.createElement("div")
+    let item = document.createElement('div')
     item.classList.add('inventory_content_items_item')
 
-    let item_imageContainer = document.createElement("div")
-    item_imageContainer.classList.add("item_pic")
-    let item_image = document.createElement("img")
-    item_image.setAttribute("src", Data.monde_1[this.elementEntered.child.name].links.image)
+    let item_imageContainer = document.createElement('div')
+    item_imageContainer.classList.add('item_pic')
+    let item_image = document.createElement('img')
+    item_image.setAttribute(
+      'src',
+      Data.monde_1[this.elementEntered.child.name].links.image
+    )
     item_imageContainer.appendChild(item_image)
 
-    let item_textContainer = document.createElement("div")
+    let item_textContainer = document.createElement('div')
     item_textContainer.classList.add('item_texts')
-    let item_name = document.createElement("p")
+    let item_name = document.createElement('p')
     item_name.textContent = Data.monde_1[this.elementEntered.child.name].name
-    let item_description = document.createElement("p")
-    item_description.textContent = Data.monde_1[this.elementEntered.child.name].description
+    let item_description = document.createElement('p')
+    item_description.textContent =
+      Data.monde_1[this.elementEntered.child.name].description
     item_textContainer.appendChild(item_name)
     item_textContainer.appendChild(item_description)
 
-    let buttonDelete = document.createElement("button")
-    buttonDelete.classList.add("item_button")
-    let spanL = document.createElement("span")
-    let spanR = document.createElement("span")
-    spanL.classList.add("button_bar")
-    spanR.classList.add("button_bar")
-    spanL.classList.add("leftBar")
-    spanR.classList.add("rightBar")
-    buttonDelete.dataset.dataJs = "js_deleteObject"
+    let buttonDelete = document.createElement('button')
+    buttonDelete.classList.add('item_button')
+    let spanL = document.createElement('span')
+    let spanR = document.createElement('span')
+    spanL.classList.add('button_bar')
+    spanR.classList.add('button_bar')
+    spanL.classList.add('leftBar')
+    spanR.classList.add('rightBar')
+    buttonDelete.dataset.dataJs = 'js_deleteObject'
     buttonDelete.appendChild(spanL)
     buttonDelete.appendChild(spanR)
-    buttonDelete.addEventListener("click", this.deleteItemCard.bind(this))
+    buttonDelete.addEventListener('click', this.deleteItemCard.bind(this))
 
-    
     item.appendChild(buttonDelete)
     item.appendChild(item_imageContainer)
     item.appendChild(item_textContainer)
@@ -263,65 +256,49 @@ export default class World {
 
   deleteItemCard(event) {
     event.target.parentNode.parentNode.removeChild(event.target.parentNode)
-    if(this.elementEntered.isCollected === true) {
+    if (this.elementEntered.isCollected === true) {
       this.elementEntered.isCollected = false
-      let positionInInventory = this.playerInventory.indexOf(Data.monde_1[this.elementEntered.id])
+      let positionInInventory = this.playerInventory.indexOf(
+        Data.monde_1[this.elementEntered.id]
+      )
       this.playerInventory.splice(positionInInventory, 1)
-      console.log(this.playerInventory);
+      console.log(this.playerInventory)
     }
-    
   }
 
   closeDiag() {
-    document.removeEventListener(
-      'keydown',
-      this.handleKeyE, 
-      false
-    )
-    document.removeEventListener(
-      'keydown',
-      this.handleKeyF, 
-      false
-    )
+    document.removeEventListener('keydown', this.handleKeyE, false)
+    document.removeEventListener('keydown', this.handleKeyF, false)
   }
 
-
-
-
-
-
-
-
-
-
-
-
   PlayerEnterObjectArea() {
-    
-    this.time.on('tick', ()=> {
-      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+    this.time.on('tick', () => {
+      if (
+        this.perso.moveForward ||
+        this.perso.moveBackward ||
+        this.perso.moveLeft ||
+        this.perso.moveRight
+      ) {
+        this.boxObjectManager.boxesArr.forEach((element) => {
+          this.playerenteredInObject = element.objectBB.intersectsBox(
+            this.perso.playerBB
+          )
 
-        this.boxObjectManager.boxesArr.forEach(element => {
-          
-          this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
-          
-          if(this.playerenteredInObject === true) {
+          if (this.playerenteredInObject === true) {
             // console.log('enter in object');
             this.elementEntered = element
             this.openDiagOne()
             // console.log(Data.monde_1[element.child.name]);
-          }else{
           }
 
-          if(this.playerenteredInObject !== true && this.elementEntered === element) {
+          if (
+            this.playerenteredInObject !== true &&
+            this.elementEntered === element
+          ) {
             this.elementEntered = null
           }
-        });
-        
-
+        })
       }
     })
-    
   }
-
 }

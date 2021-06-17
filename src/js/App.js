@@ -1,4 +1,10 @@
-import { Color, Fog, PCFSoftShadowMap, Scene, sRGBEncoding, WebGLRenderer } from 'three'
+import {
+  Color,
+  PCFSoftShadowMap,
+  Scene,
+  sRGBEncoding,
+  WebGLRenderer,
+} from 'three'
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -108,7 +114,7 @@ export default class App {
       camera: this.camera,
       scene: this.scene,
       itemsInventory: this.itemsInventory,
-      body: this.body
+      body: this.body,
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -123,13 +129,13 @@ export default class App {
   }
 
   openInventoryMethod() {
-    this.openInventory.addEventListener('click', ()=> {
+    this.openInventory.addEventListener('click', () => {
       this.body.classList.add('open_inventory')
     })
   }
 
   closeInventoryMethod() {
-    this.closeInventory.addEventListener('click', ()=> {
+    this.closeInventory.addEventListener('click', () => {
       this.body.classList.remove('open_inventory')
     })
   }

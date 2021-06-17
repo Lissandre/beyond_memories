@@ -49,14 +49,13 @@ export default class Skybox {
     })
     this.sky = new Mesh(this.skyGeo, this.skyMat)
 
-    
     this.time.on('tick', () => {
       this.date = new Date()
       this.hours = this.date.getHours()
       this.minutes = this.date.getMinutes()
       // this.effectController.inclination = this.hours / 12 - 1 + this.minutes / 60 / 24
     })
-    
+
     this.container.add(this.sky)
 
     this.setSun()
@@ -67,9 +66,9 @@ export default class Skybox {
       debug: this.debug,
       time: this.time,
       color: 0xffffff,
-      intensity: 0.7
+      intensity: 0.7,
     })
-    this.sun.container.position.set(-70, 70,-70)
+    this.sun.container.position.set(-70, 70, -70)
     this.container.add(this.sun.container)
   }
 }
