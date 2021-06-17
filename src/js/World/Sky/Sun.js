@@ -23,8 +23,8 @@ export default class Sun {
   createSun() {
     this.light = new DirectionalLight(this.color, this.intensity)
     this.light.castShadow = true
-    // this.light.shadow.mapSize.width = 2048; // default
-    // this.light.shadow.mapSize.height = 2048; // default
+    this.light.shadow.mapSize.width = 4096; // default
+    this.light.shadow.mapSize.height = 4096; // default
     this.light.shadow.camera.top = 150
     this.light.shadow.camera.bottom = -150
     this.light.shadow.camera.left = -150

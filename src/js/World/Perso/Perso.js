@@ -47,6 +47,7 @@ export default class Perso {
       WALKING: { weight: 0 },
       RUNNING: { weight: 0 },
       JUMP: { weight: 0 },
+      VICTORY: { weight: 0 },
     }
     this.additiveActions = {
       // sneak_pose: { weight: 0 },
@@ -80,7 +81,8 @@ export default class Perso {
     this.setAnimations()
   }
   setPerso() {
-    this.perso = this.assets.models.Xbot.scene
+    this.perso = this.assets.models.EDDIE.scene
+    console.log(this.assets.models.EDDIE);
     this.perso.children[0].rotation.set(-Math.PI / 2, Math.PI, 0)
     this.perso.traverse((child) => {
       if (child.isMesh) {
@@ -483,8 +485,8 @@ export default class Perso {
     }
   }
   setAnimations() {
-    const animations = this.assets.models.Xbot.animations
-    this.mixer = new AnimationMixer(this.assets.models.Xbot.scene)
+    const animations = this.assets.models.EDDIE.animations
+    this.mixer = new AnimationMixer(this.assets.models.EDDIE.scene)
     this.numAnimations = animations.length
     for (let i = 0; i !== this.numAnimations; ++i) {
       let clip = animations[i]

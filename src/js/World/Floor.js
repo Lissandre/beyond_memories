@@ -77,7 +77,7 @@ export default class Floor {
 
     this.texture = new MeshLambertMaterial({ map: this.assets.textures.water })
 
-    this.floor = this.assets.models.MAP_NOT_CONVERTED3.scene
+    this.floor = this.assets.models.MAP.scene
     this.floor.traverse((child) => {
       if (
         child.name.includes('Cone') ||
@@ -85,6 +85,7 @@ export default class Floor {
         child.name.includes('Cube')
       ) {
         child.castShadow = true
+        child.receiveShadow = true
         if (
           child.material.name.includes('LEAVES') ||
           child.material.name.includes('Leaf') ||
@@ -96,20 +97,24 @@ export default class Floor {
       }
       if (child.name.includes('ARBUSTE')) {
         child.castShadow = true
+        child.receiveShadow = true
         if (child.material.name.includes('PLANT')) {
           child.material.transparent = true
         }
       }
       if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
         child.castShadow = true
+        child.receiveShadow = true
       }
       if (child.name.includes('SOL')) {
         child.receiveShadow = true
       }
       if (child.name.includes('ARMOIR')) {
         child.castShadow = true
+        child.receiveShadow = true
       }
       if (child.name.includes('CLOUD')) {
+        child.receiveShadow = true
         child.castShadow = true
       }
       if (child.name.includes('ROCHER_MASSIF')) {
