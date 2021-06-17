@@ -82,7 +82,6 @@ export default class Perso {
     this.setAnimations()
   }
   setPerso() {
-
     this.perso = this.assets.models.EDDIE.scene
     console.log(this.assets.models.EDDIE);
     this.perso.children[0].rotation.set(-Math.PI / 2, Math.PI, 0)
@@ -96,7 +95,6 @@ export default class Perso {
     this.container.add(this.perso)
     this.perso.position.set(0, 0, 3)
   }
-
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)
     this.material = new MeshBasicMaterial({ color: 0x00ff00, wireframe: true })
@@ -106,7 +104,6 @@ export default class Perso {
     const helper = new Box3Helper(this.playerBB, 0xffff00)
     this.container.add(this.cube, helper)
   }
-
   setListeners() {
     document.addEventListener(
       'keydown',
@@ -161,6 +158,11 @@ export default class Perso {
                 )
               // }, 1.9)
               this.playerVelocity.y = 8
+              this.oldSpeedP = this.speedP
+              this.speedP = 0.0005
+              setTimeout(() => {
+                this.speedP = this.oldSpeedP
+              }, 500)
             }
             this.playerOnFloor = false
             break
@@ -442,47 +444,6 @@ export default class Perso {
     this.playerDirection.cross(this.perso.up)
     return this.playerDirection
   }
-  setDebug() {
-    if (this.debug) {
-      this.debugFolder = this.debug.addFolder('Perso')
-      this.debugFolder
-        .add(this.params, 'deceleration')
-        .name('Camera Deceleration')
-        .min(0)
-        .max(0.5)
-        .step(0.02)
-      this.debugFolder
-        .add(this.params, 'cameraSpeedX')
-        .name('Camera Speed X')
-        .min(0)
-        .max(0.5)
-        .step(0.05)
-      this.debugFolder
-        .add(this.params, 'cameraSpeedY')
-        .name('Camera Speed Y')
-        .min(0)
-        .max(0.5)
-        .step(0.01)
-      this.debugFolder
-        .add(this.params, 'cameraMinY')
-        .name('Camera Min Y')
-        .min(0)
-        .max(4)
-        .step(0.1)
-      this.debugFolder
-        .add(this.params, 'cameraMaxY')
-        .name('Camera Max Y')
-        .min(0)
-        .max(4)
-        .step(0.1)
-      this.debugFolder
-        .add(this.params, 'lerpSpeed')
-        .name('Rotation Lerp Duration')
-        .min(0)
-        .max(1)
-        .step(0.001)
-    }
-  }
   setAnimations() {
     const animations = this.assets.models.EDDIE.animations
     this.mixer = new AnimationMixer(this.assets.models.EDDIE.scene)
@@ -595,5 +556,46 @@ export default class Perso {
       // Update the animation this.mixer, the stats panel, and render this frame
       this.mixer.update(mixerUpdateDelta)
     })
+  }
+  setDebug() {
+    if (this.debug) {
+      this.debugFolder = this.debug.addFolder('Perso')
+      this.debugFolder
+        .add(this.params, 'deceleration')
+        .name('Camera Deceleration')
+        .min(0)
+        .max(0.5)
+        .step(0.02)
+      this.debugFolder
+        .add(this.params, 'cameraSpeedX')
+        .name('Camera Speed X')
+        .min(0)
+        .max(0.5)
+        .step(0.05)
+      this.debugFolder
+        .add(this.params, 'cameraSpeedY')
+        .name('Camera Speed Y')
+        .min(0)
+        .max(0.5)
+        .step(0.01)
+      this.debugFolder
+        .add(this.params, 'cameraMinY')
+        .name('Camera Min Y')
+        .min(0)
+        .max(10)
+        .step(0.1)
+      this.debugFolder
+        .add(this.params, 'cameraMaxY')
+        .name('Camera Max Y')
+        .min(0)
+        .max(10)
+        .step(0.1)
+      this.debugFolder
+        .add(this.params, 'lerpSpeed')
+        .name('Rotation Lerp Duration')
+        .min(0)
+        .max(1)
+        .step(0.001)
+    }
   }
 }
