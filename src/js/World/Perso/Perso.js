@@ -77,8 +77,13 @@ export default class Perso {
   }
   setPerso() {
     this.perso = this.assets.models.Xbot.scene
-    console.log(this.assets.models.Xbot);
     this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
+    this.perso.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+    })
     this.perso.castShadow = true
     this.container.add(this.perso)
     this.perso.position.set(0,0, 3)

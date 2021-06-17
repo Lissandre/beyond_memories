@@ -115,6 +115,19 @@ export default class Floor {
         child.material = this.texture
         child.material = material
       }
+      if(child.name.includes('mod_') || child.name.includes('modInt_')) {
+        if (child.isMesh) {
+          child.castShadow = true
+          child.receiveShadow = true
+        } else {
+          child.traverse((children) => {
+            if (children.isMesh) {
+              children.castShadow = true
+              children.receiveShadow = true
+            }
+          })
+        }
+      }
     })
     // this.floor.scale.set(0.2, 0.2, 0.2)
     this.container.add(this.floor)

@@ -141,7 +141,7 @@ export default class World {
       this.handleKeyE.bind(this),
       false
     )
-    console.log('open diag oui');
+    // console.log('open diag oui');
     // document.addEventListener(
     //   'keydown',
     //   this.handleKeyF.bind(this),
@@ -189,7 +189,7 @@ export default class World {
   interactWithCar() {
     this.text_01.style.opacity = 0
     this.appThis.watchCar = true
-    console.log(this.appThis.watchCar);
+    // console.log(this.appThis.watchCar);
   }
 
   collecteObject() {
@@ -309,7 +309,7 @@ export default class World {
             // console.log('enter in object');
             this.elementEntered = element
             this.openDiagOne()
-            console.log(Data.monde_1[element.child.name]);
+            // console.log(Data.monde_1[element.child.name]);
           }else{
           }
 
