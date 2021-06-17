@@ -4,7 +4,6 @@ import BoxObjectInteractif from './BoxObjectInteractif'
 
 export default class BoxObjectManager {
 
-
     constructor(options) {
         
         //Set options
@@ -40,17 +39,24 @@ export default class BoxObjectManager {
                 this.boxesArr[name] = this.boxObjectInt
                 this.container.add(this.boxObjectVanilla.container)
             }
-            
+
         })
-
-    }
-
-    animate() {
-        this.time.on('tick', ()=> {
-
-            
+        this.boxesArr.push(this.boxObjectVanilla)
+        // console.log(this.boxesArr);
+        this.container.add(this.boxObjectVanilla.container)
+      }
+      if (child.name.includes('modInt_')) {
+        this.boxObjectVanilla = new BoxObjectInteractif({
+          child: child,
         })
-    }
+        this.boxesArr.push(this.boxObjectVanilla)
+        // console.log(this.boxesArr);
+        this.container.add(this.boxObjectVanilla.container)
+      }
+    })
+  }
 
-
+  animate() {
+    this.time.on('tick', () => {})
+  }
 }

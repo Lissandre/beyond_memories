@@ -1,8 +1,15 @@
-
-import { Object3D, BoxGeometry, MeshBasicMaterial, Mesh, Vector3, Quaternion, Box3, Box3Helper } from 'three'
+import {
+  Object3D,
+  BoxGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Vector3,
+  Quaternion,
+  Box3,
+  Box3Helper,
+} from 'three'
 
 export default class BoxObjectVanilla {
-
     
     constructor(options) {
 
@@ -41,7 +48,16 @@ export default class BoxObjectVanilla {
         this.objectBB = new Box3().setFromObject(this.cube)
         const helper = new Box3Helper( this.objectBB, 0xff0000 );
         this.container.add(this.cube, helper)
+
     }
-
-
+    this.geometry = new BoxGeometry(this.size.x, this.size.y, this.size.z)
+    this.material = new MeshBasicMaterial({ color: 0x0000ff, wireframe: true })
+    this.cube = new Mesh(this.geometry, this.material)
+    this.cube.quaternion.copy(this.child.quaternion)
+    this.cube.position.copy(this.child.position)
+    this.objectBB = new Box3().setFromObject(this.cube)
+    const helper = new Box3Helper(this.objectBB, 0xff0000)
+    this.container.add(this.cube, helper)
+    // console.log(this.child);
+  }
 }

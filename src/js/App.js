@@ -4,6 +4,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -143,13 +144,13 @@ export default class App {
   }
 
   openInventoryMethod() {
-    this.openInventory.addEventListener('click', ()=> {
+    this.openInventory.addEventListener('click', () => {
       this.body.classList.add('open_inventory')
     })
   }
 
   closeInventoryMethod() {
-    this.closeInventory.addEventListener('click', ()=> {
+    this.closeInventory.addEventListener('click', () => {
       this.body.classList.remove('open_inventory')
     })
   }

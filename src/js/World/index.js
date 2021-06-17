@@ -91,7 +91,7 @@ export default class World {
     this.floor = new Floor({
       assets: this.assets,
       time: this.time,
-      debug: this.debug
+      debug: this.debug,
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -121,7 +121,7 @@ export default class World {
   setWater() {
     this.water = new Water({
       time: this.time,
-      debug: this.debug
+      debug: this.debug,
     })
     this.container.add(this.water.container)
   }
@@ -145,10 +145,6 @@ export default class World {
     })
   }
 
-
-
-
-
   openDiagOne() {
     document.addEventListener(
       'keydown',
@@ -168,7 +164,7 @@ export default class World {
     // }
     switch (event.code) {
       case 'KeyE': // e
-      if(this.elementEntered !== null) {
+        if (this.elementEntered !== null) {
           this.collecteObject()
         }
         break
@@ -205,49 +201,39 @@ export default class World {
   }
 
   collecteObject() {
-    if(this.elementEntered.isCollected === false) {
-      if(this.playerInventory.length < 8) {
-       
+    if (this.elementEntered.isCollected === false) {
+      if (this.playerInventory.length < 8) {
         this.elementEntered.isCollected = true
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
         console.log(this.playerInventory)
         this.createItemCrad()
-      }else {
-        console.log('trop d\'item mon pote')
+      } else {
+        console.log("trop d'item mon pote")
       }
     }
-      
   }
 
-    // if(this.videoScreen.isCollected === false){
-    //   if(this.playerInventory.length < 8) {
-    //     this.videoScreen.isCollected = true
-    //     this.videoScreen.videoLoad.pause()
-    //     this.playerInventory.push(this.videoScreen.data)
-    //     this.videoScreen.container.visible = false
-    //     this.createItemCrad()
-    //   }else {
-    //   }
-    // }
-  // }
 
   createItemCrad() {
-    
-    let item = document.createElement("div")
+    let item = document.createElement('div')
     item.classList.add('inventory_content_items_item')
 
-    let item_imageContainer = document.createElement("div")
-    item_imageContainer.classList.add("item_pic")
-    let item_image = document.createElement("img")
-    item_image.setAttribute("src", Data.monde_1[this.elementEntered.child.name].links.image)
+    let item_imageContainer = document.createElement('div')
+    item_imageContainer.classList.add('item_pic')
+    let item_image = document.createElement('img')
+    item_image.setAttribute(
+      'src',
+      Data.monde_1[this.elementEntered.child.name].links.image
+    )
     item_imageContainer.appendChild(item_image)
 
-    let item_textContainer = document.createElement("div")
+    let item_textContainer = document.createElement('div')
     item_textContainer.classList.add('item_texts')
-    let item_name = document.createElement("p")
+    let item_name = document.createElement('p')
     item_name.textContent = Data.monde_1[this.elementEntered.child.name].name
-    let item_description = document.createElement("p")
-    item_description.textContent = Data.monde_1[this.elementEntered.child.name].description
+    let item_description = document.createElement('p')
+    item_description.textContent =
+      Data.monde_1[this.elementEntered.child.name].description
     item_textContainer.appendChild(item_name)
     item_textContainer.appendChild(item_description)
 
@@ -263,9 +249,8 @@ export default class World {
     buttonDelete.dataset.object = Data.monde_1[this.elementEntered.child.name].data_object
     buttonDelete.appendChild(spanL)
     buttonDelete.appendChild(spanR)
-    buttonDelete.addEventListener("click", this.deleteItemCard.bind(this))
+    buttonDelete.addEventListener('click', this.deleteItemCard.bind(this))
 
-    
     item.appendChild(buttonDelete)
     item.appendChild(item_imageContainer)
     item.appendChild(item_textContainer)
@@ -283,16 +268,8 @@ export default class World {
   }
 
   closeDiag() {
-    document.removeEventListener(
-      'keydown',
-      this.handleKeyE, 
-      false
-    )
-    document.removeEventListener(
-      'keydown',
-      this.handleKeyF, 
-      false
-    )
+    document.removeEventListener('keydown', this.handleKeyE, false)
+    document.removeEventListener('keydown', this.handleKeyF, false)
   }
 
   PlayerEnterObjectArea() {
@@ -311,16 +288,15 @@ export default class World {
           }else{
           }
 
-          if(this.playerenteredInObject !== true && this.elementEntered === element) {
+          if (
+            this.playerenteredInObject !== true &&
+            this.elementEntered === element
+          ) {
             this.elementEntered = null
           }
           
         }
-        
-
       }
     })
-    
   }
-
 }

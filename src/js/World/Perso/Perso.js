@@ -10,7 +10,8 @@ import {
   MeshBasicMaterial,
   Mesh,
   Box3,
-  Box3Helper
+  Box3Helper,
+  LoopOnce,
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
@@ -28,7 +29,11 @@ export default class Perso {
     // Set up
     this.container = new Object3D()
 
-    this.playerCollider = new Capsule(new Vector3(0, 2, 0), new Vector3(0, 3.5, 0), 0.35)
+    this.playerCollider = new Capsule(
+      new Vector3(0, 2, 0),
+      new Vector3(0, 3.5, 0),
+      0.35
+    )
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
     this.GRAVITY = 30
@@ -42,7 +47,8 @@ export default class Perso {
       IDLE: { weight: 1 },
       WALKING: { weight: 0 },
       RUNNING: { weight: 0 },
-      JUMP: { weight: 0 }
+      JUMP: { weight: 0 },
+      VICTORY: { weight: 0 },
     }
     this.additiveActions = {
       // sneak_pose: { weight: 0 },
@@ -76,22 +82,30 @@ export default class Perso {
     this.setAnimations()
   }
   setPerso() {
-    this.perso = this.assets.models.Xbot.scene
-    this.perso.children[0].rotation.set(-Math.PI/2, Math.PI, 0)
+
+    this.perso = this.assets.models.EDDIE.scene
+    console.log(this.assets.models.EDDIE);
+    this.perso.children[0].rotation.set(-Math.PI / 2, Math.PI, 0)
+    this.perso.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+    })
     this.perso.castShadow = true
     this.container.add(this.perso)
-    this.perso.position.set(0,0, 3)
+    this.perso.position.set(0, 0, 3)
   }
 
   setCollider() {
-    this.geometry = new BoxGeometry( 1, 1, 1 );
-    this.material = new MeshBasicMaterial( {color: 0x00ff00, wireframe: true} );
-    this.cube = new Mesh( this.geometry, this.material )
-    this.cube.position.set(0,0.5,0)
+    this.geometry = new BoxGeometry(1, 1, 1)
+    this.material = new MeshBasicMaterial({ color: 0x00ff00, wireframe: true })
+    this.cube = new Mesh(this.geometry, this.material)
+    this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
-    const helper = new Box3Helper( this.playerBB, 0xffff00 );
+    const helper = new Box3Helper(this.playerBB, 0xffff00)
     this.container.add(this.cube, helper)
-}
+  }
 
   setListeners() {
     document.addEventListener(
@@ -114,24 +128,39 @@ export default class Perso {
           case 'KeyD': // d
             this.moveRight = true
             break
-          case 'KeyC':
-            this.shift = true
-            break
           case 'ShiftLeft':
             this.run = true
-            if (this.currentBaseAction != 'IDLE' && this.currentBaseAction != 'RUNNING' && (this.moveForward == true || this.moveBackward == true || this.moveLeft == true || this.moveRight == true)) {
-              this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.2 )
+            if (
+              this.currentBaseAction != 'IDLE' &&
+              this.currentBaseAction != 'RUNNING' &&
+              (this.moveForward == true ||
+                this.moveBackward == true)
+            ) {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['RUNNING'].action,
+                0.2
+              )
               this.speedP = 0.01
             }
             break
           case 'Space': // space
             if (this.playerOnFloor) {
-              // if (this.currentBaseAction != 'WALKING' || this.currentBaseAction != 'RUNNING') {
-              //   this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, -0.2 )
-              // } else {
-                this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['JUMP'].action, 0 )
-              // }
-              this.playerVelocity.y = 8;
+              // this.baseActions['JUMP'].action.loop = LoopOnce
+              this.temp = this.currentBaseAction
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['JUMP'].action,
+                0
+              )
+              // setTimeout(() => {
+                this.prepareCrossFade(
+                  this.baseActions['JUMP'].action,
+                  this.baseActions[this.temp].action,
+                  1.3
+                )
+              // }, 1.9)
+              this.playerVelocity.y = 8
             }
             this.playerOnFloor = false
             break
@@ -159,18 +188,28 @@ export default class Perso {
           case 'KeyD': // d
             this.moveRight = false
             break
-          case 'KeyC':
-            this.shift = false
-            break
           case 'ShiftLeft':
             this.run = false
             break
         }
-        if (this.moveForward == false && this.moveBackward == false) {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['IDLE'].action, 1.2 )
+        if (this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+          this.prepareCrossFade(
+            this.baseActions[this.currentBaseAction].action,
+            this.baseActions['IDLE'].action,
+            1.2
+          )
           this.speedP = 0.005
-        } else if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'IDLE' && this.run == false && (this.moveForward == true || this.moveBackward == true)) {
-          this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.3 )
+        } else if (
+          this.currentBaseAction != 'WALKING' &&
+          this.currentBaseAction != 'IDLE' &&
+          this.run == false &&
+          (this.moveForward == true || this.moveBackward == true)
+        ) {
+          this.prepareCrossFade(
+            this.baseActions[this.currentBaseAction].action,
+            this.baseActions['WALKING'].action,
+            0.3
+          )
           this.speedP = 0.005
         }
       },
@@ -180,15 +219,28 @@ export default class Perso {
   setMovements() {
     this.time.on('tick', () => {
       if (this.moveForward) {
-        this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
+        this.playerVelocity.add(
+          this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
+        )
         this.cube.position.copy(this.perso.position)
         this.playerBB.setFromObject(this.cube)
-        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+        if (
+          this.currentBaseAction != 'WALKING' &&
+          this.currentBaseAction != 'RUNNING'
+        ) {
           if (this.run) {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['RUNNING'].action,
+              0.6
+            )
             this.speedP = 0.01
           } else {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['WALKING'].action,
+              0.6
+            )
           }
         }
         this.lerpOrientation()
@@ -197,41 +249,94 @@ export default class Perso {
         const step = this.params.lerpSpeed * this.time.delta
         this.quat = new Quaternion()
         this.camera.container.quaternion.clone(this.quat)
-        this.quat.multiplyQuaternions(this.camera.container.quaternion, this.quat)
-        this.perso.quaternion.rotateTowards( this.quat.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)), step )
-        this.playerVelocity.add( this.getForwardVector().multiplyScalar( - this.speedP * this.time.delta ) )
+        this.quat.multiplyQuaternions(
+          this.camera.container.quaternion,
+          this.quat
+        )
+        this.perso.quaternion.rotateTowards(
+          this.quat.multiply(
+            new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)
+          ),
+          step
+        )
+        this.playerVelocity.add(
+          this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
+        )
         this.cube.position.copy(this.perso.position)
         this.playerBB.setFromObject(this.cube)
-        if (this.currentBaseAction != 'WALKING' && this.currentBaseAction != 'RUNNING') {
+        if (
+          this.currentBaseAction != 'WALKING' &&
+          this.currentBaseAction != 'RUNNING'
+        ) {
           if (this.run) {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['RUNNING'].action, 0.6 )
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['RUNNING'].action,
+              0.6
+            )
             this.speedP = 0.01
           } else {
-            this.prepareCrossFade( this.baseActions[this.currentBaseAction].action, this.baseActions['WALKING'].action, 0.6 )
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['WALKING'].action,
+              0.6
+            )
           }
         }
         // this.lerpOrientation()
       }
       if (this.moveLeft) {
         if (this.moveBackward) {
-          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.1 * this.speedP))
+          this.perso.quaternion.multiply(
+            new Quaternion().setFromAxisAngle(
+              new Vector3(0, 1, 0),
+              4.0 * Math.PI * 0.1 * this.speedP
+            )
+          )
           const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step/10 )
+          this.camera.container.quaternion.rotateTowards(
+            this.perso.quaternion,
+            step / 10
+          )
         } else {
-          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * Math.PI * 0.1 * this.speedP))
+          this.perso.quaternion.multiply(
+            new Quaternion().setFromAxisAngle(
+              new Vector3(0, 1, 0),
+              4.0 * Math.PI * 0.1 * this.speedP
+            )
+          )
           const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
+          this.camera.container.quaternion.rotateTowards(
+            this.perso.quaternion,
+            step
+          )
         }
       }
       if (this.moveRight) {
         if (this.moveBackward) {
-          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * - Math.PI * 0.1 * this.speedP))
+          this.perso.quaternion.multiply(
+            new Quaternion().setFromAxisAngle(
+              new Vector3(0, 1, 0),
+              4.0 * -Math.PI * 0.1 * this.speedP
+            )
+          )
           const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step/10 )
+          this.camera.container.quaternion.rotateTowards(
+            this.perso.quaternion,
+            step / 10
+          )
         } else {
-          this.perso.quaternion.multiply(new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), 4.0 * - Math.PI * 0.1 * this.speedP))
+          this.perso.quaternion.multiply(
+            new Quaternion().setFromAxisAngle(
+              new Vector3(0, 1, 0),
+              4.0 * -Math.PI * 0.1 * this.speedP
+            )
+          )
           const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards( this.perso.quaternion, step )
+          this.camera.container.quaternion.rotateTowards(
+            this.perso.quaternion,
+            step
+          )
         }
       }
       if (this.mouse.grab === true) {
@@ -276,55 +381,65 @@ export default class Perso {
         this.camera.container.quaternion
       )
 
-      const delta = Math.min( 0.1, this.clock.getDelta() )
+      const delta = Math.min(0.1, this.clock.getDelta())
       this.updatePlayer(delta)
     })
   }
   lerpOrientation() {
     const baseQuat = new Quaternion().copy(this.camera.container.quaternion)
-    if ( !baseQuat.equals( this.perso.quaternion ) ) {
+    if (!baseQuat.equals(this.perso.quaternion)) {
       const step = this.params.lerpSpeed * this.time.delta
-      this.perso.quaternion.rotateTowards( this.camera.container.quaternion, step )
+      this.perso.quaternion.rotateTowards(
+        this.camera.container.quaternion,
+        step
+      )
     }
   }
   toRadians(angle) {
     return angle * (Math.PI / 180)
   }
   playerCollitions() {
-    const result = this.worldOctree.capsuleIntersect( this.playerCollider )
+    const result = this.worldOctree.capsuleIntersect(this.playerCollider)
     this.playerOnFloor = false
-    if ( result ) {
+    if (result) {
       this.playerOnFloor = result.normal.y > 0
-      if ( ! this.playerOnFloor ) {
-        this.playerVelocity.addScaledVector( result.normal, - result.normal.dot( this.playerVelocity ) )
+      if (!this.playerOnFloor) {
+        this.playerVelocity.addScaledVector(
+          result.normal,
+          -result.normal.dot(this.playerVelocity)
+        )
       }
-      this.playerCollider.translate( result.normal.multiplyScalar( result.depth ) )
+      this.playerCollider.translate(result.normal.multiplyScalar(result.depth))
     }
   }
   updatePlayer(delta) {
-    if ( this.playerOnFloor ) {
-      const damping = Math.exp( - 3 * delta ) - 1
-      this.playerVelocity.addScaledVector( this.playerVelocity, damping )
+    if (this.playerOnFloor) {
+      const damping = Math.exp(-3 * delta) - 1
+      this.playerVelocity.addScaledVector(this.playerVelocity, damping)
     } else {
       this.playerVelocity.y -= this.GRAVITY * delta
     }
-    const deltaPosition = this.playerVelocity.clone().multiplyScalar( delta )
-    this.playerCollider.translate( deltaPosition )
+    const deltaPosition = this.playerVelocity.clone().multiplyScalar(delta)
+    this.playerCollider.translate(deltaPosition)
     this.playerCollitions()
-    this.camera.container.position.copy( this.playerCollider.start )
-    this.perso.position.set(this.camera.container.position.x, this.camera.container.position.y - 0.35, this.camera.container.position.z)
+    this.camera.container.position.copy(this.playerCollider.start)
+    this.perso.position.set(
+      this.camera.container.position.x,
+      this.camera.container.position.y - 0.35,
+      this.camera.container.position.z
+    )
   }
   getForwardVector() {
-    this.perso.getWorldDirection( this.playerDirection )
+    this.perso.getWorldDirection(this.playerDirection)
     this.playerDirection.y = 0
     this.playerDirection.normalize()
     return this.playerDirection
   }
   getSideVector() {
-    this.perso.getWorldDirection( this.playerDirection )
+    this.perso.getWorldDirection(this.playerDirection)
     this.playerDirection.y = 0
     this.playerDirection.normalize()
-    this.playerDirection.cross( this.perso.up )
+    this.playerDirection.cross(this.perso.up)
     return this.playerDirection
   }
   setDebug() {
@@ -369,114 +484,116 @@ export default class Perso {
     }
   }
   setAnimations() {
-    const animations = this.assets.models.Xbot.animations;
-    this.mixer = new AnimationMixer( this.assets.models.Xbot.scene )
+    const animations = this.assets.models.EDDIE.animations
+    this.mixer = new AnimationMixer(this.assets.models.EDDIE.scene)
     this.numAnimations = animations.length
-    for ( let i = 0; i !== this.numAnimations; ++ i ) {
-      let clip = animations[ i ]
+    for (let i = 0; i !== this.numAnimations; ++i) {
+      let clip = animations[i]
       const name = clip.name
-      if ( this.baseActions[ name ] ) {
-        const action = this.mixer.clipAction( clip )
-        this.activateAction( action )
-        action.setEffectiveTimeScale( 0.2 )
-        this.baseActions[ name ].action = action
-        this.allActions.push( action )
-      } else if ( this.additiveActions[ name ] ) {
+      if (this.baseActions[name]) {
+        const action = this.mixer.clipAction(clip)
+        this.activateAction(action)
+        action.setEffectiveTimeScale(0.2)
+        this.baseActions[name].action = action
+        this.allActions.push(action)
+      } else if (this.additiveActions[name]) {
         // Make the clip additive and remove the reference frame
-        AnimationUtils.makeClipAdditive( clip )
-        if ( clip.name.endsWith( '_pose' ) ) {
-          clip = AnimationUtils.subclip( clip, clip.name, 2, 3, 30 )
+        AnimationUtils.makeClipAdditive(clip)
+        if (clip.name.endsWith('_pose')) {
+          clip = AnimationUtils.subclip(clip, clip.name, 2, 3, 30)
         }
-        const action = this.mixer.clipAction( clip )
-        this.activateAction( action )
-        this.additiveActions[ name ].action = action
-        this.allActions.push( action )
+        const action = this.mixer.clipAction(clip)
+        this.activateAction(action)
+        this.additiveActions[name].action = action
+        this.allActions.push(action)
       }
     }
     this.animate()
   }
-  activateAction( action ) {
-    const clip = action.getClip();
-    const settings = this.baseActions[ clip.name ] || this.additiveActions[ clip.name ];
-    this.setWeight( action, settings.weight );
-    action.play();
+  activateAction(action) {
+    const clip = action.getClip()
+    const settings =
+      this.baseActions[clip.name] || this.additiveActions[clip.name]
+    this.setWeight(action, settings.weight)
+    action.play()
   }
-  prepareCrossFade( startAction, endAction, duration ) {
+  prepareCrossFade(startAction, endAction, duration) {
     // If the current action is 'idle', execute the crossfade immediately;
     // else wait until the current action has finished its current loop
-    if ( this.currentBaseAction === 'IDLE' || ! startAction || ! endAction ) {
-      this.executeCrossFade( startAction, endAction, duration );
-    } else {
-      this.synchronizeCrossFade( startAction, endAction, duration );
-    }
+    // if (this.currentBaseAction === 'JUMP') {
+    //   this.synchronizeCrossFade(startAction, endAction, duration)
+    // } else {
+      this.executeCrossFade(startAction, endAction, duration)
+    // }
     // Update control colors
-    if ( endAction ) {
-      const clip = endAction.getClip();
-      this.currentBaseAction = clip.name;
+    if (endAction) {
+      const clip = endAction.getClip()
+      this.currentBaseAction = clip.name
     } else {
-      this.currentBaseAction = 'None';
+      this.currentBaseAction = 'None'
     }
-    this.crossFadeControls.forEach( function ( control ) {
-      const name = control.property;
-      if ( name === this.currentBaseAction ) {
-        control.setActive();
+    this.crossFadeControls.forEach(function (control) {
+      const name = control.property
+      if (name === this.currentBaseAction) {
+        control.setActive()
       } else {
-        control.setInactive();
+        control.setInactive()
       }
-    } );
+    })
   }
-  synchronizeCrossFade( startAction, endAction, duration ) {
-    this.mixer.addEventListener( 'loop', onLoopFinished );
+  synchronizeCrossFade(startAction, endAction, duration) {
+    this.mixer.addEventListener('loop', onLoopFinished)
     const that = this
-    function onLoopFinished( event ) {
-      if ( event.action === startAction ) {
-        that.mixer.removeEventListener( 'loop', onLoopFinished );
-        that.executeCrossFade( startAction, endAction, duration );
+    function onLoopFinished(event) {
+      if (event.action === startAction) {
+        that.mixer.removeEventListener('loop', onLoopFinished)
+        that.executeCrossFade(startAction, endAction, duration)
       }
     }
   }
-  executeCrossFade( startAction, endAction, duration ) {
+  executeCrossFade(startAction, endAction, duration) {
     // Not only the start action, but also the end action must get a weight of 1 before fading
     // (concerning the start action this is already guaranteed in this place)
-    if ( endAction ) {
-      this.setWeight( endAction, 1 );
-      endAction.time = 0;
-      if ( startAction ) {
+    if (endAction) {
+      this.setWeight(endAction, 1)
+      endAction.time = 0
+      if (startAction) {
         // Crossfade with warping
-        startAction.crossFadeTo( endAction, duration, true );
+        startAction.crossFadeTo(endAction, duration, true)
       } else {
         // Fade in
-        endAction.fadeIn( duration );
+        endAction.fadeIn(duration)
       }
     } else {
       // Fade out
-      startAction.fadeOut( duration );
+      startAction.fadeOut(duration)
     }
     if (endAction._clip.name == 'IDLE') {
-      endAction.setEffectiveTimeScale( 0.2 )
+      endAction.setEffectiveTimeScale(0.2)
     }
   }
   // This function is needed, since animationAction.crossFadeTo() disables its start action and sets
   // the start action's timeScale to ((start animation's duration) / (end animation's duration))
-  setWeight( action, weight ) {
-    action.enabled = true;
-    action.setEffectiveTimeScale( 1 );
-    action.setEffectiveWeight( weight );
+  setWeight(action, weight) {
+    action.enabled = true
+    action.setEffectiveTimeScale(1)
+    action.setEffectiveWeight(weight)
   }
   animate() {
     // Render loop
     this.time.on('tick', () => {
-    // requestAnimationFrame(this.animate())
-      for ( let i = 0; i !== this.numAnimations; ++ i ) {
-        const action = this.allActions[ i ];
-        const clip = action.getClip();
-        const settings = this.baseActions[ clip.name ] || this.additiveActions[ clip.name ];
-        settings.weight = action.getEffectiveWeight();
+      // requestAnimationFrame(this.animate())
+      for (let i = 0; i !== this.numAnimations; ++i) {
+        const action = this.allActions[i]
+        const clip = action.getClip()
+        const settings =
+          this.baseActions[clip.name] || this.additiveActions[clip.name]
+        settings.weight = action.getEffectiveWeight()
       }
       // Get the time elapsed since the last frame, used for this.mixer update
-      const mixerUpdateDelta = this.time.delta/1500;
+      const mixerUpdateDelta = this.time.delta / 1500
       // Update the animation this.mixer, the stats panel, and render this frame
-      this.mixer.update( mixerUpdateDelta );
+      this.mixer.update(mixerUpdateDelta)
     })
   }
 }
