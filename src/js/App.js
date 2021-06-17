@@ -1,13 +1,9 @@
-<<<<<<< HEAD
-import { Color, Fog, PCFSoftShadowMap, Scene, sRGBEncoding, WebGLRenderer } from 'three'
-=======
 import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2 } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
->>>>>>> add inventory
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
