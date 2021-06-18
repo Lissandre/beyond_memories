@@ -9,6 +9,7 @@ import Skybox from './Sky/Sky'
 import Water from './Water/Water'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
+import Seagull from './Seagull/Seagull'
 
 import Data from '../../data/data.json'
 
@@ -23,6 +24,7 @@ export default class World {
     this.itemsIventory = options.itemsInventory
     this.body = options.body
     this.screenShot = options.screenShot
+    this.appThis = options.appThis
 
     // Set up
     this.container = new Object3D()
@@ -30,6 +32,7 @@ export default class World {
     this.container.name = 'World'
 
     this.playerInventory = []
+    this.elementEnteredArray = []
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -44,10 +47,11 @@ export default class World {
     this.setSky()
     this.setHemisphereLight()
     this.setFloor()
+    // this.setSeagull()
     // this.setWater()
-    this.setPerso()
+    // this.setPerso()
     this.setBoxObjectManager()
-    this.PlayerEnterObjectArea()
+    // this.PlayerEnterObjectArea()
     this.screenCanvas()
   }
   setLoader() {
@@ -116,6 +120,20 @@ export default class World {
       exponent: 2,
     })
     this.container.add(this.sky.container)
+  }
+
+  setSeagull() {
+    this.seagull = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+      ]
+    })
+    this.container.add(this.seagull.container)
   }
 
   setWater() {
@@ -276,7 +294,8 @@ export default class World {
     
     this.time.on('tick', ()=> {
       if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
-
+        
+        // console.log(this.elementEnteredArray);
 
         for (const elementName in this.boxObjectManager.boxesArr) {
           const element = this.boxObjectManager.boxesArr[elementName];
@@ -284,8 +303,12 @@ export default class World {
           
           if(this.playerenteredInObject === true) {
             this.elementEntered = element
+            // this.elementEnteredArray.push(element.child.children)
             this.openDiagOne()
+            // this.appThis.outlinePass = this.elementEntered
+            
           }else{
+            this.appThis.outlinePass.selectedObjects.pop()
           }
 
           if (

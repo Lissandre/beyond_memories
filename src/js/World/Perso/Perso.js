@@ -97,12 +97,12 @@ export default class Perso {
   }
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)
-    this.material = new MeshBasicMaterial({ color: 0x00ff00, wireframe: true })
+    this.material = new MeshBasicMaterial({ color: 0x00ff00, wireframe: true, opacity: 0, transparent: true })
     this.cube = new Mesh(this.geometry, this.material)
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
     const helper = new Box3Helper(this.playerBB, 0xffff00)
-    this.container.add(this.cube, helper)
+    this.container.add(this.cube)
   }
   setListeners() {
     document.addEventListener(

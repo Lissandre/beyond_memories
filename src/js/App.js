@@ -53,6 +53,7 @@ export default class App {
     this.setWorld()
     this.openInventoryMethod()
     this.closeInventoryMethod()
+    this.composerCreator()
   }
   setRenderer() {
     // Set scene
@@ -129,6 +130,7 @@ export default class App {
       scene: this.scene,
       itemsInventory: this.itemsInventory,
       screenShot: this.screenShot,
+      appThis: this,
       body: this.body
     })
     // Add world to scene
