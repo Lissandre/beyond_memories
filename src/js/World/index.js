@@ -47,8 +47,8 @@ export default class World {
     this.setSky()
     this.setHemisphereLight()
     this.setFloor()
-    // this.setSeagull()
-    // this.setWater()
+    this.setSeagull()
+    // this.setSeagull2()
     // this.setPerso()
     this.setBoxObjectManager()
     // this.PlayerEnterObjectArea()
@@ -131,17 +131,33 @@ export default class World {
         [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
         [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
         [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-      ]
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ],
+      decal: -60,
+      heightDecal: 20,
+      lineVisible: true,
+      rotation: Math.PI
     })
     this.container.add(this.seagull.container)
   }
 
-  setWater() {
-    this.water = new Water({
+  setSeagull2() {
+    this.seagull2 = new Seagull({
       time: this.time,
-      debug: this.debug,
+      assets: this.assets,
+      curve: [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ],
+      decal: -40,
+      heightDecal: 10,
+      lineVisible: true,
+      rotation: Math.PI
     })
-    this.container.add(this.water.container)
+    this.container.add(this.seagull2.container)
   }
 
   setBoxObjectManager() {
