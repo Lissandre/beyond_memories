@@ -121,7 +121,7 @@ export default class Floor {
         child.receiveShadow = true
         // if (
         //   // child.material.name.includes('LEAVES') ||
-        //   child.material.name.includes('Leaf') ||
+        //   // child.material.name.includes('Leaf') ||
         //   child.material.name.includes('rock') ||
         //   child.material.name.includes('WOOD')
         // ) {
@@ -155,9 +155,17 @@ export default class Floor {
         child.receiveShadow = true
         child.material.side = FrontSide
       }
-      if (child.name.includes('EAU')) {
-        child.material = this.texture
-        child.material = this.materialRiver
+      if (child.name.includes('BARRIERE')) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+      if (child.name.includes('HERBES')) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+      if (child.name.includes('BUSH')) {
+        child.castShadow = true
+        child.receiveShadow = true
       }
       if (child.name.includes('EAU')) {
         child.material = this.texture
