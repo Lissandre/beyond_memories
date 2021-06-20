@@ -51,7 +51,7 @@ export default class World {
     this.setSeagull()
     this.setSeagull2()
     this.setSeagull3()
-    // this.setPerso()
+    this.setPerso()
     this.setBoxObjectManager()
     // this.PlayerEnterObjectArea()
     this.screenCanvas()
@@ -98,6 +98,7 @@ export default class World {
       assets: this.assets,
       time: this.time,
       debug: this.debug,
+      scene: this.scene
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
