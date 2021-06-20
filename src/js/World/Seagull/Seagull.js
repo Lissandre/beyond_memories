@@ -1,4 +1,15 @@
-import { AnimationClip, AnimationMixer, Clock, Object3D, Vector3, CatmullRomCurve3, TubeGeometry, Mesh, MeshLambertMaterial, BufferGeometry, Line } from 'three'
+import {AnimationClip, 
+        AnimationMixer, 
+        Clock, 
+        Object3D, 
+        Vector3, 
+        CatmullRomCurve3, 
+        TubeGeometry, 
+        Mesh, 
+        MeshLambertMaterial, 
+        BufferGeometry, 
+        Line, 
+        Skeleton } from 'three'
 
 export default class Seagull {
     constructor(options) {
@@ -10,6 +21,7 @@ export default class Seagull {
         this.heightDecal = options.heightDecal
         this.lineVisible = options.lineVisible
         this.rotation = options.rotation
+        this.speed = options.speed
     
         // Set up
         this.container = new Object3D()
@@ -25,17 +37,75 @@ export default class Seagull {
     }
 
     setSeagull() {
-        this.seagull = this.assets.models.OISEAUX.scene
+
+
+        const cloneGltf = (gltf) => {
+            const clone = {
+              animations: gltf.animations,
+              scene: gltf.scene.clone(true)
+            };
+          
+            const skinnedMeshes = {};
+          
+            gltf.scene.traverse(node => {
+              if (node.isSkinnedMesh) {
+                skinnedMeshes[node.name] = node;
+              }
+            });
+          
+            const cloneBones = {};
+            const cloneSkinnedMeshes = {};
+          
+            clone.scene.traverse(node => {
+              if (node.isBone) {
+                cloneBones[node.name] = node;
+              }
+          
+              if (node.isSkinnedMesh) {
+                cloneSkinnedMeshes[node.name] = node;
+              }
+            });
+          
+            for (let name in skinnedMeshes) {
+              const skinnedMesh = skinnedMeshes[name];
+              const skeleton = skinnedMesh.skeleton;
+              const cloneSkinnedMesh = cloneSkinnedMeshes[name];
+          
+              const orderedCloneBones = [];
+          
+              for (let i = 0; i < skeleton.bones.length; ++i) {
+                const cloneBone = cloneBones[skeleton.bones[i].name];
+                orderedCloneBones.push(cloneBone);
+              }
+          
+              cloneSkinnedMesh.bind(
+                  new Skeleton(orderedCloneBones, skeleton.boneInverses),
+                  cloneSkinnedMesh.matrixWorld);
+            }
+          
+            return clone;
+          }
+
+
+
+
+        this.seagull = cloneGltf(this.assets.models.OISEAUX) 
         // this.seagull.scale.set(0.2, 0.2, 0.2)
+        console.log(this.seagull);
+        this.seagull.scene.children[0].rotation.z = this.rotation
         
-        this.seagull.children[0].rotation.z = this.rotation
-        this.seagull.castShadow = true
-        this.container.add(this.seagull)
+        this.seagull.scene.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true
+              child.receiveShadow = true
+            }
+          })
+        this.container.add(this.seagull.scene)
     }
 
     animateSeagull() {
-        const mixer = new AnimationMixer(this.seagull)
-        const clips = this.assets.models.OISEAUX.animations
+        const mixer = new AnimationMixer(this.seagull.scene)
+        const clips = this.seagull.animations
         this.clock = new Clock()
 
         for (var i = 0; i < this.curve.length; i++) {
@@ -62,9 +132,9 @@ export default class Seagull {
         this.time.on('tick', () => {
             mixer.update(this.clock.getDelta())
 
-            this.nextPoint = Math.round((this.time.elapsed * 0.001)) % this.points.length
-            this.seagull.position.lerp(this.points[this.nextPoint], 0.0025)
-            this.seagull.lookAt(this.points[this.nextPoint])
+            this.nextPoint = Math.round((this.time.elapsed * this.speed)) % this.points.length
+            this.seagull.scene.position.lerp(this.points[this.nextPoint], 0.0025)
+            this.seagull.scene.lookAt(this.points[this.nextPoint])
             
             
             

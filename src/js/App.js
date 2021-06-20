@@ -1,4 +1,4 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap } from 'three'
+import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping } from 'three'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
@@ -41,8 +41,8 @@ export default class App {
     this.setConfig()
     this.setRenderer()
     this.setCamera()
-    this.setWorld()
     this.composerCreator()
+    this.setWorld()
     this.openInventoryMethod()
     this.closeInventoryMethod()
   }
@@ -50,7 +50,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    // this.scene.fog = new Fog(this.params.fogColor, 10, 80)
+    this.scene.fog = new Fog(this.params.fogColor, 10, 80)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -58,9 +58,12 @@ export default class App {
       antialias: true,
       powerPreference: 'high-performance',
     })
+    // this.renderer.toneMapping = CineonToneMapping
+    // this.renderer.toneMappingExposure = 2
     this.renderer.outputEncoding = sRGBEncoding
     this.renderer.gammaFactor = 2.2
     this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMapSoft = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
@@ -80,11 +83,11 @@ export default class App {
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         // }
         
-        // if(this.composer) {
-          // this.composer.render(this.scene, this.camera.camera)
-        // }else {
+        if(this.composer) {
+          this.composer.render(this.time.delta * 0.0001)
+        }else {
           this.renderer.render(this.scene, this.camera.camera)
-        // }
+        }
 
       this.debug && this.stats.end()
     })
@@ -131,7 +134,8 @@ export default class App {
       screenShot: this.screenShot,
       appThis: this,
       body: this.body,
-      renderer: this.renderer
+      renderer: this.renderer,
+      composer: this.composer
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -160,17 +164,16 @@ export default class App {
   composerCreator() {
     
     this.composer = new EffectComposer( this.renderer );
-    // this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.composer.setSize(window.innerWidth * 2, window.innerHeight * 2)
     this.renderPass = new RenderPass(this.scene, this.camera.camera)
     this.composer.addPass(this.renderPass)
     
-    this.filmPass = new FilmPass(0.01,0,648,false)
+    this.filmPass = new FilmPass(0.15,0,0,false)
     this.filmPass.renderToScreen = true
     
-    this.composer.addPass(this.filmPass)
+    // this.composer.addPass(this.filmPass)
     
-    console.log(this.composer);
 
   }
 }

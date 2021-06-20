@@ -25,6 +25,7 @@ export default class World {
     this.screenShot = options.screenShot
     this.appThis = options.appThis
     this.renderer = options.renderer
+    this.composer = options.composer
 
     // Set up
     this.container = new Object3D()
@@ -48,7 +49,8 @@ export default class World {
     this.setHemisphereLight()
     this.setFloor()
     this.setSeagull()
-    // this.setSeagull2()
+    this.setSeagull2()
+    this.setSeagull3()
     // this.setPerso()
     this.setBoxObjectManager()
     // this.PlayerEnterObjectArea()
@@ -114,7 +116,8 @@ export default class World {
     this.sky = new Skybox({
       time: this.time,
       debug: this.debug,
-      renderer: this.renderer
+      renderer: this.renderer,
+      composer: this.composer
     })
     this.container.add(this.sky.container)
   }
@@ -132,8 +135,9 @@ export default class World {
       ],
       decal: -60,
       heightDecal: 20,
-      lineVisible: true,
-      rotation: Math.PI
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.001
     })
     this.container.add(this.seagull.container)
   }
@@ -150,11 +154,32 @@ export default class World {
         [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
       ],
       decal: -40,
-      heightDecal: 10,
-      lineVisible: true,
-      rotation: Math.PI
+      heightDecal: 20,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.0015
     })
     this.container.add(this.seagull2.container)
+  }
+
+  setSeagull3() {
+    this.seagull3 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ],
+      decal: -50,
+      heightDecal: 20,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.0018
+    })
+    this.container.add(this.seagull3.container)
   }
 
   setBoxObjectManager() {

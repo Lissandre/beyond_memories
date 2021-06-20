@@ -12,19 +12,20 @@ export default class Skybox {
       this.debug = options.debug
       this.time = options.time
       this.renderer = options.renderer
+      this.composer = options.composer
   
   
       this.sun
       this.sky
 
       this.effectController = {
-        turbidity: 1.7,
+        turbidity: 0.01,
         rayleigh: 0.339,
-        mieCoefficient: 0.02,
+        mieCoefficient: 0.026,
         mieDirectionalG: 0.963,
         elevation: 15.4,
         azimuth: -135,
-        exposure: this.renderer.toneMappingExposure
+        exposure: this.composer.toneMappingExposure
     };
 
       this.container = new Object3D()
@@ -43,7 +44,6 @@ export default class Skybox {
         this.container.add(this.sky)
 
         this.uniforms = this.sky.material.uniforms;
-        console.log(this.effectController);
         this.uniforms[ 'turbidity' ].value = this.effectController.turbidity;
         this.uniforms[ 'rayleigh' ].value = this.effectController.rayleigh;
         this.uniforms[ 'mieCoefficient' ].value = this.effectController.mieCoefficient;
@@ -56,7 +56,7 @@ export default class Skybox {
 
         this.uniforms[ 'sunPosition' ].value.copy( this.sun );
 
-        this.renderer.toneMappingExposure = this.effectController.exposure;
+        this.composer.toneMappingExposure = this.effectController.exposure;
 
     }
 
@@ -83,8 +83,8 @@ export default class Skybox {
             .add(this.uniforms[ 'turbidity'], 'value')
             .name('Turbidity')
             .min(0.0)
-            .max(20.0)
-            .step(0.1)
+            .max(1.0)
+            .step(0.01)
         this.debugFolder
             .add(this.uniforms[ 'mieCoefficient'], 'value')
             .name('mieCoefficient')
