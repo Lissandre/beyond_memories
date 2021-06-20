@@ -5,8 +5,7 @@ import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
-import Skybox from './Sky/Sky'
-import Water from './Water/Water'
+import Skybox from './Sky/NewSky'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
 import Seagull from './Seagull/Seagull'
@@ -25,6 +24,7 @@ export default class World {
     this.body = options.body
     this.screenShot = options.screenShot
     this.appThis = options.appThis
+    this.renderer = options.renderer
 
     // Set up
     this.container = new Object3D()
@@ -114,10 +114,7 @@ export default class World {
     this.sky = new Skybox({
       time: this.time,
       debug: this.debug,
-      sphereTopColor: 0xaaddff,
-      sphereBottomColor: 0xbbeeff,
-      offset: 20,
-      exponent: 2,
+      renderer: this.renderer
     })
     this.container.add(this.sky.container)
   }

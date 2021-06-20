@@ -67,8 +67,10 @@ export default class Skybox {
       time: this.time,
       color: 0xffffff,
       intensity: 0.7,
+      radius: 2,
     })
     this.sun.container.position.set(-70, 70, -70)
     this.container.add(this.sun.container)
   }
+
 }

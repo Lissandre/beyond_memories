@@ -131,7 +131,8 @@ export default class App {
       itemsInventory: this.itemsInventory,
       screenShot: this.screenShot,
       appThis: this,
-      body: this.body
+      body: this.body,
+      renderer: this.renderer
     })
     // Add world to scene
     this.scene.add(this.world.container)

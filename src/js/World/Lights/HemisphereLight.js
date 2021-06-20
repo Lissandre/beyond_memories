@@ -10,7 +10,7 @@ export default class HemisphereLightSource {
     this.container.name = 'Hemisphere Light'
     this.params = {
       skycolor: 0xffffff,
-      groundcolor: 0xffffff,
+      groundcolor: 0x000000,
       intensity: 1,
     }
 
