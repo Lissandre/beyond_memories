@@ -4,6 +4,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -36,24 +37,14 @@ export default class App {
 
 
     this.composer 
-    this.effectFXAA 
-    this.outlinePass;
-    this.outLineParams = {
-      edgeStrength: 3.0,
-      edgeGlow: 0.0,
-      edgeThickness: 1.0,
-      pulsePeriod: 0,
-      rotate: false,
-      usePatternTexture: false
-    };
 
     this.setConfig()
     this.setRenderer()
     this.setCamera()
     this.setWorld()
+    this.composerCreator()
     this.openInventoryMethod()
     this.closeInventoryMethod()
-    this.composerCreator()
   }
   setRenderer() {
     // Set scene
@@ -87,10 +78,18 @@ export default class App {
     this.time.on('tick', () => {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
-      this.renderer.render(this.scene, this.camera.camera)
-      // }
+        // }
+        
+        // if(this.composer) {
+          // this.composer.render(this.scene, this.camera.camera)
+        // }else {
+          this.renderer.render(this.scene, this.camera.camera)
+        // }
+
       this.debug && this.stats.end()
     })
+
+   
 
     if (this.debug) {
       this.renderOnBlur = { activated: true }
@@ -159,18 +158,19 @@ export default class App {
   }
 
   composerCreator() {
+    
     this.composer = new EffectComposer( this.renderer );
+    // this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    this.composer.setSize(window.innerWidth * 2, window.innerHeight * 2)
+    this.renderPass = new RenderPass(this.scene, this.camera.camera)
+    this.composer.addPass(this.renderPass)
+    
+    this.filmPass = new FilmPass(0.01,0,648,false)
+    this.filmPass.renderToScreen = true
+    
+    this.composer.addPass(this.filmPass)
+    
+    console.log(this.composer);
 
-    this.renderPass = new RenderPass( this.scene, this.camera );
-    this.composer.addPass( this.renderPass );
-
-    this.outlinePass = new OutlinePass( new Vector2( window.innerWidth, window.innerHeight ), this.scene, this.camera );
-    this.composer.addPass( this.outlinePass );
-
-    this.effectFXAA = new ShaderPass( FXAAShader );
-    this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
-    this.composer.addPass( this.effectFXAA );
-
-    // window.addEventListener( 'resize', onWindowResize );
   }
 }
