@@ -7,7 +7,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
-import VignetteShader from '@shaders/Vignette/Vignette.js'
+// import VignetteShader from '@shaders/Vignette/Vignette.js'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
