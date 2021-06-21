@@ -29,6 +29,8 @@ export default class App {
     this.body = options.body
     this.itemsInventory = options.itemsInventory
     this.screenShot = options.screenShot
+    this.initButton = options.initButton
+    this.music = options.music
 
     // Set up
     this.time = new Time()
@@ -158,7 +160,9 @@ export default class App {
       appThis: this,
       body: this.body,
       renderer: this.renderer,
-      composer: this.composer
+      composer: this.composer,
+      initButton: this.initButton,
+      music: this.music
     })
     // Add world to scene
     this.scene.add(this.world.container)

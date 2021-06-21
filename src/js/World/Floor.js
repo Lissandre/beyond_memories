@@ -6,10 +6,15 @@ import {
   ShaderMaterial,
   DoubleSide,
   FrontSide,
+  PositionalAudio,
+  AudioLoader
 } from 'three'
 
 import WaterFrag from '@shaders/Water/WaterFrag.frag'
 import WaterVert from '@shaders/Water/WaterVert.vert'
+
+import riverSound from '@sounds/river/river.mp3'
+import oceanSound from '@sounds/ocean/ocean.mp3'
 
 export default class Floor {
   constructor(options) {
@@ -18,6 +23,7 @@ export default class Floor {
     this.time = options.time
     this.debug = options.debug
     this.scene = options.scene
+    this.listener = options.listener
 
     // Set up
     this.container = new Object3D()
@@ -41,6 +47,26 @@ export default class Floor {
     // this.assets.textures.water.repeat.set(10, 10);
     // this.assets.textures.water.wrapS = RepeatWrapping;
     // this.assets.textures.water.wrapT = RepeatWrapping;
+
+    this.riverSound = new PositionalAudio( this.listener )
+    const audioLoaderR = new AudioLoader()
+    audioLoaderR.load( riverSound, (buffer)=> {
+      this.riverSound.setBuffer( buffer )
+      this.riverSound.setRefDistance( 5 )
+      this.riverSound.setLoop(true)
+      this.riverSound.setVolume(1)
+      this.riverSound.play()
+    })
+
+    this.oceanSound = new PositionalAudio( this.listener )
+    const audioLoaderO = new AudioLoader()
+    audioLoaderO.load( oceanSound, (buffer)=> {
+      this.oceanSound.setBuffer( buffer )
+      this.oceanSound.setRefDistance( 5 )
+      this.oceanSound.setLoop(true)
+      this.oceanSound.setVolume(1)
+      this.oceanSound.play()
+    })
 
 
     this.debugObject = {}
@@ -168,10 +194,12 @@ export default class Floor {
       if (child.name.includes('EAU')) {
         child.material = this.texture
         child.material = this.materialRiver
+        child.add(this.riverSound)
       }
       if (child.name.includes('Plane004')) {
         child.material = this.texture
         child.material = this.materialOcean
+        child.add(this.oceanSound)
       }
       if (child.name.includes('mod_') || child.name.includes('modInt_')) {
         if (child.isMesh) {

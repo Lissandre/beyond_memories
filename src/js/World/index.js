@@ -1,4 +1,4 @@
-import { AxesHelper, Object3D } from 'three'
+import { AudioListener, AxesHelper, Object3D } from 'three'
 import { Octree } from 'three/examples/jsm/math/Octree'
 
 import AmbientLightSource from './Lights/AmbientLight'
@@ -26,6 +26,8 @@ export default class World {
     this.appThis = options.appThis
     this.renderer = options.renderer
     this.composer = options.composer
+    this.initButton = options.initButton
+    this.music = options.music
 
     // Set up
     this.container = new Object3D()
@@ -47,11 +49,12 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
+    this.setPerso()
+    this.setAudioListener()
     this.setFloor()
     this.setSeagull()
     this.setSeagull2()
     this.setSeagull3()
-    this.setPerso()
     this.setBoxObjectManager()
     // this.PlayerEnterObjectArea()
     this.screenCanvas()
@@ -73,11 +76,15 @@ export default class World {
       })
 
       this.assets.on('ressourcesReady', () => {
-        this.init()
-        this.loadDiv.style.opacity = 0
-        setTimeout(() => {
-          this.loadDiv.remove()
-        }, 550)
+        this.initButton.addEventListener('click', ()=> {
+          this.init()
+          this.music.play()
+          this.music.volume = 0.5
+          this.loadDiv.style.opacity = 0
+          setTimeout(() => {
+            this.loadDiv.remove()
+          }, 550)
+        })
       })
     }
   }
@@ -98,7 +105,8 @@ export default class World {
       assets: this.assets,
       time: this.time,
       debug: this.debug,
-      scene: this.scene
+      scene: this.scene,
+      listener: this.listener,
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -181,6 +189,11 @@ export default class World {
       speed: 0.0018
     })
     this.container.add(this.seagull3.container)
+  }
+
+  setAudioListener() {
+    this.listener = new AudioListener()
+    this.camera.camera.add(this.listener)
   }
 
   setBoxObjectManager() {
