@@ -50,7 +50,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new Fog(0xffffff, 100, 200)
+    this.scene.fog = new Fog(0xff00ff, 100, 200)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,

@@ -60,8 +60,6 @@ export default class Floor {
 			
     }
 
-    console.log(params.fogColor, params.fogNear, params.fogFar);
-
     this.materialRiver = new ShaderMaterial({
       vertexShader: WaterVert,
       fragmentShader: WaterFrag,
