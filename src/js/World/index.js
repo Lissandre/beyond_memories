@@ -56,7 +56,7 @@ export default class World {
     this.setSeagull2()
     this.setSeagull3()
     this.setBoxObjectManager()
-    // this.PlayerEnterObjectArea()
+    this.PlayerEnterObjectArea()
     this.screenCanvas()
   }
   setLoader() {
