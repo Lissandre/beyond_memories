@@ -230,13 +230,13 @@ export default class Floor {
         .addColor(this.debugObject, 'depthColor')
         .name('Depth Color')
         .onChange(() => {
-          this.materialRiver.uniforms.uDepthColor.value.set(debugObject.depthColor)
+          this.materialRiver.uniforms.uDepthColor.value.set(this.debugObject.depthColor)
         })
       this.debugFolder
         .addColor(this.debugObject, 'surfaceColor')
         .name('Surface Color')
         .onChange(() => {
-          this.materialRiver.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor)
+          this.materialRiver.uniforms.uSurfaceColor.value.set(this.debugObject.surfaceColor)
         })
       this.debugFolder
         .add(this.materialRiver.uniforms.uColorOffset, 'value')
@@ -286,13 +286,13 @@ export default class Floor {
           .addColor(this.debugObject, 'depthColor')
           .name('Depth Color')
           .onChange(() => {
-            this.materialOcean.uniforms.uDepthColor.value.set(debugObject.depthColor)
+            this.materialOcean.uniforms.uDepthColor.value.set(this.debugObject.depthColor)
           })
         this.debugFolder
           .addColor(this.debugObject, 'surfaceColor')
           .name('Surface Color')
           .onChange(() => {
-            this.materialOcean.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor)
+            this.materialOcean.uniforms.uSurfaceColor.value.set(this.debugObject.surfaceColor)
           })
         this.debugFolder
           .add(this.materialOcean.uniforms.uColorOffset, 'value')
