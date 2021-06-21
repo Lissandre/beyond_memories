@@ -8,8 +8,8 @@ import {
   FrontSide,
 } from 'three'
 
-import WaterFrag from '@shaders/WaterFrag.frag'
-import WaterVert from '@shaders/WaterVert.vert'
+import WaterFrag from '@shaders/Water/WaterFrag.frag'
+import WaterVert from '@shaders/Water/WaterVert.vert'
 
 export default class Floor {
   constructor(options) {

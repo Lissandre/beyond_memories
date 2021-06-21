@@ -1,10 +1,13 @@
 import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping } from 'three'
+
+// Post Pro
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
+import VignetteShader from '@shaders/Vignette/Vignette.js'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -33,6 +36,8 @@ export default class App {
     this.assets = new Assets()
     this.params = {
       fogColor: 0xcfc5b0,
+      fogNear: 100,
+      fogFar: 200
     }
 
 
@@ -50,7 +55,7 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new Fog(0xff00ff, 100, 200)
+    this.scene.fog = new Fog(this.params.fogColor, this.params.fogNear, this.params.fogFar)
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -110,6 +115,24 @@ export default class App {
         .onChange(() => {
           this.scene.fog.color = new Color(this.params.fogColor)
         })
+      folder
+        .add(this.params, 'fogNear')
+        .name('Fog Near')
+        .min(0.0)
+        .max(500)
+        .step(1)
+        .onChange(()=> {
+          this.scene.fog.near = this.params.fogNear
+        })
+      folder
+        .add(this.params, 'fogFar')
+        .name('Fog Far')
+        .min(0.0)
+        .max(500)
+        .step(1)
+        .onChange(()=> {
+          this.scene.fog.far = this.params.fogFar
+        })
     }
   }
   setCamera() {
@@ -163,17 +186,28 @@ export default class App {
 
   composerCreator() {
     
+    //Composer
     this.composer = new EffectComposer( this.renderer );
     this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.composer.setSize(window.innerWidth * 2, window.innerHeight * 2)
+
+    // Render
     this.renderPass = new RenderPass(this.scene, this.camera.camera)
     this.composer.addPass(this.renderPass)
     
+    // Grain (film pass)
     this.filmPass = new FilmPass(0.15,0,0,false)
     this.filmPass.renderToScreen = true
-    
     // this.composer.addPass(this.filmPass)
     
+    //Vignette
+    // this.shaderVignette = new VignetteShader
+	  // this.effectVignette = new ShaderPass( this.shaderVignette )
+    // console.log(this.effectVignette);
+	  // this.effectVignette.renderToScreen = true;
+    // this.effectVignette.uniforms[ "offset" ].value = 0.8;
+	  // this.effectVignette.uniforms[ "darkness" ].value = 1.6;
+    // this.composer.addPass(this.effectVignette)
 
   }
 }

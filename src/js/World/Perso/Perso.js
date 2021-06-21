@@ -69,7 +69,7 @@ export default class Perso {
       deceleration: 0.12,
       cameraSpeedX: 0.1,
       cameraSpeedY: 0.01,
-      cameraMaxY: 3,
+      cameraMaxY: 8,
       cameraMinY: 0.5,
       lerpSpeed: 0.005,
     }
