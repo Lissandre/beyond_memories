@@ -5,6 +5,7 @@ import {
   } from 'three'
 import { Sky } from 'three/examples/jsm/objects/Sky.js';
 import Sun from './Sun'
+import SpotSun from './SpotSun';
 
 export default class Skybox {
     constructor(options) {
@@ -32,6 +33,7 @@ export default class Skybox {
   
       this.createSkyBox()
       this.setSun()
+      this.setSpotSun()
       this.setDebug()
     }
   
@@ -69,6 +71,21 @@ export default class Skybox {
         })
         this.sunObj.container.position.set(-70, 70, -70)
         this.container.add(this.sunObj.container)
+    }
+
+    setSpotSun() {
+        this.sunSpot = new SpotSun({
+            position: {
+                x: this.sunObj.container.position.x,
+                y: this.sunObj.container.position.y,
+                z: this.sunObj.container.position.z - 100
+            },
+            intensity: 5,
+            distanceSpot: 200,
+            angleSpot: 20,
+            debug: this.debug
+        })
+        this.container.add(this.sunSpot.container)
     }
 
     setDebug() {
