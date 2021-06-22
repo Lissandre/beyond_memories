@@ -36,7 +36,7 @@ export default class SpotSun {
 
     this.helper = new SpotLightHelper(this.light, '#ff0000')
 
-    this.container.add(this.light, this.helper, this.plane)
+    this.container.add(this.light, this.plane)
   }
 
   setDebug() {
