@@ -153,15 +153,17 @@ export default class Floor {
       ) {
         child.castShadow = true
         child.receiveShadow = true
-        console.log(child);
-        // if (
-        //   child.material.name.includes('LEAVES') ||
-        //   child.material.name.includes('Leaf') ||
-        //   child.material.name.includes('rock') ||
-        //   child.material.name.includes('WOOD')
-        // ) {
-        //   child.material.transparent = true
-        // }
+        if(child.material !== undefined) {
+          if (
+            child.material.name.includes('LEAVES') ||
+            child.material.name.includes('Leaf') ||
+            child.material.name.includes('rocks') ||
+            child.material.name.includes('WOOD') ||
+            child.material.name.includes('BUSH')
+          ) {
+            child.material.transparent = true
+          }
+        }
       }
       if (child.name.includes('ARBUSTE')) {
         child.castShadow = true

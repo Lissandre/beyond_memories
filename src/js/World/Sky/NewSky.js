@@ -32,7 +32,7 @@ export default class Skybox {
   
       this.createSkyBox()
       this.setSun()
-      this.setDebug()
+      // this.setDebug()
     }
   
     createSkyBox() {

@@ -408,7 +408,6 @@ export default class World {
             this.elementEntered = element
             // this.elementEnteredArray.push(element.child.children)
             this.openDiagOne()
-            console.log(this.elementEntered);
             // this.appThis.outlinePass = this.elementEntered
             
           }else{
