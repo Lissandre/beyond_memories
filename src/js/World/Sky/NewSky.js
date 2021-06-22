@@ -32,7 +32,7 @@ export default class Skybox {
   
       this.createSkyBox()
       this.setSun()
-      // this.setDebug()
+      this.setDebug()
     }
   
     createSkyBox() {
@@ -97,6 +97,24 @@ export default class Skybox {
             .min(0.0)
             .max(1.0)
             .step(0.001)
+        this.debugFolder
+            .add(this.sunObj.container.position, 'x')
+            .name('X of sun light')
+            .min(-200)
+            .max(200)
+            .step(0.1)
+        this.debugFolder
+            .add(this.sunObj.container.position, 'y')
+            .name('Y of sun light')
+            .min(0)
+            .max(200)
+            .step(0.1)
+        this.debugFolder
+            .add(this.sunObj.container.position, 'z')
+            .name('Z of sun light')
+            .min(-200)
+            .max(200)
+            .step(0.1)
       }
   
   }
