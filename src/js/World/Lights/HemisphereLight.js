@@ -47,6 +47,6 @@ export default class HemisphereLightSource {
       .add(this.light, 'intensity')
       .name('Intensity')
       .min(0)
-      .max(1)
+      .max(10)
   }
 }
