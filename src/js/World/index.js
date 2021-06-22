@@ -9,6 +9,7 @@ import Skybox from './Sky/NewSky'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
 import Seagull from './Seagull/Seagull'
+import Butterfly from './Butterfly/Butterfly'
 
 import Data from '../../data/data.json'
 
@@ -76,6 +77,7 @@ export default class World {
     this.setSeagull4()
     this.setSeagull5()
     this.setSeagull6()
+    this.setButterfly()
     this.setBoxObjectManager()
     // this.PlayerEnterObjectArea()
     this.screenCanvas()
@@ -269,6 +271,14 @@ export default class World {
       speed: 0.00102
     })
     this.container.add(this.seagull6.container)
+  }
+
+  setButterfly() {
+    this.butterfly = new Butterfly({
+      time: this.time,
+      assets: this.assets
+    })
+    this.container.add(this.butterfly.container)
   }
 
   setAudioListener() {
