@@ -91,7 +91,6 @@ export default class Seagull {
 
         this.seagull = cloneGltf(this.assets.models.OISEAUX) 
         // this.seagull.scale.set(0.2, 0.2, 0.2)
-        console.log(this.seagull);
         this.seagull.scene.children[0].rotation.z = this.rotation
         
         this.seagull.scene.traverse((child) => {

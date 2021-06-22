@@ -43,6 +43,15 @@ export default class World {
 
     this.playerInventory = []
     this.elementEnteredArray = []
+    this.curves = [
+      [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ]
+    ]
 
     this.musicFinVol = 1
 
@@ -64,6 +73,9 @@ export default class World {
     this.setSeagull()
     this.setSeagull2()
     this.setSeagull3()
+    this.setSeagull4()
+    this.setSeagull5()
+    this.setSeagull6()
     this.setBoxObjectManager()
     // this.PlayerEnterObjectArea()
     this.screenCanvas()
@@ -149,13 +161,7 @@ export default class World {
     this.seagull = new Seagull({
       time: this.time,
       assets: this.assets,
-      curve: [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-      ],
+      curve: this.curves[0],
       decal: -60,
       heightDecal: 20,
       lineVisible: false,
@@ -176,11 +182,11 @@ export default class World {
         [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
         [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
       ],
-      decal: -40,
-      heightDecal: 20,
+      decal: -57,
+      heightDecal: 22,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.0015
+      speed: 0.00104
     })
     this.container.add(this.seagull2.container)
   }
@@ -196,13 +202,73 @@ export default class World {
         [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
         [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
       ],
-      decal: -50,
-      heightDecal: 20,
+      decal: -63,
+      heightDecal: 18,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.0018
+      speed: 0.00102
     })
     this.container.add(this.seagull3.container)
+  }
+
+  setSeagull4() {
+    this.seagull4 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ].reverse(),
+      decal: -55,
+      heightDecal: 24,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.001
+    })
+    this.container.add(this.seagull4.container)
+  }
+
+  setSeagull5() {
+    this.seagull5 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ].reverse(),
+      decal: -52,
+      heightDecal: 26,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.00104
+    })
+    this.container.add(this.seagull5.container)
+  }
+
+  setSeagull6() {
+    this.seagull6 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
+        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+      ].reverse(),
+      decal: -58,
+      heightDecal: 22,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.00102
+    })
+    this.container.add(this.seagull6.container)
   }
 
   setAudioListener() {
