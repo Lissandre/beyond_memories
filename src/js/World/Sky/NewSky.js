@@ -34,7 +34,9 @@ export default class Skybox {
       this.createSkyBox()
       this.setSun()
       this.setSpotSun()
-      this.setDebug()
+      if(this.debug) {
+          this.setDebug()
+      }
     }
   
     createSkyBox() {
