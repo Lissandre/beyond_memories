@@ -29,6 +29,13 @@ export default class World {
     this.initButton = options.initButton
     this.music = options.music
 
+    this.musicRange = options.musicRange
+    this.ambianceRange = options.ambianceRange
+    this.js_musicVol = options.js_musicVol
+    this.js_ambianceVol = options.js_ambianceVol
+    this.muteButton = options.muteButton
+    this.unmuteButton = options.unmuteButton
+
     // Set up
     this.container = new Object3D()
     this.worldOctree = new Octree()
@@ -36,6 +43,8 @@ export default class World {
 
     this.playerInventory = []
     this.elementEnteredArray = []
+
+    this.musicFinVol = 1
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -58,6 +67,9 @@ export default class World {
     this.setBoxObjectManager()
     this.PlayerEnterObjectArea()
     this.screenCanvas()
+    this.getMusicRangeValue()
+    this.muteSoundMethod()
+    this.unmuteSoundMethod()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -79,7 +91,7 @@ export default class World {
         this.initButton.addEventListener('click', ()=> {
           this.init()
           this.music.play()
-          this.music.volume = 0.5
+          this.music.volume = this.musicFinVol
           this.loadDiv.style.opacity = 0
           setTimeout(() => {
             this.loadDiv.remove()
@@ -107,6 +119,8 @@ export default class World {
       debug: this.debug,
       scene: this.scene,
       listener: this.listener,
+      ambianceRange: this.ambianceRange,
+      js_ambianceVol: this.js_ambianceVol
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -212,6 +226,43 @@ export default class World {
         playerInventory: this.playerInventory,
         body: this.body
       })
+    })
+  }
+
+  getMusicRangeValue() {
+    this.musicRange.addEventListener('input', ()=> {
+      this.musicFinVol = this.musicRange.value / 100
+      console.log(this.musicFinVol);
+      this.music.volume = this.musicFinVol
+      this.js_musicVol.innerHTML = this.musicRange.value
+    })
+  }
+
+  muteSoundMethod() {
+    this.muteButton.addEventListener('click', ()=> {
+      this.oldMusicValue = this.musicFinVol
+      this.oldAmbianceValue = this.floor.ambianceFinVol
+      console.log(this.oldMusicValue, this.oldAmbianceValue);
+      this.music.volume = 0
+      this.floor.oceanSound.setVolume(0)
+      this.floor.riverSound.setVolume(0)
+      this.musicRange.disabled = true
+      this.ambianceRange.disabled = true
+      this.muteButton.style.display = 'none'
+      this.unmuteButton.style.display = 'block'
+      
+    })
+  }
+
+  unmuteSoundMethod() {
+    this.unmuteButton.addEventListener('click', ()=> {
+        this.music.volume = this.oldMusicValue
+        this.floor.oceanSound.setVolume(this.oldAmbianceValue)
+        this.floor.riverSound.setVolume(this.oldAmbianceValue)
+        this.musicRange.disabled = false
+        this.ambianceRange.disabled = false
+        this.muteButton.style.display = 'block'
+        this.unmuteButton.style.display = 'none'
     })
   }
 
@@ -357,10 +408,11 @@ export default class World {
             this.elementEntered = element
             // this.elementEnteredArray.push(element.child.children)
             this.openDiagOne()
+            console.log(this.elementEntered);
             // this.appThis.outlinePass = this.elementEntered
             
           }else{
-            this.appThis.outlinePass.selectedObjects.pop()
+            // this.appThis.outlinePass.selectedObjects.pop()
           }
 
           if (

@@ -26,11 +26,20 @@ export default class App {
 
     this.openInventory = options.openInventory
     this.closeInventory = options.closeInventory
+    this.openOptions = options.openOptions
+    this.closeOptions = options.closeOptions
     this.body = options.body
     this.itemsInventory = options.itemsInventory
     this.screenShot = options.screenShot
     this.initButton = options.initButton
     this.music = options.music
+
+    this.musicRange = options.musicRange
+    this.ambianceRange = options.ambianceRange
+    this.js_musicVol = options.js_musicVol
+    this.js_ambianceVol = options.js_ambianceVol
+    this.muteButton = options.muteButton
+    this.unmuteButton = options.unmuteButton
 
     // Set up
     this.time = new Time()
@@ -52,6 +61,8 @@ export default class App {
     this.setWorld()
     this.openInventoryMethod()
     this.closeInventoryMethod()
+    this.openOptionsMethod()
+    this.closeOptionsMethod()
   }
   setRenderer() {
     // Set scene
@@ -162,7 +173,13 @@ export default class App {
       renderer: this.renderer,
       composer: this.composer,
       initButton: this.initButton,
-      music: this.music
+      music: this.music,
+      musicRange: this.musicRange,
+      ambianceRange: this.ambianceRange,
+      js_musicVol: this.js_musicVol,
+      js_ambianceVol: this.js_ambianceVol,
+      muteButton: this.muteButton,
+      unmuteButton: this.unmuteButton
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -187,6 +204,22 @@ export default class App {
       this.body.classList.remove('open_inventory')
     })
   }
+
+  openOptionsMethod() {
+    this.openOptions.addEventListener('click', () => {
+      this.body.classList.add('open_options')
+      if(this.body.classList.contains('open_inventory')) {
+        this.body.classList.remove('open_inventory')
+      }
+    })
+  }
+
+  closeOptionsMethod() {
+    this.closeOptions.addEventListener('click', () => {
+      this.body.classList.remove('open_options')
+    })
+  }
+
 
   composerCreator() {
     

@@ -25,12 +25,18 @@ export default class Floor {
     this.scene = options.scene
     this.listener = options.listener
 
+    this.ambianceRange = options.ambianceRange
+    this.js_ambianceVol = options.js_ambianceVol
+
+    this.ambianceFinVol = 1
+
     // Set up
     this.container = new Object3D()
     this.container.name = 'map'
 
     this.setFloor()
     this.animateWater()
+    this.getAmbianceRangeValue()
     if (this.debug) {
       this.setDebug()
     }
@@ -43,10 +49,19 @@ export default class Floor {
     })
   }
 
+  getAmbianceRangeValue() {
+    this.ambianceRange.addEventListener('input', ()=> {
+      this.ambianceFinVol = this.ambianceRange.value / 50
+      console.log(this.ambianceFinVol);
+      this.riverSound.setVolume(this.ambianceFinVol)
+      this.oceanSound.setVolume(this.ambianceFinVol)
+      this.js_ambianceVol.innerHTML = this.ambianceRange.value
+      this
+    })
+  }
+
+
   setFloor() {
-    // this.assets.textures.water.repeat.set(10, 10);
-    // this.assets.textures.water.wrapS = RepeatWrapping;
-    // this.assets.textures.water.wrapT = RepeatWrapping;
 
     this.riverSound = new PositionalAudio( this.listener )
     const audioLoaderR = new AudioLoader()
@@ -128,11 +143,6 @@ export default class Floor {
       },
       fog: true
     })
-
-
-
-
-    this.texture = new MeshLambertMaterial({ map: this.assets.textures.water })
 
     this.floor = this.assets.models.MAP.scene
     this.floor.traverse((child) => {
