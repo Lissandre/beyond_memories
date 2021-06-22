@@ -19,8 +19,8 @@ export default class Sun {
     this.intensity = options.intensity
 
     this.params = {
-      color: 0xFFE49E,
-      intensity: 1
+      color: 0xffc942,
+      intensity: 2.64
     }
 
     // Set up

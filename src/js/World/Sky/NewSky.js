@@ -20,10 +20,10 @@ export default class Skybox {
       this.sky
 
       this.effectController = {
-        turbidity: 0.01,
-        rayleigh: 0.339,
-        mieCoefficient: 0.026,
-        mieDirectionalG: 0.963,
+        turbidity: 0.03,
+        rayleigh: 0.2,
+        mieCoefficient: 0.037,
+        mieDirectionalG: 0.823,
         elevation: 15.4,
         azimuth: -135,
         exposure: this.composer.toneMappingExposure
@@ -69,7 +69,7 @@ export default class Skybox {
           color: 0xFFE49E,
           intensity: 0.7,
         })
-        this.sunObj.container.position.set(-70, 70, -70)
+        this.sunObj.container.position.set(-96.6, 70, -70)
         this.container.add(this.sunObj.container)
     }
 

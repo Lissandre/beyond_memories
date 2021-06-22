@@ -85,18 +85,18 @@ export default class Floor {
 
 
     this.debugObject = {}
-    this.debugObject.depthColor = '#0000FF'
-    this.debugObject.surfaceColor = '#8888FF'
+    this.debugObject.depthColor = '#0096ff'
+    this.debugObject.surfaceColor = '#a2dcfc'
 
     const params = {
       uBigWavesElevation: 0.5,
-      uBigWavesFrequency: new Vector2(0.1, 0.1),
+      uBigWavesFrequency: new Vector2(-1.6, 0.1),
       uTime: 0,
       uBigWavesSpeed: 0.001,
       uDepthColor: new Color(this.debugObject.depthColor),
       uSurfaceColor: new Color(this.debugObject.surfaceColor),
       uColorOffset: 0.25,
-      uColorMultiplier: 2,
+      uColorMultiplier: 1.13,
       uHeightWave: 2.0,
 			
     }
