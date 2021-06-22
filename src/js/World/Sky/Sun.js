@@ -19,7 +19,8 @@ export default class Sun {
     this.intensity = options.intensity
 
     this.params = {
-      color: 0xFFE49E
+      color: 0xFFE49E,
+      intensity: 1
     }
 
     // Set up
@@ -33,7 +34,7 @@ export default class Sun {
   }
 
   createSun() {
-    this.light = new DirectionalLight(this.color, this.intensity)
+    this.light = new DirectionalLight(this.color, this.params.intensity)
     this.light.castShadow = true
     this.light.shadow.mapSize.width = 4096; // default
     this.light.shadow.mapSize.height = 4096; // default
@@ -53,10 +54,16 @@ export default class Sun {
   setDebug() {
     this.debugFolder = this.debug.addFolder('Sun')
     this.debugFolder
-    .addColor(this.params, 'color')
-    .name('Color')
-    .onChange(() => {
-      this.light.color = new Color(this.params.color)
-    })
+      .addColor(this.params, 'color')
+      .name('Color')
+      .onChange(() => {
+        this.light.color = new Color(this.params.color)
+      })
+    this.debugFolder
+      .add(this.light, 'intensity')
+      .name('intensity')
+      .min(0.0)
+      .max(10.0)
+      .step(0.01)
   }
 }
