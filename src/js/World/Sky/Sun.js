@@ -6,6 +6,7 @@ import {
   SphereGeometry,
   MeshBasicMaterial,
   Mesh,
+  Color
 } from 'three'
 
 export default class Sun {
@@ -17,11 +18,18 @@ export default class Sun {
     this.color = options.color
     this.intensity = options.intensity
 
+    this.params = {
+      color: 0xFFE49E
+    }
+
     // Set up
     this.container = new Object3D()
     this.container.name = "sun"
 
     this.createSun()
+    if(this.debug) {
+      this.setDebug()
+    }
   }
 
   createSun() {
@@ -40,5 +48,15 @@ export default class Sun {
     this.helper = new DirectionalLightHelper(this.light, 10)
 
     this.container.add(this.light)
+  }
+
+  setDebug() {
+    this.debugFolder = this.debug.addFolder('Sun')
+    this.debugFolder
+    .addColor(this.params, 'color')
+    .name('Color')
+    .onChange(() => {
+      this.light.color = new Color(this.params.color)
+    })
   }
 }

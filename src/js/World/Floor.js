@@ -153,77 +153,78 @@ export default class Floor {
       ) {
         child.castShadow = true
         child.receiveShadow = true
+        console.log(child);
         // if (
-        //   // child.material.name.includes('LEAVES') ||
-        //   // child.material.name.includes('Leaf') ||
+        //   child.material.name.includes('LEAVES') ||
+        //   child.material.name.includes('Leaf') ||
         //   child.material.name.includes('rock') ||
         //   child.material.name.includes('WOOD')
         // ) {
         //   child.material.transparent = true
         // }
       }
-      if (child.name.includes('ARBUSTE')) {
-        child.castShadow = true
-        child.receiveShadow = true
-        if (child.material.name.includes('PLANT')) {
-          child.material.transparent = true
-        }
-      }
-      if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
+      // if (child.name.includes('ARBUSTE')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      //   if (child.material.name.includes('PLANT')) {
+      //     child.material.transparent = true
+      //   }
+      // }
+      // if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      // }
       if (child.name.includes('SOL')) {
         child.receiveShadow = true
       }
-      if (child.name.includes('ARMOIR')) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-      if (child.name.includes('CLOUD')) {
-        child.receiveShadow = true
-        child.castShadow = true
-      }
-      if (child.name.includes('ROCHER_MASSIF')) {
-        child.castShadow = true
-        child.receiveShadow = true
-        child.material.side = FrontSide
-      }
-      if (child.name.includes('BARRIERE')) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-      if (child.name.includes('HERBES')) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-      if (child.name.includes('BUSH')) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-      if (child.name.includes('EAU')) {
-        child.material = this.texture
-        child.material = this.materialRiver
-        child.add(this.riverSound)
-      }
-      if (child.name.includes('Plane004')) {
-        child.material = this.texture
-        child.material = this.materialOcean
-        child.add(this.oceanSound)
-      }
-      if (child.name.includes('mod_') || child.name.includes('modInt_')) {
-        if (child.isMesh) {
-          child.castShadow = true
-          child.receiveShadow = true
-        } else {
-          child.traverse((children) => {
-            if (children.isMesh) {
-              children.castShadow = true
-              children.receiveShadow = true
-            }
-          })
-        }
-      }
+      // if (child.name.includes('ARMOIR')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      // }
+      // if (child.name.includes('CLOUD')) {
+      //   child.receiveShadow = true
+      //   child.castShadow = true
+      // }
+      // if (child.name.includes('ROCHER_MASSIF')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      //   child.material.side = FrontSide
+      // }
+      // if (child.name.includes('BARRIERE')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      // }
+      // if (child.name.includes('HERBES')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      // }
+      // if (child.name.includes('BUSH')) {
+      //   child.castShadow = true
+      //   child.receiveShadow = true
+      // }
+      // if (child.name.includes('EAU')) {
+      //   child.material = this.texture
+      //   child.material = this.materialRiver
+      //   child.add(this.riverSound)
+      // }
+      // if (child.name.includes('Plane004')) {
+      //   child.material = this.texture
+      //   child.material = this.materialOcean
+      //   child.add(this.oceanSound)
+      // }
+      // if (child.name.includes('mod_') || child.name.includes('modInt_')) {
+      //   if (child.isMesh) {
+      //     child.castShadow = true
+      //     child.receiveShadow = true
+      //   } else {
+      //     child.traverse((children) => {
+      //       if (children.isMesh) {
+      //         children.castShadow = true
+      //         children.receiveShadow = true
+      //       }
+      //     })
+      //   }
+      // }
     })
     // this.floor.scale.set(0.2, 0.2, 0.2)
     this.container.add(this.floor)

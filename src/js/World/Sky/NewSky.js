@@ -64,7 +64,7 @@ export default class Skybox {
         this.sunObj = new Sun({
           debug: this.debug,
           time: this.time,
-          color: 0xffffff,
+          color: 0xFFE49E,
           intensity: 0.7,
         })
         this.sunObj.container.position.set(-70, 70, -70)
