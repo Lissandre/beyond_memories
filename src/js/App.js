@@ -3,10 +3,12 @@ import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowM
 // Post Pro
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
-import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+// import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+// import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+// import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+// import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass'
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 // import VignetteShader from '@shaders/Vignette/Vignette.js'
 
 import * as dat from 'dat.gui'
@@ -236,7 +238,28 @@ export default class App {
     this.filmPass = new FilmPass(0.15,0,0,false)
     this.filmPass.renderToScreen = true
     // this.composer.addPass(this.filmPass)
-    
+
+    const params = {
+      exposure: 0,
+      bloomStrength: 0.12,
+      bloomThreshold: 0,
+      bloomRadius: 0
+    }
+    const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 )
+    bloomPass.threshold = params.bloomThreshold
+    bloomPass.strength = params.bloomStrength
+    bloomPass.radius = params.bloomRadius
+    this.composer.addPass( bloomPass )
+
+    // this.bokehPass = new BokehPass(this.scene, this.camera.camera, {
+    //   focus: 20.0,
+    //   aperture: 0.00002,
+    //   maxblur: 0.004,
+    //   width: this.sizes.viewport.width,
+    //   height: this.sizes.viewport.height,
+    // })
+    // this.composer.addPass(this.bokehPass)
+
     //Vignette
     // this.shaderVignette = new VignetteShader
 	  // this.effectVignette = new ShaderPass( this.shaderVignette )

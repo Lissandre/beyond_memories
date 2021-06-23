@@ -152,7 +152,8 @@ export default class Floor {
         !child.material.name.includes('Leaf') &&
         !child.material.name.includes('PLANT') &&
         !child.material.name.includes('BUSH') &&
-        !child.name.includes('mod')
+        !child.name.includes('mod') &&
+        !child.name.includes('HERBES')
       ) {
         child.material.side = FrontSide
       }
