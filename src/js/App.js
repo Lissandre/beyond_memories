@@ -1,4 +1,4 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping } from 'three'
+import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping, Vector3, LinearEncoding } from 'three'
 
 // Post Pro
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
@@ -81,7 +81,7 @@ export default class App {
     // this.renderer.toneMapping = CineonToneMapping
     // this.renderer.toneMappingExposure = 2
     this.renderer.outputEncoding = sRGBEncoding
-    this.renderer.gammaFactor = 2.2
+    this.renderer.gammaFactor = 2.8
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMapSoft = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
@@ -228,16 +228,51 @@ export default class App {
     //Composer
     this.composer = new EffectComposer( this.renderer );
     this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    this.composer.setSize(window.innerWidth * 2, window.innerHeight * 2)
+    this.composer.setSize(window.innerWidth, window.innerHeight)
 
     // Render
     this.renderPass = new RenderPass(this.scene, this.camera.camera)
     this.composer.addPass(this.renderPass)
     
     // Grain (film pass)
-    this.filmPass = new FilmPass(0.15,0,0,false)
+    this.filmPass = new FilmPass(0.25,0,0,false)
     this.filmPass.renderToScreen = true
-    // this.composer.addPass(this.filmPass)
+    
+
+    // Tint pass
+    const TintShader = {
+      uniforms: {
+        tDiffuse: { value: null },
+        uTint: { value: null }
+      },
+      vertexShader:`
+        varying vec2 vUv;
+
+        void main()
+        {
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+          vUv = uv;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform vec3 uTint;
+        varying vec2 vUv;
+
+        void main()
+        {
+          vec4 color = texture2D(tDiffuse, vUv);
+          color.rgb += uTint;
+  
+          gl_FragColor = color;
+        }
+      `
+    }
+
+    this.tintPass = new ShaderPass( TintShader)
+    this.tintPass.material.uniforms.uTint.value = new Vector3() 
+    
 
     // LUT
     this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
@@ -245,13 +280,95 @@ export default class App {
     this.lut = new LUTPass();
     
     //Vignette
-    // this.shaderVignette = new VignetteShader
-	  // this.effectVignette = new ShaderPass( this.shaderVignette )
-    // console.log(this.effectVignette);
-	  // this.effectVignette.renderToScreen = true;
-    // this.effectVignette.uniforms[ "offset" ].value = 0.8;
-	  // this.effectVignette.uniforms[ "darkness" ].value = 1.6;
+
+    const VignetteShader = {
+
+      uniforms: {
+    
+        "tDiffuse": { type: "t", value: null },
+        "offset":   { type: "f", value: 1.0 },
+        "darkness": { type: "f", value: 1.0 }
+    
+      },
+    
+      vertexShader: `
+        varying vec2 vUv;
+    
+        void main() {
+  
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+  
+        }`,
+    
+       
+    
+      fragmentShader: `
+        uniform float offset;
+        uniform float darkness;
+    
+        uniform sampler2D tDiffuse;
+    
+        varying vec2 vUv;
+    
+        void main() {
+    
+          // Eskil's vignette
+    
+          vec4 texel = texture2D( tDiffuse, vUv );
+          vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
+          gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
+    
+          /*
+          // alternative version from glfx.js
+          // this one makes more dusty look (as opposed to burned)
+    
+          vec4 color = texture2D( tDiffuse, vUv );
+          float dist = distance( vUv, vec2( 0.5 ) );
+          color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
+          gl_FragColor = color;
+          */
+    
+        }
+      `
+    
+        
+    
+    };
+
+    this.shaderVignette = VignetteShader
+	  this.effectVignette = new ShaderPass( this.shaderVignette )
+	  this.effectVignette.renderToScreen = true;
+    this.effectVignette.uniforms[ "offset" ].value = 0.8;
+	  this.effectVignette.uniforms[ "darkness" ].value = 1.6;
+
+    // this.composer.addPass( this.tintPass)
     // this.composer.addPass(this.effectVignette)
+    // this.composer.addPass(this.filmPass)
+
+
+
+    if (this.debug) {
+      const folder = this.debug.addFolder('Teinte')
+      folder
+        .add(this.tintPass.material.uniforms.uTint.value, 'x')
+        .name('Rouge')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      folder
+        .add(this.tintPass.material.uniforms.uTint.value, 'y')
+        .name('Vert')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      folder
+        .add(this.tintPass.material.uniforms.uTint.value, 'z')
+        .name('Bleu')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+    }
 
   }
 }

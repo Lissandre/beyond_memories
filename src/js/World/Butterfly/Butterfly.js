@@ -68,14 +68,16 @@ export default class Butterfly {
 
           this.butterfly = cloneGltf(this.assets.models.Butterfly)
 
-        // this.butterfly = this.assets.models.Butterfly.scene
         this.butterfly.scene.scale.set(0.2, 0.2, 0.2)
-        // this.butterfly.position.set(0,1,0)
-        // this.butterfly.rotation.y = Math.PI/2
-        // this.butterfly.castShadow = true
-        this.container.add(this.butterfly.scene)
-    }
-
+        this.butterfly.scene.traverse((child) => {
+            if (child.isMesh) {
+              child.castShadow = true
+              child.receiveShadow = true
+            }
+          })
+          this.container.add(this.butterfly.scene)
+        }
+        
     animateButterfly() {
         const mixer = new AnimationMixer( this.butterfly.scene)
         const clips = this.butterfly.animations
@@ -110,7 +112,7 @@ export default class Butterfly {
 
         const clip = AnimationClip.findByName(clips, 'KeyAction')
         const action = mixer.clipAction(clip)
-
+        
         action.play()
     }
 }

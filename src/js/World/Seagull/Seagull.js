@@ -142,7 +142,7 @@ export default class Seagull {
         const clip = AnimationClip.findByName(clips, 'MOVEMENTS')
         const action = mixer.clipAction(clip)
         action.setEffectiveTimeScale(2)
-
+        console.log(action);
         action.play()
     }
 
