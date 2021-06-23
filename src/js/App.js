@@ -82,9 +82,9 @@ export default class App {
       powerPreference: 'high-performance',
     })
     // this.renderer.toneMapping = CineonToneMapping
-    this.renderer.toneMappingExposure = 2
-    this.renderer.outputEncoding = LinearEncoding
-    this.renderer.gammaFactor = 1.6
+    // this.renderer.toneMappingExposure = 2
+    this.renderer.outputEncoding = sRGBEncoding
+    this.renderer.gammaFactor = 2
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMapSoft = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
@@ -111,10 +111,12 @@ export default class App {
         // }else {
         //   this.renderer.render(this.scene, this.camera.camera)
         // }
-        if(this.nodepost) {
-          this.frame.update( this.time.delta)
-          this.nodepost.render( this.scene, this.camera.camera, this.frame );
-        }
+        // if(this.nodepost) {
+        //   this.frame.update( this.time.delta)
+        //   this.nodepost.render( this.scene, this.camera.camera, this.frame )
+        // }else {
+          this.renderer.render(this.scene, this.camera.camera)
+        // }
 
       this.debug && this.stats.end()
     })
