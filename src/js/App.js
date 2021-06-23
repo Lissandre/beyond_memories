@@ -11,6 +11,8 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 // import VignetteShader from '@shaders/Vignette/Vignette.js'
 
+import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
+
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -60,6 +62,7 @@ export default class App {
     this.setRenderer()
     this.setCamera()
     this.composerCreator()
+    this.nodeComposer()
     this.setWorld()
     this.openInventoryMethod()
     this.closeInventoryMethod()
@@ -79,9 +82,9 @@ export default class App {
       powerPreference: 'high-performance',
     })
     // this.renderer.toneMapping = CineonToneMapping
-    // this.renderer.toneMappingExposure = 2
-    this.renderer.outputEncoding = sRGBEncoding
-    this.renderer.gammaFactor = 2.8
+    this.renderer.toneMappingExposure = 2
+    this.renderer.outputEncoding = LinearEncoding
+    this.renderer.gammaFactor = 1.6
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMapSoft = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
@@ -103,10 +106,14 @@ export default class App {
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         // }
         
-        if(this.composer) {
-          this.composer.render(this.time.delta * 0.0001)
-        }else {
-          this.renderer.render(this.scene, this.camera.camera)
+        // if(this.composer) {
+        //   this.composer.render(this.time.delta * 0.0001)
+        // }else {
+        //   this.renderer.render(this.scene, this.camera.camera)
+        // }
+        if(this.nodepost) {
+          this.frame.update( this.time.delta)
+          this.nodepost.render( this.scene, this.camera.camera, this.frame );
         }
 
       this.debug && this.stats.end()
@@ -370,5 +377,62 @@ export default class App {
         .step(0.0001)
     }
 
+  }
+
+  nodeComposer() {
+    this.screen = new Nodes.ScreenNode()
+    this.nodepost = new Nodes.NodePostProcessing( this.renderer );
+    this.frame = new Nodes.NodeFrame();
+    console.log(this.screen);
+
+    const hue = new Nodes.FloatNode()
+    const sataturation = new Nodes.FloatNode( 1 )
+    const vibrance = new Nodes.FloatNode()
+    const brightness = new Nodes.FloatNode( 0 )
+    const contrast = new Nodes.FloatNode( 1 )
+
+    const hueNode = new Nodes.ColorAdjustmentNode( this.screen, hue, Nodes.ColorAdjustmentNode.HUE )
+    const satNode = new Nodes.ColorAdjustmentNode( hueNode, sataturation, Nodes.ColorAdjustmentNode.SATURATION )
+    const vibranceNode = new Nodes.ColorAdjustmentNode( satNode, vibrance, Nodes.ColorAdjustmentNode.VIBRANCE )
+    const brightnessNode = new Nodes.ColorAdjustmentNode( vibranceNode, brightness, Nodes.ColorAdjustmentNode.BRIGHTNESS )
+    const contrastNode = new Nodes.ColorAdjustmentNode( brightnessNode, contrast, Nodes.ColorAdjustmentNode.CONTRAST )
+
+    this.nodepost.output = contrastNode
+    this.nodepost.needsUpdate = true
+
+
+    if (this.debug) {
+      const folder = this.debug.addFolder('NodeController')
+      folder
+        .add(hue, 'value')
+        .name('hue')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      folder
+        .add(sataturation, 'value')
+        .name('saturation')
+        .min(0.0)
+        .max(3.0)
+        .step(0.0001)
+      folder
+        .add(vibrance, 'value')
+        .name('vibrance')
+        .min(-2.0)
+        .max(2.0)
+        .step(0.0001)
+      folder
+        .add(brightness, 'value')
+        .name('Brightness')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      folder
+        .add(contrast, 'value')
+        .name('Contrast')
+        .min(-2.0)
+        .max(2.0)
+        .step(0.0001)
+    }
   }
 }

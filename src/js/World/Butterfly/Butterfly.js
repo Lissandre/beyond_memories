@@ -90,8 +90,6 @@ export default class Butterfly {
         let index = 0
         let count = 200
 
-        console.log(this.clock.getDelta);
-
         this.time.on('tick', () => {
             mixer.update(this.clock.getDelta())
             this.vectButter = new Vector3(this.curve[index][1], this.curve[index][2], this.curve[index][0])
