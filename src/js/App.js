@@ -84,7 +84,7 @@ export default class App {
     // this.renderer.toneMapping = CineonToneMapping
     // this.renderer.toneMappingExposure = 2
     this.renderer.outputEncoding = sRGBEncoding
-    this.renderer.gammaFactor = 2
+    this.renderer.gammaFactor = 2.2
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMapSoft = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
@@ -106,16 +106,17 @@ export default class App {
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         // }
         
-        // if(this.composer) {
-        //   this.composer.render(this.time.delta * 0.0001)
+        if(this.composer) {
+          this.composer.render(this.time.delta * 0.0001)
+        }else {
+          this.renderer.render(this.scene, this.camera.camera)
+        }
+        // if(this.nodepost || this.composer) {
+          // this.frame.update( this.time.delta)
+          // this.composer.render(this.time.delta * 0.0001)
+          // this.nodepost.render( this.scene, this.camera.camera, this.frame )
         // }else {
         //   this.renderer.render(this.scene, this.camera.camera)
-        // }
-        // if(this.nodepost) {
-        //   this.frame.update( this.time.delta)
-        //   this.nodepost.render( this.scene, this.camera.camera, this.frame )
-        // }else {
-          this.renderer.render(this.scene, this.camera.camera)
         // }
 
       this.debug && this.stats.end()
@@ -236,6 +237,10 @@ export default class App {
     
     //Composer
     this.composer = new EffectComposer( this.renderer );
+    console.log(this.composer);
+    // this.composer.outputEncoding = sRGBEncoding
+    this.composer.renderer.outputEncoding = sRGBEncoding
+    // this.composer.renderer.gammaFactor = 2
     this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
@@ -244,7 +249,7 @@ export default class App {
     this.composer.addPass(this.renderPass)
     
     // Grain (film pass)
-    this.filmPass = new FilmPass(0.25,0,0,false)
+    this.filmPass = new FilmPass(0.5,0,0,false)
     this.filmPass.renderToScreen = true
     
 
@@ -285,78 +290,78 @@ export default class App {
 
     // LUT
     this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
-    // this.composer.addPass( this.shaderPassGammaCorr )
     this.lut = new LUTPass();
     
     //Vignette
-
-    const VignetteShader = {
-
-      uniforms: {
     
+    const VignetteShader = {
+      
+      uniforms: {
+        
         "tDiffuse": { type: "t", value: null },
         "offset":   { type: "f", value: 1.0 },
         "darkness": { type: "f", value: 1.0 }
-    
-      },
-    
-      vertexShader: `
-        varying vec2 vUv;
-    
-        void main() {
-  
-          vUv = uv;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-  
-        }`,
-    
-       
-    
-      fragmentShader: `
-        uniform float offset;
-        uniform float darkness;
-    
-        uniform sampler2D tDiffuse;
-    
-        varying vec2 vUv;
-    
-        void main() {
-    
-          // Eskil's vignette
-    
-          vec4 texel = texture2D( tDiffuse, vUv );
-          vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
-          gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
-    
-          /*
-          // alternative version from glfx.js
-          // this one makes more dusty look (as opposed to burned)
-    
-          vec4 color = texture2D( tDiffuse, vUv );
-          float dist = distance( vUv, vec2( 0.5 ) );
-          color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
-          gl_FragColor = color;
-          */
-    
-        }
-      `
-    
         
-    
+      },
+      
+      vertexShader: `
+      varying vec2 vUv;
+      
+      void main() {
+        
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        
+      }`,
+      
+      
+      
+      fragmentShader: `
+      uniform float offset;
+      uniform float darkness;
+      
+      uniform sampler2D tDiffuse;
+      
+      varying vec2 vUv;
+      
+      void main() {
+        
+        // Eskil's vignette
+        
+        vec4 texel = texture2D( tDiffuse, vUv );
+        vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
+        gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
+        
+        /*
+        // alternative version from glfx.js
+        // this one makes more dusty look (as opposed to burned)
+        
+        vec4 color = texture2D( tDiffuse, vUv );
+        float dist = distance( vUv, vec2( 0.5 ) );
+        color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
+        gl_FragColor = color;
+        */
+       
+      }
+      `
+      
+      
+      
     };
-
+    
     this.shaderVignette = VignetteShader
 	  this.effectVignette = new ShaderPass( this.shaderVignette )
 	  this.effectVignette.renderToScreen = true;
     this.effectVignette.uniforms[ "offset" ].value = 0.8;
 	  this.effectVignette.uniforms[ "darkness" ].value = 1.6;
-
-    // this.composer.addPass( this.tintPass)
-    // this.composer.addPass(this.effectVignette)
+    
+    this.composer.addPass( this.tintPass)
+    this.composer.addPass(this.effectVignette)
     this.composer.addPass(this.filmPass)
-
-
-
+    this.composer.addPass( this.shaderPassGammaCorr )
+    
+    
+    
     if (this.debug) {
       const folder = this.debug.addFolder('Teinte')
       folder
@@ -385,7 +390,6 @@ export default class App {
     this.screen = new Nodes.ScreenNode()
     this.nodepost = new Nodes.NodePostProcessing( this.renderer );
     this.frame = new Nodes.NodeFrame();
-    console.log(this.screen);
 
     const hue = new Nodes.FloatNode()
     const sataturation = new Nodes.FloatNode( 1 )
