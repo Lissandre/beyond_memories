@@ -4,6 +4,8 @@ import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowM
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
@@ -236,6 +238,11 @@ export default class App {
     this.filmPass = new FilmPass(0.15,0,0,false)
     this.filmPass.renderToScreen = true
     // this.composer.addPass(this.filmPass)
+
+    // LUT
+    this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
+    // this.composer.addPass( this.shaderPassGammaCorr )
+    this.lut = new LUTPass();
     
     //Vignette
     // this.shaderVignette = new VignetteShader
