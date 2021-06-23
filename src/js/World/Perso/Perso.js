@@ -70,7 +70,7 @@ export default class Perso {
       cameraSpeedX: 0.1,
       cameraSpeedY: 0.01,
       cameraMaxY: 8,
-      cameraMinY: 0.5,
+      cameraMinY: 4,
       lerpSpeed: 0.005,
     }
 
@@ -291,7 +291,7 @@ export default class Perso {
           this.perso.quaternion.multiply(
             new Quaternion().setFromAxisAngle(
               new Vector3(0, 1, 0),
-              4.0 * Math.PI * 0.1 * this.speedP
+              4.0 * Math.PI * 0.2 * this.speedP
             )
           )
           const step = this.params.lerpSpeed * this.time.delta
@@ -303,7 +303,7 @@ export default class Perso {
           this.perso.quaternion.multiply(
             new Quaternion().setFromAxisAngle(
               new Vector3(0, 1, 0),
-              4.0 * Math.PI * 0.1 * this.speedP
+              4.0 * Math.PI * 0.2 * this.speedP
             )
           )
           const step = this.params.lerpSpeed * this.time.delta
@@ -318,7 +318,7 @@ export default class Perso {
           this.perso.quaternion.multiply(
             new Quaternion().setFromAxisAngle(
               new Vector3(0, 1, 0),
-              4.0 * -Math.PI * 0.1 * this.speedP
+              4.0 * -Math.PI * 0.2 * this.speedP
             )
           )
           const step = this.params.lerpSpeed * this.time.delta
@@ -330,7 +330,7 @@ export default class Perso {
           this.perso.quaternion.multiply(
             new Quaternion().setFromAxisAngle(
               new Vector3(0, 1, 0),
-              4.0 * -Math.PI * 0.1 * this.speedP
+              4.0 * -Math.PI * 0.2 * this.speedP
             )
           )
           const step = this.params.lerpSpeed * this.time.delta
