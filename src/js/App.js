@@ -344,7 +344,7 @@ export default class App {
 
     // this.composer.addPass( this.tintPass)
     // this.composer.addPass(this.effectVignette)
-    // this.composer.addPass(this.filmPass)
+    this.composer.addPass(this.filmPass)
 
 
 
