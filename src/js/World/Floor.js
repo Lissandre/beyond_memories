@@ -147,6 +147,15 @@ export default class Floor {
     this.floor = this.assets.models.MAP.scene
     this.floor.traverse((child) => {
       if (
+        child.isMesh &&
+        !child.material.name.includes('LEAVES') &&
+        !child.material.name.includes('Leaf') &&
+        !child.material.name.includes('PLANT') &&
+        !child.material.name.includes('BUSH')
+      ) {
+        child.material.side = FrontSide
+      }
+      if (
         child.name.includes('Cone') ||
         child.name.includes('Cylinder') ||
         child.name.includes('Cube')
@@ -158,7 +167,6 @@ export default class Floor {
             child.material.name.includes('LEAVES') ||
             child.material.name.includes('Leaf') ||
             child.material.name.includes('rocks') ||
-            child.material.name.includes('WOOD') ||
             child.material.name.includes('BUSH')
           ) {
             child.material.transparent = true

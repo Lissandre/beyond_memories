@@ -22,7 +22,7 @@ export default class Camera {
     this.camera = new PerspectiveCamera(
       75,
       this.sizes.viewport.width / this.sizes.viewport.height,
-      0.1,
+      1.2,
       400
     )
     this.container.add(this.camera)
