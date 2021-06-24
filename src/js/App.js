@@ -8,7 +8,9 @@ import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 // import VignetteShader from '@shaders/Vignette/Vignette.js'
 
 import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
@@ -252,6 +254,29 @@ export default class App {
     this.filmPass = new FilmPass(0.5,0,0,false)
     console.log(this.filmPass);
     this.filmPass.renderToScreen = true
+    // this.composer.addPass(this.filmPass)
+
+    const params = {
+      exposure: 0,
+      bloomStrength: 0.12,
+      bloomThreshold: 0,
+      bloomRadius: 0
+    }
+    const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 )
+    bloomPass.threshold = params.bloomThreshold
+    bloomPass.strength = params.bloomStrength
+    bloomPass.radius = params.bloomRadius
+    this.composer.addPass( bloomPass )
+
+    // this.bokehPass = new BokehPass(this.scene, this.camera.camera, {
+    //   focus: 20.0,
+    //   aperture: 0.00002,
+    //   maxblur: 0.004,
+    //   width: this.sizes.viewport.width,
+    //   height: this.sizes.viewport.height,
+    // })
+    // this.composer.addPass(this.bokehPass)
+
     
 
     // Tint pass
@@ -291,7 +316,7 @@ export default class App {
 
     // LUT
     this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
-
+    
     //Vignette
     
     const VignetteShader = {
