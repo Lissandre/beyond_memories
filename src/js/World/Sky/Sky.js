@@ -6,9 +6,10 @@ import {
   BackSide,
   Mesh,
 } from 'three'
-import SkyFrag from '@shaders/SkyFrag.frag'
-import SkyVert from '@shaders/SkyVert.vert'
+import SkyFrag from '@shaders/Sky/SkyFrag.frag'
+import SkyVert from '@shaders/Sky/SkyVert.vert'
 import Sun from './Sun'
+import SpotSun from './SpotSun'
 
 export default class Skybox {
   constructor(options) {
@@ -30,6 +31,7 @@ export default class Skybox {
     this.container = new Object3D()
 
     this.createSkyBox()
+    this.setSpotSun()
   }
 
   createSkyBox() {
@@ -40,7 +42,7 @@ export default class Skybox {
       exponent: { value: this.exponent },
     }
 
-    this.skyGeo = new SphereBufferGeometry(200, 32, 45)
+    this.skyGeo = new SphereBufferGeometry(300, 32, 45)
     this.skyMat = new ShaderMaterial({
       uniforms: this.uniforms,
       vertexShader: SkyVert,
@@ -62,15 +64,29 @@ export default class Skybox {
   }
 
   setSun() {
-    this.sun = new Sun({
+    this.sunObj = new Sun({
       debug: this.debug,
       time: this.time,
-      color: 0xffffff,
+      color: 0xFFE49E,
       intensity: 0.7,
-      radius: 2,
     })
-    this.sun.container.position.set(-70, 70, -70)
-    this.container.add(this.sun.container)
-  }
+    this.sunObj.container.position.set(-96.6, 70, -70)
+    this.container.add(this.sunObj.container)
+}
+
+setSpotSun() {
+    this.sunSpot = new SpotSun({
+        position: {
+            x: this.sunObj.container.position.x,
+            y: this.sunObj.container.position.y,
+            z: this.sunObj.container.position.z - 100
+        },
+        intensity: 2.6,
+        distanceSpot: 414.3,
+        angleSpot: 20,
+        debug: this.debug
+    })
+    this.container.add(this.sunSpot.container)
+}
 
 }

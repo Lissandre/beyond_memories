@@ -24,7 +24,7 @@ export default class Skybox {
         rayleigh: 0.2,
         mieCoefficient: 0.037,
         mieDirectionalG: 0.823,
-        elevation: 15.4,
+        elevation: 35.4,
         azimuth: -135,
         exposure: this.composer.toneMappingExposure
     };

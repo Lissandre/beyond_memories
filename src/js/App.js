@@ -52,7 +52,7 @@ export default class App {
     this.sizes = new Sizes()
     this.assets = new Assets()
     this.params = {
-      fogColor: 0xf3faff,
+      fogColor: 0xa2dcfc,
       fogNear: 0,
       fogFar: 248
     }
