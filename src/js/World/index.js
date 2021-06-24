@@ -10,6 +10,7 @@ import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
 import Seagull from './Seagull/Seagull'
 import Butterfly from './Butterfly/Butterfly'
+import Particles from './Particles/Particles'
 
 import Data from '../../data/data.json'
 
@@ -70,7 +71,7 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPerso()
+    // this.setPerso()
     this.setAudioListener()
     this.setFloor()
     this.setSeagull()
@@ -81,8 +82,9 @@ export default class World {
     this.setSeagull6()
     this.setButterfly()
     this.setButterfly2()
+    this.setParticules()
     this.setBoxObjectManager()
-    this.PlayerEnterObjectArea()
+    // this.PlayerEnterObjectArea()
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
@@ -359,6 +361,15 @@ export default class World {
     })
     this.container.add(this.boxObjectManager.container)
   }
+
+  setParticules() {
+    this.particules = new Particles({
+      debug: this.debug,
+      time: this.time
+    })
+    this.container.add(this.particules.container)
+  }
+
 
   screenCanvas() {
     this.screenShot.addEventListener('click', ()=> {
