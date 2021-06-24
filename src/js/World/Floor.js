@@ -10,7 +10,8 @@ import {
   AudioLoader
 } from 'three'
 
-import WaterFrag from '@shaders/Water/WaterFrag.frag'
+import OceanFrag from '@shaders/Water/OceanFrag.frag'
+import RiverFrag from '@shaders/Water/RiverFrag.frag'
 import WaterVert from '@shaders/Water/WaterVert.vert'
 
 import riverSound from '@sounds/river/river.mp3'
@@ -116,8 +117,9 @@ export default class Floor {
 
     this.materialRiver = new ShaderMaterial({
       vertexShader: WaterVert,
-      fragmentShader: WaterFrag,
-      side: DoubleSide,
+      fragmentShader: RiverFrag,
+      // side: DoubleSide,
+      transparent: true,
       uniforms: {
         uBigWavesElevation: { value: paramsRiver.uBigWavesElevation },
         uBigWavesFrequency: { value: paramsRiver.uBigWavesFrequency },
@@ -135,7 +137,7 @@ export default class Floor {
 
     this.materialOcean = new ShaderMaterial({
       vertexShader: WaterVert,
-      fragmentShader: WaterFrag,
+      fragmentShader: OceanFrag,
       side: DoubleSide,
       uniforms: {
         uBigWavesElevation: { value: paramsOcean.uBigWavesElevation },
@@ -154,7 +156,7 @@ export default class Floor {
     	  fogNear:     { type: "f", value: this.scene.fog.near },
     	  fogFar:      { type: "f", value: this.scene.fog.far }
       },
-      fog: true
+      fog: true,
     })
 
     this.floor = this.assets.models.MAP.scene
@@ -229,10 +231,12 @@ export default class Floor {
       }
       if (child.name.includes('EAU')) {
         child.material = this.materialRiver
+        child.receiveShadow = true
         child.add(this.riverSound)
       }
       if (child.name.includes('Plane004')) {
         child.material = this.materialOcean
+        child.receiveShadow = true
         child.add(this.oceanSound)
       }
       if (child.name.includes('mod_') || child.name.includes('modInt_')) {
