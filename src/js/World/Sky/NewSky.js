@@ -82,8 +82,8 @@ export default class Skybox {
                 y: this.sunObj.container.position.y,
                 z: this.sunObj.container.position.z - 100
             },
-            intensity: 5,
-            distanceSpot: 200,
+            intensity: 2.6,
+            distanceSpot: 414.3,
             angleSpot: 20,
             debug: this.debug
         })

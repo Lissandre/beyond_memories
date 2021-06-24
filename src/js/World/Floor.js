@@ -88,7 +88,7 @@ export default class Floor {
     this.debugObject.depthColor = '#0096ff'
     this.debugObject.surfaceColor = '#a2dcfc'
 
-    const params = {
+    const paramsOcean = {
       uBigWavesElevation: 0.5,
       uBigWavesFrequency: new Vector2(-1.6, 0.1),
       uTime: 0,
@@ -101,22 +101,35 @@ export default class Floor {
 			
     }
 
+    const paramsRiver = {
+      uBigWavesElevation: -0.3,
+      uBigWavesFrequency: new Vector2(-1.6, 0.1),
+      uTime: 0,
+      uBigWavesSpeed: 0.000108,
+      uDepthColor: new Color(this.debugObject.depthColor),
+      uSurfaceColor: new Color(this.debugObject.surfaceColor),
+      uColorOffset: 0.25,
+      uColorMultiplier: 1.13,
+      uHeightWave: 1.201,
+			
+    }
+
     this.materialRiver = new ShaderMaterial({
       vertexShader: WaterVert,
       fragmentShader: WaterFrag,
       side: DoubleSide,
       uniforms: {
-        uBigWavesElevation: { value: params.uBigWavesElevation },
-        uBigWavesFrequency: { value: params.uBigWavesFrequency },
-        uBigWavesSpeed: { value: params.uBigWavesSpeed },
-        uHeightWave: { value: params.uHeightWave },
+        uBigWavesElevation: { value: paramsRiver.uBigWavesElevation },
+        uBigWavesFrequency: { value: paramsRiver.uBigWavesFrequency },
+        uBigWavesSpeed: { value: paramsRiver.uBigWavesSpeed },
+        uHeightWave: { value: paramsRiver.uHeightWave },
 
-        uTime: { value: params.uTime },
+        uTime: { value: paramsRiver.uTime },
 
-        uDepthColor: { value: params.uDepthColor },
-        uSurfaceColor: { value: params.uSurfaceColor },
-        uColorOffset: { value: params.uColorOffset },
-        uColorMultiplier: { value: params.uColorMultiplier },
+        uDepthColor: { value: paramsRiver.uDepthColor },
+        uSurfaceColor: { value: paramsRiver.uSurfaceColor },
+        uColorOffset: { value: paramsRiver.uColorOffset },
+        uColorMultiplier: { value: paramsRiver.uColorMultiplier },
       },
     })
 
@@ -125,17 +138,17 @@ export default class Floor {
       fragmentShader: WaterFrag,
       side: DoubleSide,
       uniforms: {
-        uBigWavesElevation: { value: params.uBigWavesElevation },
-        uBigWavesFrequency: { value: params.uBigWavesFrequency },
-        uBigWavesSpeed: { value: params.uBigWavesSpeed },
-        uHeightWave: { value: params.uHeightWave },
+        uBigWavesElevation: { value: paramsOcean.uBigWavesElevation },
+        uBigWavesFrequency: { value: paramsOcean.uBigWavesFrequency },
+        uBigWavesSpeed: { value: paramsOcean.uBigWavesSpeed },
+        uHeightWave: { value: paramsOcean.uHeightWave },
 
-        uTime: { value: params.uTime },
+        uTime: { value: paramsOcean.uTime },
 
-        uDepthColor: { value: params.uDepthColor },
-        uSurfaceColor: { value: params.uSurfaceColor },
-        uColorOffset: { value: params.uColorOffset },
-        uColorMultiplier: { value: params.uColorMultiplier },
+        uDepthColor: { value: paramsOcean.uDepthColor },
+        uSurfaceColor: { value: paramsOcean.uSurfaceColor },
+        uColorOffset: { value: paramsOcean.uColorOffset },
+        uColorMultiplier: { value: paramsOcean.uColorMultiplier },
 
         fogColor:    { type: "c", value: this.scene.fog.color },
     	  fogNear:     { type: "f", value: this.scene.fog.near },
@@ -215,12 +228,10 @@ export default class Floor {
         child.receiveShadow = true
       }
       if (child.name.includes('EAU')) {
-        child.material = this.texture
         child.material = this.materialRiver
         child.add(this.riverSound)
       }
       if (child.name.includes('Plane004')) {
-        child.material = this.texture
         child.material = this.materialOcean
         child.add(this.oceanSound)
       }

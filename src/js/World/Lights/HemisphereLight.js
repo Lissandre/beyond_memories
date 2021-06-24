@@ -9,8 +9,8 @@ export default class HemisphereLightSource {
     this.container = new Object3D()
     this.container.name = 'Hemisphere Light'
     this.params = {
-      skycolor: 0xffe4be,
-      groundcolor: 0x000000,
+      skycolor: 0x989898,
+      groundcolor: 0x43ac,
       intensity: 1,
     }
 

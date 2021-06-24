@@ -12,7 +12,7 @@ export default class SpotSun {
     this.color = 0xffebb0
 
     this.params = {
-        color: 0xffffff
+        color: 0xffe358
     }
 
     this.createAmbientLight()
