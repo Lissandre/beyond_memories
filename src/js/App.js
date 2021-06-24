@@ -52,7 +52,7 @@ export default class App {
     this.sizes = new Sizes()
     this.assets = new Assets()
     this.params = {
-      fogColor: 0xf3faff,
+      fogColor: 0xa2dcfc,
       fogNear: 0,
       fogFar: 248
     }
@@ -263,11 +263,13 @@ export default class App {
       bloomThreshold: 0,
       bloomRadius: 0
     }
-    const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 )
+    const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 1 )
     bloomPass.threshold = params.bloomThreshold
     bloomPass.strength = params.bloomStrength
     bloomPass.radius = params.bloomRadius
-    this.composer.addPass( bloomPass )
+
+    console.log(bloomPass);
+    
 
     // this.bokehPass = new BokehPass(this.scene, this.camera.camera, {
     //   focus: 20.0,
@@ -389,8 +391,11 @@ export default class App {
     this.outlinePass.pulsePeriod = 2
 
     this.composer.addPass( this.tintPass)
+    
+    // this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
-    this.composer.addPass(this.filmPass)
+    // this.composer.addPass(this.filmPass)
+    this.composer.addPass( bloomPass )
     this.composer.addPass( this.shaderPassGammaCorr )
     this.composer.addPass( this.outlinePass )
     
@@ -445,6 +450,25 @@ export default class App {
           folderGrain
             .add(this.filmPass.material.uniforms.sIntensity, 'value')
             .name('Intensitée')
+            .min(0.0)
+            .max(3.0)
+            .step(0.0001)
+      const folderBloom = this.debug.addFolder('Bloom')
+          folderBloom
+            .add(params, 'bloomThreshold')
+            .name('Threshold')
+            .min(0.0)
+            .max(3.0)
+            .step(0.0001)
+          folderBloom
+            .add(params, 'bloomStrength')
+            .name('Strength')
+            .min(0.0)
+            .max(2000.0)
+            .step(1.0)
+          folderBloom
+            .add(params, 'bloomRadius')
+            .name('Radius')
             .min(0.0)
             .max(3.0)
             .step(0.0001)

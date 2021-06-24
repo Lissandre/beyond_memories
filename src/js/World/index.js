@@ -5,7 +5,7 @@ import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
-import Skybox from './Sky/NewSky'
+import Skybox from './Sky/Sky'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
 import Seagull from './Seagull/Seagull'
@@ -157,7 +157,11 @@ export default class World {
       time: this.time,
       debug: this.debug,
       renderer: this.renderer,
-      composer: this.composer
+      composer: this.composer,
+      sphereTopColor: 0x0096ff,
+      sphereBottomColor: 0xa2dcfc,
+      offset: 20,
+      exponent: 2
     })
     this.container.add(this.sky.container)
   }

@@ -24,7 +24,7 @@ export default class Skybox {
         rayleigh: 0.2,
         mieCoefficient: 0.037,
         mieDirectionalG: 0.823,
-        elevation: 15.4,
+        elevation: 35.4,
         azimuth: -135,
         exposure: this.composer.toneMappingExposure
     };
@@ -82,8 +82,8 @@ export default class Skybox {
                 y: this.sunObj.container.position.y,
                 z: this.sunObj.container.position.z - 100
             },
-            intensity: 5,
-            distanceSpot: 200,
+            intensity: 2.6,
+            distanceSpot: 414.3,
             angleSpot: 20,
             debug: this.debug
         })
