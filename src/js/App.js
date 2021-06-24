@@ -250,6 +250,7 @@ export default class App {
     
     // Grain (film pass)
     this.filmPass = new FilmPass(0.5,0,0,false)
+    console.log(this.filmPass);
     this.filmPass.renderToScreen = true
     
 
@@ -290,8 +291,7 @@ export default class App {
 
     // LUT
     this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
-    this.lut = new LUTPass();
-    
+
     //Vignette
     
     const VignetteShader = {
@@ -328,11 +328,11 @@ export default class App {
         
         // Eskil's vignette
         
-        vec4 texel = texture2D( tDiffuse, vUv );
-        vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
-        gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
+        // vec4 texel = texture2D( tDiffuse, vUv );
+        // vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
+        // gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
         
-        /*
+        
         // alternative version from glfx.js
         // this one makes more dusty look (as opposed to burned)
         
@@ -340,7 +340,7 @@ export default class App {
         float dist = distance( vUv, vec2( 0.5 ) );
         color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
         gl_FragColor = color;
-        */
+        
        
       }
       `
@@ -352,8 +352,8 @@ export default class App {
     this.shaderVignette = VignetteShader
 	  this.effectVignette = new ShaderPass( this.shaderVignette )
 	  this.effectVignette.renderToScreen = true;
-    this.effectVignette.uniforms[ "offset" ].value = 0.8;
-	  this.effectVignette.uniforms[ "darkness" ].value = 1.6;
+    this.effectVignette.uniforms[ "offset" ].value = 0.15;
+	  this.effectVignette.uniforms[ "darkness" ].value = 0.8 ;
     
     this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
@@ -382,6 +382,38 @@ export default class App {
         .min(-1.0)
         .max(1.0)
         .step(0.0001)
+      const folderVign = this.debug.addFolder('Vignette')
+      folderVign
+          .add(this.effectVignette.uniforms["offset"], 'value')
+          .name('Offset')
+          .min(0.0)
+          .max(3.0)
+          .step(0.0001)
+        folderVign
+          .add(this.effectVignette.uniforms["darkness"], 'value')
+          .name('Darkness')
+          .min(-1.0)
+          .max(1.0)
+          .step(0.0001)
+      const folderGrain = this.debug.addFolder('Grain')
+          folderGrain
+            .add(this.filmPass.material.uniforms.nIntensity, 'value')
+            .name('Quantité')
+            .min(0.0)
+            .max(3.0)
+            .step(0.0001)
+          folderGrain
+            .add(this.filmPass.material.uniforms.sCount, 'value')
+            .name('Lignes')
+            .min(0.0)
+            .max(2000.0)
+            .step(1.0)
+          folderGrain
+            .add(this.filmPass.material.uniforms.sIntensity, 'value')
+            .name('Intensitée')
+            .min(0.0)
+            .max(3.0)
+            .step(0.0001)
     }
 
   }
@@ -407,38 +439,38 @@ export default class App {
     this.nodepost.needsUpdate = true
 
 
-    if (this.debug) {
-      const folder = this.debug.addFolder('NodeController')
-      folder
-        .add(hue, 'value')
-        .name('hue')
-        .min(-1.0)
-        .max(1.0)
-        .step(0.0001)
-      folder
-        .add(sataturation, 'value')
-        .name('saturation')
-        .min(0.0)
-        .max(3.0)
-        .step(0.0001)
-      folder
-        .add(vibrance, 'value')
-        .name('vibrance')
-        .min(-2.0)
-        .max(2.0)
-        .step(0.0001)
-      folder
-        .add(brightness, 'value')
-        .name('Brightness')
-        .min(-1.0)
-        .max(1.0)
-        .step(0.0001)
-      folder
-        .add(contrast, 'value')
-        .name('Contrast')
-        .min(-2.0)
-        .max(2.0)
-        .step(0.0001)
-    }
+    // if (this.debug) {
+    //   const folder = this.debug.addFolder('NodeController')
+    //   folder
+    //     .add(hue, 'value')
+    //     .name('hue')
+    //     .min(-1.0)
+    //     .max(1.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(sataturation, 'value')
+    //     .name('saturation')
+    //     .min(0.0)
+    //     .max(3.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(vibrance, 'value')
+    //     .name('vibrance')
+    //     .min(-2.0)
+    //     .max(2.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(brightness, 'value')
+    //     .name('Brightness')
+    //     .min(-1.0)
+    //     .max(1.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(contrast, 'value')
+    //     .name('Contrast')
+    //     .min(-2.0)
+    //     .max(2.0)
+    //     .step(0.0001)
+    // }
   }
 }
