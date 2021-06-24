@@ -93,7 +93,7 @@ export default class App {
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     // Resize renderer on resize event
     this.sizes.on('resize', () => {
@@ -401,10 +401,10 @@ export default class App {
     // this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
     // this.composer.addPass(this.filmPass)
-    this.composer.addPass( bloomPass )
-    this.composer.addPass( this.shaderPassGammaCorr )
+    // this.composer.addPass( bloomPass )
     this.composer.addPass( this.outlinePass )
     this.composer.addPass( this.fxaaPass )
+    this.composer.addPass( this.shaderPassGammaCorr )
     
     
     
