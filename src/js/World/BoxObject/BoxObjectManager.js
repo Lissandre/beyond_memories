@@ -1,4 +1,5 @@
-import { Object3D } from 'three'
+import { Object3D, Mesh, MeshBasicMaterial, BackSide, BufferGeometry } from 'three'
+import { BufferGeometryUtils } from 'three/examples/jsm/utils/BufferGeometryUtils'
 import BoxObjectVanilla from './BoxObjectVanilla'
 import BoxObjectInteractif from './BoxObjectInteractif'
 
@@ -23,8 +24,7 @@ export default class BoxObjectManager {
         this.floor.traverse((child) => {
             if (child.name.includes('mod_')) {
                 this.boxObjectVanilla = new BoxObjectVanilla({
-                    child: child
-
+                    child: child,
                 })
                 const name = child.name
                 this.boxesArr[name] = this.boxObjectVanilla

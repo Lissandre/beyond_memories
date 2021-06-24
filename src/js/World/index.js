@@ -37,6 +37,8 @@ export default class World {
     this.muteButton = options.muteButton
     this.unmuteButton = options.unmuteButton
 
+    this.outline = options.outline
+
     // Set up
     this.container = new Object3D()
     this.worldOctree = new Octree()
@@ -350,7 +352,6 @@ export default class World {
       time: this.time,
       debug: this.debug,
       assets: this.assets,
-      Data: Data
     })
     this.container.add(this.boxObjectManager.container)
   }
@@ -541,21 +542,27 @@ export default class World {
           
           if(this.playerenteredInObject === true) {
             this.elementEntered = element
-            // this.elementEnteredArray.push(element.child.children)
+            this.meshes = []
+            this.elementEntered.child.traverse((child) => {
+              if(child.isMesh) {
+                this.meshes.push(child)
+              }
+            })
+            this.outline.selectedObjects = this.meshes
+
             this.openDiagOne()
-            // this.appThis.outlinePass = this.elementEntered
-            
-          }else{
-            // this.appThis.outlinePass.selectedObjects.pop()
           }
+          // else{
+            // this.appThis.outlinePass.selectedObjects.pop()
+          // }
 
           if (
             this.playerenteredInObject !== true &&
             this.elementEntered === element
           ) {
             this.elementEntered = null
+            this.outline.selectedObjects = []
           }
-          
         }
       }
     })

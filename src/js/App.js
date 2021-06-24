@@ -193,7 +193,8 @@ export default class App {
       js_musicVol: this.js_musicVol,
       js_ambianceVol: this.js_ambianceVol,
       muteButton: this.muteButton,
-      unmuteButton: this.unmuteButton
+      unmuteButton: this.unmuteButton,
+      outline: this.outlinePass
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -379,11 +380,19 @@ export default class App {
 	  this.effectVignette.renderToScreen = true;
     this.effectVignette.uniforms[ "offset" ].value = 0.15;
 	  this.effectVignette.uniforms[ "darkness" ].value = 0.8 ;
-    
+
+    this.outlinePass = new OutlinePass( new Vector2( this.sizes.width, this.sizes.height ), this.scene, this.camera.camera )
+    this.outlinePass.edgeThickness = 7
+    this.outlinePass.edgeStrength = 12
+    this.outlinePass.visibleEdgeColor = new Color(0xffffff)
+    this.outlinePass.hiddenEdgeColor = new Color(0xffffff)
+    this.outlinePass.pulsePeriod = 2
+
     this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
     this.composer.addPass(this.filmPass)
     this.composer.addPass( this.shaderPassGammaCorr )
+    this.composer.addPass( this.outlinePass )
     
     
     
