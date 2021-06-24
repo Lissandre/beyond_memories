@@ -80,7 +80,7 @@ export default class App {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      antialias: true,
+      // antialias: true,
       powerPreference: 'high-performance',
     })
     // this.renderer.toneMapping = CineonToneMapping
@@ -93,7 +93,7 @@ export default class App {
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
-    this.renderer.setPixelRatio(window.devicePixelRatio)
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
     // Resize renderer on resize event
     this.sizes.on('resize', () => {
@@ -390,6 +390,12 @@ export default class App {
     this.outlinePass.hiddenEdgeColor = new Color(0xffffff)
     this.outlinePass.pulsePeriod = 2
 
+    this.fxaaPass = new ShaderPass( FXAAShader )
+    const pixelRatio = this.renderer.getPixelRatio()
+
+    this.fxaaPass.material.uniforms[ 'resolution' ].value.x = 1 / ( this.sizes.width * pixelRatio );
+    this.fxaaPass.material.uniforms[ 'resolution' ].value.y = 1 / ( this.sizes.height * pixelRatio );
+
     this.composer.addPass( this.tintPass)
     
     // this.composer.addPass( this.tintPass)
@@ -398,6 +404,7 @@ export default class App {
     this.composer.addPass( bloomPass )
     this.composer.addPass( this.shaderPassGammaCorr )
     this.composer.addPass( this.outlinePass )
+    this.composer.addPass( this.fxaaPass )
     
     
     
