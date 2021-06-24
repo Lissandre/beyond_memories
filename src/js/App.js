@@ -1,15 +1,19 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping } from 'three'
+import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping, Vector3, LinearEncoding } from 'three'
 
 // Post Pro
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-// import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-// import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
-// import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
-// import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 // import VignetteShader from '@shaders/Vignette/Vignette.js'
+
+import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -60,6 +64,7 @@ export default class App {
     this.setRenderer()
     this.setCamera()
     this.composerCreator()
+    this.nodeComposer()
     this.setWorld()
     this.openInventoryMethod()
     this.closeInventoryMethod()
@@ -108,6 +113,13 @@ export default class App {
         }else {
           this.renderer.render(this.scene, this.camera.camera)
         }
+        // if(this.nodepost || this.composer) {
+          // this.frame.update( this.time.delta)
+          // this.composer.render(this.time.delta * 0.0001)
+          // this.nodepost.render( this.scene, this.camera.camera, this.frame )
+        // }else {
+        //   this.renderer.render(this.scene, this.camera.camera)
+        // }
 
       this.debug && this.stats.end()
     })
@@ -227,15 +239,20 @@ export default class App {
     
     //Composer
     this.composer = new EffectComposer( this.renderer );
+    console.log(this.composer);
+    // this.composer.outputEncoding = sRGBEncoding
+    this.composer.renderer.outputEncoding = sRGBEncoding
+    // this.composer.renderer.gammaFactor = 2
     this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    this.composer.setSize(window.innerWidth * 2, window.innerHeight * 2)
+    this.composer.setSize(window.innerWidth, window.innerHeight)
 
     // Render
     this.renderPass = new RenderPass(this.scene, this.camera.camera)
     this.composer.addPass(this.renderPass)
     
     // Grain (film pass)
-    this.filmPass = new FilmPass(0.15,0,0,false)
+    this.filmPass = new FilmPass(0.5,0,0,false)
+    console.log(this.filmPass);
     this.filmPass.renderToScreen = true
     // this.composer.addPass(this.filmPass)
 
@@ -260,14 +277,225 @@ export default class App {
     // })
     // this.composer.addPass(this.bokehPass)
 
-    //Vignette
-    // this.shaderVignette = new VignetteShader
-	  // this.effectVignette = new ShaderPass( this.shaderVignette )
-    // console.log(this.effectVignette);
-	  // this.effectVignette.renderToScreen = true;
-    // this.effectVignette.uniforms[ "offset" ].value = 0.8;
-	  // this.effectVignette.uniforms[ "darkness" ].value = 1.6;
-    // this.composer.addPass(this.effectVignette)
+    
 
+    // Tint pass
+    const TintShader = {
+      uniforms: {
+        tDiffuse: { value: null },
+        uTint: { value: null }
+      },
+      vertexShader:`
+        varying vec2 vUv;
+
+        void main()
+        {
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+          vUv = uv;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform vec3 uTint;
+        varying vec2 vUv;
+
+        void main()
+        {
+          vec4 color = texture2D(tDiffuse, vUv);
+          color.rgb += uTint;
+  
+          gl_FragColor = color;
+        }
+      `
+    }
+
+    this.tintPass = new ShaderPass( TintShader)
+    this.tintPass.material.uniforms.uTint.value = new Vector3() 
+    
+
+    // LUT
+    this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
+    
+    //Vignette
+    
+    const VignetteShader = {
+      
+      uniforms: {
+        
+        "tDiffuse": { type: "t", value: null },
+        "offset":   { type: "f", value: 1.0 },
+        "darkness": { type: "f", value: 1.0 }
+        
+      },
+      
+      vertexShader: `
+      varying vec2 vUv;
+      
+      void main() {
+        
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        
+      }`,
+      
+      
+      
+      fragmentShader: `
+      uniform float offset;
+      uniform float darkness;
+      
+      uniform sampler2D tDiffuse;
+      
+      varying vec2 vUv;
+      
+      void main() {
+        
+        // Eskil's vignette
+        
+        // vec4 texel = texture2D( tDiffuse, vUv );
+        // vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
+        // gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
+        
+        
+        // alternative version from glfx.js
+        // this one makes more dusty look (as opposed to burned)
+        
+        vec4 color = texture2D( tDiffuse, vUv );
+        float dist = distance( vUv, vec2( 0.5 ) );
+        color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
+        gl_FragColor = color;
+        
+       
+      }
+      `
+      
+      
+      
+    };
+    
+    this.shaderVignette = VignetteShader
+	  this.effectVignette = new ShaderPass( this.shaderVignette )
+	  this.effectVignette.renderToScreen = true;
+    this.effectVignette.uniforms[ "offset" ].value = 0.15;
+	  this.effectVignette.uniforms[ "darkness" ].value = 0.8 ;
+    
+    this.composer.addPass( this.tintPass)
+    this.composer.addPass(this.effectVignette)
+    this.composer.addPass(this.filmPass)
+    this.composer.addPass( this.shaderPassGammaCorr )
+    
+    
+    
+    if (this.debug) {
+      const folder = this.debug.addFolder('Teinte')
+      folder
+        .add(this.tintPass.material.uniforms.uTint.value, 'x')
+        .name('Rouge')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      folder
+        .add(this.tintPass.material.uniforms.uTint.value, 'y')
+        .name('Vert')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      folder
+        .add(this.tintPass.material.uniforms.uTint.value, 'z')
+        .name('Bleu')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
+      const folderVign = this.debug.addFolder('Vignette')
+      folderVign
+          .add(this.effectVignette.uniforms["offset"], 'value')
+          .name('Offset')
+          .min(0.0)
+          .max(3.0)
+          .step(0.0001)
+        folderVign
+          .add(this.effectVignette.uniforms["darkness"], 'value')
+          .name('Darkness')
+          .min(-1.0)
+          .max(1.0)
+          .step(0.0001)
+      const folderGrain = this.debug.addFolder('Grain')
+          folderGrain
+            .add(this.filmPass.material.uniforms.nIntensity, 'value')
+            .name('Quantité')
+            .min(0.0)
+            .max(3.0)
+            .step(0.0001)
+          folderGrain
+            .add(this.filmPass.material.uniforms.sCount, 'value')
+            .name('Lignes')
+            .min(0.0)
+            .max(2000.0)
+            .step(1.0)
+          folderGrain
+            .add(this.filmPass.material.uniforms.sIntensity, 'value')
+            .name('Intensitée')
+            .min(0.0)
+            .max(3.0)
+            .step(0.0001)
+    }
+
+  }
+
+  nodeComposer() {
+    this.screen = new Nodes.ScreenNode()
+    this.nodepost = new Nodes.NodePostProcessing( this.renderer );
+    this.frame = new Nodes.NodeFrame();
+
+    const hue = new Nodes.FloatNode()
+    const sataturation = new Nodes.FloatNode( 1 )
+    const vibrance = new Nodes.FloatNode()
+    const brightness = new Nodes.FloatNode( 0 )
+    const contrast = new Nodes.FloatNode( 1 )
+
+    const hueNode = new Nodes.ColorAdjustmentNode( this.screen, hue, Nodes.ColorAdjustmentNode.HUE )
+    const satNode = new Nodes.ColorAdjustmentNode( hueNode, sataturation, Nodes.ColorAdjustmentNode.SATURATION )
+    const vibranceNode = new Nodes.ColorAdjustmentNode( satNode, vibrance, Nodes.ColorAdjustmentNode.VIBRANCE )
+    const brightnessNode = new Nodes.ColorAdjustmentNode( vibranceNode, brightness, Nodes.ColorAdjustmentNode.BRIGHTNESS )
+    const contrastNode = new Nodes.ColorAdjustmentNode( brightnessNode, contrast, Nodes.ColorAdjustmentNode.CONTRAST )
+
+    this.nodepost.output = contrastNode
+    this.nodepost.needsUpdate = true
+
+
+    // if (this.debug) {
+    //   const folder = this.debug.addFolder('NodeController')
+    //   folder
+    //     .add(hue, 'value')
+    //     .name('hue')
+    //     .min(-1.0)
+    //     .max(1.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(sataturation, 'value')
+    //     .name('saturation')
+    //     .min(0.0)
+    //     .max(3.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(vibrance, 'value')
+    //     .name('vibrance')
+    //     .min(-2.0)
+    //     .max(2.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(brightness, 'value')
+    //     .name('Brightness')
+    //     .min(-1.0)
+    //     .max(1.0)
+    //     .step(0.0001)
+    //   folder
+    //     .add(contrast, 'value')
+    //     .name('Contrast')
+    //     .min(-2.0)
+    //     .max(2.0)
+    //     .step(0.0001)
+    // }
   }
 }
