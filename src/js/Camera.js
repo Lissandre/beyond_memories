@@ -23,7 +23,7 @@ export default class Camera {
       75,
       this.sizes.viewport.width / this.sizes.viewport.height,
       1.2,
-      400
+      500
     )
     this.container.add(this.camera)
     // Change camera aspect on resize

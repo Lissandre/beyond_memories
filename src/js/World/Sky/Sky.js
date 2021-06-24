@@ -42,7 +42,7 @@ export default class Skybox {
       exponent: { value: this.exponent },
     }
 
-    this.skyGeo = new SphereBufferGeometry(300, 32, 45)
+    this.skyGeo = new SphereBufferGeometry(350, 32, 45)
     this.skyMat = new ShaderMaterial({
       uniforms: this.uniforms,
       vertexShader: SkyVert,
