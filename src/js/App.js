@@ -114,7 +114,10 @@ export default class App {
         if(this.composer) {
           this.renderer.info.reset()
           this.composer.render(this.time.delta * 0.0001)
+<<<<<<< HEAD
           // console.log( this.renderer.info.render.calls )
+=======
+>>>>>>> add ui on option
         }else {
           this.renderer.render(this.scene, this.camera.camera)
         }
@@ -404,7 +407,7 @@ export default class App {
     // this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
     // this.composer.addPass(this.filmPass)
-    // this.composer.addPass( bloomPass )
+    this.composer.addPass( bloomPass )
     this.composer.addPass( this.outlinePass )
     this.composer.addPass( this.fxaaPass )
     this.composer.addPass( this.shaderPassGammaCorr )

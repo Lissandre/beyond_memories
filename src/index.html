@@ -18,31 +18,45 @@
 
     <!-- OPTIONS MENU -->
     <div class="options">
-      
+      <button class="options_button optCTA js_optionsBtn">
+        <svg width="119" height="183" viewBox="0 0 119 183" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M82.9359 183H107.817C110.016 183 112.126 182.124 113.681 180.564C115.236 179.004 116.11 176.888 116.11 174.682C116.11 174.682 118.875 156.538 118.875 117.247C118.875 91.5685 116.11 8.31818 116.11 8.31818C116.11 6.11206 115.236 3.9963 113.681 2.43634C112.126 0.876379 110.016 0 107.817 0H82.9359C80.7363 0 78.6268 0.876379 77.0715 2.43634C75.5161 3.9963 74.6423 6.11206 74.6423 8.31818C74.6423 8.31818 75.2816 36.7185 75.2816 54.6623C75.2816 101.688 74.6423 174.682 74.6423 174.682C74.6423 176.888 75.5161 179.004 77.0715 180.564C78.6268 182.124 80.7363 183 82.9359 183ZM8.29366 183H33.1744C35.374 183 37.4835 182.124 39.0389 180.564C40.5942 179.004 41.468 176.888 41.468 174.682C41.468 174.682 43.0151 120.633 43.0389 86C43.0596 55.6629 41.468 8.31818 41.468 8.31818C41.468 6.11206 40.5942 3.9963 39.0389 2.43634C37.4835 0.876379 35.374 0 33.1744 0H8.29366C6.09406 0 3.98456 0.876379 2.42921 2.43634C0.873856 3.9963 6.86646e-05 6.11206 6.86646e-05 8.31818C6.86646e-05 8.31818 1.00007 54.3521 1.00007 102C1.00007 133.182 6.86646e-05 174.682 6.86646e-05 174.682C6.86646e-05 176.888 0.873856 179.004 2.42921 180.564C3.98456 182.124 6.09406 183 8.29366 183Z" fill="#f2f2f2"/>
+        </svg>
+      </button>
     </div>
     <div class="options_container">
       <div class="options_content">
+        <div class="options_title">
+          <h2 class="options_titleText">Reglages</h2>
+        </div>
        <div class="options_sounds">
-        <div class="options_music">
-          <label for="music">General Music</label>
+        <div class="options_music sound_item">
+          <label for="music" class="sound_object">General Music</label>
           <input type="range" id="_music" name="music" 
-                 min="0" max="100" value="100" step="1">
-          <p class="js_musicVol">100</p>
+                 min="0" max="100" value="100" step="1" class="sound_object slider">
+          <p class="js_musicVol sound_object">100</p>
         </div>
-        <div class="options_ambiance">
-          <label for="ambiance">Ambiance</label>
+        <div class="options_ambiance sound_item">
+          <label for="ambiance" class="sound_object">Ambiance</label>
           <input type="range" id="_ambiance" name="ambiance" 
-                 min="0" max="100" value="50" step="1">
-          <p class="js_ambianceVol">50</p>
+                 min="0" max="100" value="50" step="1"class="sound_object slider">
+          <p class="js_ambianceVol sound_object">50</p>
         </div>
-        <div class="options_mute">
+        <!-- <div class="options_mute">
           <button class="js_muteSound">Mute</button>
           <button class="js_unmuteSound">Unmute</button>
-        </div>
+        </div> -->
        </div>
       </div>
-      <div class="options_container_close">
-        <button class="js_closeOptions">close</button>
+      <div class="options_container_replay">
+        <button class="options_replayCta">Reprendre</button>
+      </div>
+      <div class="options_container_close js_closeDivOpton">
+        <button class="js_closeOptions optCTA">
+          <svg width="156" height="179" viewBox="0 0 156 179" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.0205 179C15.0269 178.994 12.0864 178.212 9.48807 176.728C3.63726 173.421 0 167 0 160.03C0 160.03 1 139.807 1 111C1 73.4277 0 18.9709 0 18.9709C0 11.9812 3.63726 5.57999 9.48807 2.2724C12.1483 0.747189 15.1703 -0.0371522 18.2382 0.0013524C21.3062 0.039857 24.3075 0.899796 26.9284 2.49128C26.9284 2.49128 57.5303 16.5748 77.5 28.5C123.53 55.9878 147.772 74.6552 147.772 74.6552C150.291 76.2306 152.367 78.4184 153.806 81.0132C155.245 83.6081 156 86.5251 156 89.4907C156 92.4563 155.245 95.3733 153.806 97.9682C152.367 100.563 150.291 102.751 147.772 104.326C147.772 104.326 127.503 119.876 113.921 128.992C81.7806 150.566 26.9089 176.51 26.9089 176.51C24.2267 178.127 21.1547 178.988 18.0205 179Z" fill="#f2f2f2"/>
+          </svg>
+        </button>
       </div>
     </div>
 
