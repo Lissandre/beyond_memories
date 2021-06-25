@@ -85,7 +85,7 @@ export default class App {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      // antialias: true,
+      antialias: true,
       powerPreference: 'high-performance',
     })
     // this.renderer.toneMapping = CineonToneMapping
