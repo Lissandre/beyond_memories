@@ -10,9 +10,6 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-// import VignetteShader from '@shaders/Vignette/Vignette.js'
-
-import * as Nodes from 'three/examples/jsm/nodes/Nodes.js';
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -23,6 +20,8 @@ import Assets from '@tools/Loader'
 
 import Camera from './Camera'
 import World from '@world/index'
+import WaitingScreen from '@world/WaitingScreen';
+import IntroCam from './introCam';
 
 export default class App {
   constructor(options) {
@@ -62,14 +61,17 @@ export default class App {
       fogFar: 248
     }
 
+    this.isWaitingScreen = true
 
     this.composer 
 
     this.setConfig()
     this.setRenderer()
     this.setCamera()
+    this.setIntroCam()
     this.composerCreator()
     this.setWorld()
+    this.setWaitingScreen()
     this.checkInventoryLength()
     this.openInventoryMethod()
     this.closeInventoryMethod()
@@ -114,12 +116,20 @@ export default class App {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         // }
-        
-        if(this.composer) {
-          this.renderer.info.reset()
-          this.composer.render(this.time.delta * 0.0001)
+        if(this.isWaitingScreen === true) {
+          if(this.composer) {
+            this.renderer.info.reset()
+            this.composer.render(this.time.delta * 0.0001)
+          }else {
+            this.renderer.render(this.scene, this.introCam.camera)
+          }
         }else {
-          this.renderer.render(this.scene, this.camera.camera)
+          if(this.composer) {
+            this.renderer.info.reset()
+            this.composer.render(this.time.delta * 0.0001)
+          }else {
+            this.renderer.render(this.scene, this.camera.camera)
+          }
         }
         // if(this.nodepost || this.composer) {
           // this.frame.update( this.time.delta)
@@ -180,6 +190,18 @@ export default class App {
     // Add camera to scene
     this.scene.add(this.camera.container)
   }
+
+  setIntroCam() {
+    // Create camera instance
+    this.introCam = new IntroCam({
+      sizes: this.sizes,
+      renderer: this.renderer,
+      debug: this.debug,
+    })
+    // Add camera to scene
+    this.scene.add(this.introCam.container)
+  }
+
   setWorld() {
     // Create world instance
     this.world = new World({
@@ -210,6 +232,38 @@ export default class App {
     })
     // Add world to scene
     this.scene.add(this.world.container)
+  }
+
+  setWaitingScreen() {
+    // Create world instance
+    this.waitingScreen = new WaitingScreen({
+      time: this.time,
+      debug: this.debug,
+      assets: this.assets,
+      camera: this.camera,
+      scene: this.scene,
+      itemsInventory: this.itemsInventory,
+      screenShot: this.screenShot,
+      appThis: this,
+      body: this.body,
+      renderer: this.renderer,
+      composer: this.composer,
+      initButton: this.initButton,
+      music: this.music,
+      musicRange: this.musicRange,
+      ambianceRange: this.ambianceRange,
+      js_musicVol: this.js_musicVol,
+      js_ambianceVol: this.js_ambianceVol,
+      muteButton: this.muteButton,
+      unmuteButton: this.unmuteButton,
+      outline: this.outlinePass,
+      openOptions: this.openOptions,
+      closeOptions: this.closeOptions,
+      qualityButton: this.qualityButton,
+      qualityDiv: this.qualityDiv
+    })
+    // Add world to scene
+    this.scene.add(this.waitingScreen.container)
   }
   setConfig() {
     if (window.location.hash === '#debug') {
@@ -250,9 +304,9 @@ export default class App {
       element.addEventListener('click', ()=> {
         this.choosenDefinition = element.dataset.definition
         console.log(this.choosenDefinition);
-        this.world.init()
-        this.world.music.play()
-        this.world.music.volume = this.world.musicFinVol
+        this.waitingScreen.init()
+        this.waitingScreen.music.play()
+        this.waitingScreen.music.volume = this.waitingScreen.musicFinVol
         this.qualityDiv.style.opacity = 0
         setTimeout(() => {
           this.qualityDiv.remove()
@@ -273,7 +327,11 @@ export default class App {
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
     // Render
-    this.renderPass = new RenderPass(this.scene, this.camera.camera)
+    if(this.isWaitingScreen === true) {
+      this.renderPass = new RenderPass(this.scene, this.introCam.camera)
+    }else {
+      this.renderPass = new RenderPass(this.scene, this.camera.camera)
+    }
     this.composer.addPass(this.renderPass)
     
     // Grain (film pass)
