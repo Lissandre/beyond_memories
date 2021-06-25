@@ -61,6 +61,8 @@ export default class World {
     ]
 
     this.musicFinVol = 1
+    this.scrollValuePercentage = 0
+    this.scrollValue = 0
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -498,24 +500,13 @@ export default class World {
     let item = document.createElement('div')
     item.classList.add('inventory_content_items_item')
 
-    let item_imageContainer = document.createElement('div')
-    item_imageContainer.classList.add('item_pic')
     let item_image = document.createElement('img')
     item_image.setAttribute(
       'src',
       Data.monde_1[this.elementEntered.child.name].links.image
     )
-    item_imageContainer.appendChild(item_image)
 
-    let item_textContainer = document.createElement('div')
-    item_textContainer.classList.add('item_texts')
-    let item_name = document.createElement('p')
-    item_name.textContent = Data.monde_1[this.elementEntered.child.name].name
-    let item_description = document.createElement('p')
-    item_description.textContent =
-      Data.monde_1[this.elementEntered.child.name].description
-    item_textContainer.appendChild(item_name)
-    item_textContainer.appendChild(item_description)
+    item.appendChild(item_image)
 
     let buttonDelete = document.createElement("button")
     buttonDelete.classList.add("item_button")
@@ -532,8 +523,6 @@ export default class World {
     buttonDelete.addEventListener('click', this.deleteItemCard.bind(this))
 
     item.appendChild(buttonDelete)
-    item.appendChild(item_imageContainer)
-    item.appendChild(item_textContainer)
     this.itemsIventory.appendChild(item)
   }
 
@@ -599,6 +588,28 @@ export default class World {
     this.optionButton.classList.add('options_button')
     
     this.optionDiv.appendChild(this.optionButton)
+
+    const inv = document.querySelector(".inventory_content_items")
+    // window.addEventListener("MozMousePixelScroll", handleScroll(event, this))
+    window.addEventListener("wheel", handleScroll)
+    // window.addEventListener("mousewheel", handleScroll(event, this))
+    // window.addEventListener("DOMMouseScroll", handleScroll(event, this))
+    let that = this
+    function handleScroll(e) {
+      that.docWidth = inv.offsetWidth
+  
+      if (that.scrollValue - e.deltaY / 1.4 > 0) {
+        that.scrollValue = 0;
+      } else if (that.scrollValue - e.deltaY / 1.4 < -that.docWidth) {
+        that.scrollValue = -that.docWidth;
+      } else {
+        that.scrollValue -= e.deltaY / 1.4;
+      }
+      that.scrollValuePercentage = (that.scrollValue/(that.docWidth+50)) * 100
+      console.log(inv);
+      console.log(that.scrollValuePercentage);
+      inv.style.transform = `translateX(${that.scrollValuePercentage}%)`
+    }
   }
 
   openOptionsMethod() {
@@ -615,5 +626,4 @@ export default class World {
       this.body.classList.remove('open_options')
     })
   }
-
 }
