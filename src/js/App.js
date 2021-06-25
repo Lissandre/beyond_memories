@@ -4,7 +4,6 @@ import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowM
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
@@ -47,6 +46,9 @@ export default class App {
     this.muteButton = options.muteButton
     this.unmuteButton = options.unmuteButton
 
+    this.openOptions = options.openOptions
+    this.closeOptions = options.closeOptions
+
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
@@ -64,13 +66,12 @@ export default class App {
     this.setRenderer()
     this.setCamera()
     this.composerCreator()
-    this.nodeComposer()
     this.setWorld()
+    this.checkInventoryLength()
     this.openInventoryMethod()
     this.closeInventoryMethod()
-    this.openOptionsMethod()
-    this.closeOptionsMethod()
   }
+
   setRenderer() {
     // Set scene
     this.scene = new Scene()
@@ -197,7 +198,9 @@ export default class App {
       js_ambianceVol: this.js_ambianceVol,
       muteButton: this.muteButton,
       unmuteButton: this.unmuteButton,
-      outline: this.outlinePass
+      outline: this.outlinePass,
+      openOptions: this.openOptions,
+      closeOptions: this.closeOptions
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -223,31 +226,28 @@ export default class App {
     })
   }
 
-  openOptionsMethod() {
-    this.openOptions.addEventListener('click', () => {
-      this.body.classList.add('open_options')
-      if(this.body.classList.contains('open_inventory')) {
-        this.body.classList.remove('open_inventory')
-      }
-    })
+  checkInventoryLength() {
+    this.invLength = this.world.playerInventory.length
+    this.depthColorFor3 = new Color(0x0a3772)
+    this.surfaceColorFor3 = new Color(0x43b1d9)
+    if(this.invLength >= 3) {
+      this.world.floor.materialOcean.uniforms.uHeightWave.value = 4
+      this.world.floor.materialOcean.uniforms.uDepthColor.value = this.depthColorFor3
+      this.world.floor.materialOcean.uniforms.uSurfaceColor.value = this.surfaceColorFor3
+      console.log(this.world.floor.materialOcean.uniforms)
+    }
+    console.log(this.world.playerInventory.length);
   }
-
-  closeOptionsMethod() {
-    this.closeOptions.addEventListener('click', () => {
-      this.body.classList.remove('open_options')
-    })
-  }
-
 
   composerCreator() {
     
     //Composer
     this.composer = new EffectComposer( this.renderer );
-    console.log(this.composer);
+    
     // this.composer.outputEncoding = sRGBEncoding
     this.composer.renderer.outputEncoding = sRGBEncoding
     // this.composer.renderer.gammaFactor = 2
-    this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
     // Render
@@ -256,7 +256,7 @@ export default class App {
     
     // Grain (film pass)
     this.filmPass = new FilmPass(0.5,0,0,false)
-    console.log(this.filmPass);
+    
     this.filmPass.renderToScreen = true
     // this.composer.addPass(this.filmPass)
 
@@ -271,7 +271,6 @@ export default class App {
     bloomPass.strength = params.bloomStrength
     bloomPass.radius = params.bloomRadius
 
-    console.log(bloomPass);
     
 
     // this.bokehPass = new BokehPass(this.scene, this.camera.camera, {
@@ -387,11 +386,11 @@ export default class App {
 	  this.effectVignette.uniforms[ "darkness" ].value = 0.8 ;
 
     this.outlinePass = new OutlinePass( new Vector2( this.sizes.width, this.sizes.height ), this.scene, this.camera.camera )
-    this.outlinePass.edgeThickness = 7
-    this.outlinePass.edgeStrength = 12
+    this.outlinePass.edgeThickness = 1.5
+    this.outlinePass.edgeStrength = 5
     this.outlinePass.visibleEdgeColor = new Color(0xffffff)
     this.outlinePass.hiddenEdgeColor = new Color(0xffffff)
-    this.outlinePass.pulsePeriod = 2
+    // this.outlinePass.pulsePeriod = 2
 
     this.fxaaPass = new ShaderPass( FXAAShader )
     const pixelRatio = this.renderer.getPixelRatio()
@@ -484,61 +483,5 @@ export default class App {
             .step(0.0001)
     }
 
-  }
-
-  nodeComposer() {
-    this.screen = new Nodes.ScreenNode()
-    this.nodepost = new Nodes.NodePostProcessing( this.renderer );
-    this.frame = new Nodes.NodeFrame();
-
-    const hue = new Nodes.FloatNode()
-    const sataturation = new Nodes.FloatNode( 1 )
-    const vibrance = new Nodes.FloatNode()
-    const brightness = new Nodes.FloatNode( 0 )
-    const contrast = new Nodes.FloatNode( 1 )
-
-    const hueNode = new Nodes.ColorAdjustmentNode( this.screen, hue, Nodes.ColorAdjustmentNode.HUE )
-    const satNode = new Nodes.ColorAdjustmentNode( hueNode, sataturation, Nodes.ColorAdjustmentNode.SATURATION )
-    const vibranceNode = new Nodes.ColorAdjustmentNode( satNode, vibrance, Nodes.ColorAdjustmentNode.VIBRANCE )
-    const brightnessNode = new Nodes.ColorAdjustmentNode( vibranceNode, brightness, Nodes.ColorAdjustmentNode.BRIGHTNESS )
-    const contrastNode = new Nodes.ColorAdjustmentNode( brightnessNode, contrast, Nodes.ColorAdjustmentNode.CONTRAST )
-
-    this.nodepost.output = contrastNode
-    this.nodepost.needsUpdate = true
-
-
-    // if (this.debug) {
-    //   const folder = this.debug.addFolder('NodeController')
-    //   folder
-    //     .add(hue, 'value')
-    //     .name('hue')
-    //     .min(-1.0)
-    //     .max(1.0)
-    //     .step(0.0001)
-    //   folder
-    //     .add(sataturation, 'value')
-    //     .name('saturation')
-    //     .min(0.0)
-    //     .max(3.0)
-    //     .step(0.0001)
-    //   folder
-    //     .add(vibrance, 'value')
-    //     .name('vibrance')
-    //     .min(-2.0)
-    //     .max(2.0)
-    //     .step(0.0001)
-    //   folder
-    //     .add(brightness, 'value')
-    //     .name('Brightness')
-    //     .min(-1.0)
-    //     .max(1.0)
-    //     .step(0.0001)
-    //   folder
-    //     .add(contrast, 'value')
-    //     .name('Contrast')
-    //     .min(-2.0)
-    //     .max(2.0)
-    //     .step(0.0001)
-    // }
   }
 }

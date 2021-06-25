@@ -53,7 +53,7 @@ export default class Floor {
   getAmbianceRangeValue() {
     this.ambianceRange.addEventListener('input', ()=> {
       this.ambianceFinVol = this.ambianceRange.value / 50
-      console.log(this.ambianceFinVol);
+      
       this.riverSound.setVolume(this.ambianceFinVol)
       this.oceanSound.setVolume(this.ambianceFinVol)
       this.js_ambianceVol.innerHTML = this.ambianceRange.value
@@ -98,7 +98,7 @@ export default class Floor {
       uSurfaceColor: new Color(this.debugObject.surfaceColor),
       uColorOffset: 0.25,
       uColorMultiplier: 1.13,
-      uHeightWave: 2.0,
+      uHeightWave: 1.2,
 			
     }
 
