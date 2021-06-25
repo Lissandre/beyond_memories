@@ -1,6 +1,5 @@
 import {
   Object3D,
-  MeshLambertMaterial,
   Vector2,
   Color,
   ShaderMaterial,
@@ -171,7 +170,6 @@ export default class Floor {
         !child.name.includes('HERBES')
       ) {
         child.material.side = FrontSide
-        child.material.shadowSide = FrontSide
       }
       if (
         child.name.includes('Cone') ||
