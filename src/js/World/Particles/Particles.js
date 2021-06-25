@@ -35,7 +35,7 @@ export default class Particles {
         opacity: this.params.opacity,
         size: this.params.size,
         transparent: this.params.transparent,
-        depthTest: true,
+        depthTest: true
     })
 
     for (let p = 0; p < 250; p++) {

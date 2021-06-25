@@ -28,8 +28,9 @@ export default class CanvasResult {
         this.canvasRect = this.canvas.getBoundingClientRect()
         context.fillStyle = '#000000';
         context.fillRect(0, 0, 1920, 1080);
+
         this.logo = new Image()
-        this.logo.src = "./assets/logo_beyond.png"
+        this.logo.src = "./assets/background.jpeg"
         this.logo.onload = ()=>{
             context.drawImage(this.logo, 0, 0 )
         }
@@ -50,10 +51,26 @@ export default class CanvasResult {
 
 
             base_image.onload = ()=>{
+                const rotation = Math.random() * 20 - 10
+                const random = Math.random() / 5
+                console.log(this.canvas);
+                const ox = this.canvas.width / 2
+                const oy = this.canvas.height / 2
+                context.translate(ox, oy)
+                context.rotate(rotation * Math.PI / 180)
+                context.translate(-ox, -oy)
+
                 context.drawImage(
                     base_image, 
-                    (1920 / 4 * column) + (Math.random() * (1920-350) /4), 
-                    (1080 / 2 * row) + (Math.random() * (1080-350) / 2))
+                    (1920 / 4 * column) + (Math.random() * (1920-470) /4), 
+                    (1080 / 2 * row) + (Math.random() * (1080-570) / 2),
+                    base_image.width * (0.7 - random),
+                    base_image.height * (0.7 - random)
+                )
+
+                context.translate(ox, oy)
+                context.rotate(-rotation * Math.PI / 180)
+                context.translate(-ox, -oy)
                 // context.drawImage(this.base_image, 0, 0)
             }
         });

@@ -35,7 +35,7 @@ export default class Sun {
     this.light.castShadow = true
     this.light.shadow.mapSize.width = 4096; // default
     this.light.shadow.mapSize.height = 4096; // default
-    // this.light.shadow.bias = 0.01;
+    // this.light.shadow.bias = -0.001;
     this.light.shadow.camera.top = 120
     this.light.shadow.camera.bottom = -120
     this.light.shadow.camera.left = -120

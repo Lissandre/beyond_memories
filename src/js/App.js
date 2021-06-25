@@ -91,6 +91,7 @@ export default class App {
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMapSoft = true
     this.renderer.shadowMap.type = PCFSoftShadowMap
+    this.renderer.sortObjects = false
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
@@ -113,7 +114,7 @@ export default class App {
         if(this.composer) {
           this.renderer.info.reset()
           this.composer.render(this.time.delta * 0.0001)
-          console.log( this.renderer.info.render.calls )
+          // console.log( this.renderer.info.render.calls )
         }else {
           this.renderer.render(this.scene, this.camera.camera)
         }
