@@ -114,10 +114,6 @@ export default class App {
         if(this.composer) {
           this.renderer.info.reset()
           this.composer.render(this.time.delta * 0.0001)
-<<<<<<< HEAD
-          // console.log( this.renderer.info.render.calls )
-=======
->>>>>>> add ui on option
         }else {
           this.renderer.render(this.scene, this.camera.camera)
         }

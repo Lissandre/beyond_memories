@@ -96,8 +96,8 @@ export default class World {
     this.PlayerEnterObjectArea()
     this.screenCanvas()
     this.getMusicRangeValue()
-    // this.muteSoundMethod()
-    // this.unmuteSoundMethod()
+    this.muteSoundMethod()
+    this.unmuteSoundMethod()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -160,6 +160,7 @@ export default class World {
       camera: this.camera,
       debug: this.debug,
       worldOctree: this.worldOctree,
+      body: this.body
     })
     this.container.add(this.perso.container)
   }
@@ -399,32 +400,32 @@ export default class World {
     })
   }
 
-  // muteSoundMethod() {
-  //   this.muteButton.addEventListener('click', ()=> {
-  //     this.oldMusicValue = this.musicFinVol
-  //     this.oldAmbianceValue = this.floor.ambianceFinVol
-  //     this.music.volume = 0
-  //     this.floor.oceanSound.setVolume(0)
-  //     this.floor.riverSound.setVolume(0)
-  //     this.musicRange.disabled = true
-  //     this.ambianceRange.disabled = true
-  //     this.muteButton.style.display = 'none'
-  //     this.unmuteButton.style.display = 'block'
+  muteSoundMethod() {
+    this.muteButton.addEventListener('click', ()=> {
+      this.oldMusicValue = this.musicFinVol
+      this.oldAmbianceValue = this.floor.ambianceFinVol
+      this.music.volume = 0
+      this.floor.oceanSound.setVolume(0)
+      this.floor.riverSound.setVolume(0)
+      this.musicRange.disabled = true
+      this.ambianceRange.disabled = true
+      this.muteButton.style.display = 'none'
+      this.unmuteButton.style.display = 'block'
       
-  //   })
-  // }
+    })
+  }
 
-  // unmuteSoundMethod() {
-  //   this.unmuteButton.addEventListener('click', ()=> {
-  //       this.music.volume = this.oldMusicValue
-  //       this.floor.oceanSound.setVolume(this.oldAmbianceValue)
-  //       this.floor.riverSound.setVolume(this.oldAmbianceValue)
-  //       this.musicRange.disabled = false
-  //       this.ambianceRange.disabled = false
-  //       this.muteButton.style.display = 'block'
-  //       this.unmuteButton.style.display = 'none'
-  //   })
-  // }
+  unmuteSoundMethod() {
+    this.unmuteButton.addEventListener('click', ()=> {
+        this.music.volume = this.oldMusicValue
+        this.floor.oceanSound.setVolume(this.oldAmbianceValue)
+        this.floor.riverSound.setVolume(this.oldAmbianceValue)
+        this.musicRange.disabled = false
+        this.ambianceRange.disabled = false
+        this.muteButton.style.display = 'block'
+        this.unmuteButton.style.display = 'none'
+    })
+  }
 
   openDiagOne() {
     document.addEventListener(
@@ -608,9 +609,16 @@ export default class World {
   }
 
   closeOptionsMethod() {
+    this.replayCta = document.querySelector('.js_replayCta')
+
     this.closeOptionButton.addEventListener('click', () => {
       this.body.classList.remove('open_options')
     })
+
+    this.replayCta.addEventListener('click', () => {
+      this.body.classList.remove('open_options')
+    })
+
   }
 
 }

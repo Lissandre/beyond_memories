@@ -25,6 +25,7 @@ export default class Perso {
     this.camera = options.camera
     this.debug = options.debug
     this.worldOctree = options.worldOctree
+    this.body = options.body
 
     // Set up
     this.container = new Object3D()
@@ -219,125 +220,127 @@ export default class Perso {
   }
   setMovements() {
     this.time.on('tick', () => {
-      if (this.moveForward) {
-        this.playerVelocity.add(
-          this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
-        )
-        this.cube.position.copy(this.perso.position)
-        this.playerBB.setFromObject(this.cube)
-        if (
-          this.currentBaseAction != 'WALKING' &&
-          this.currentBaseAction != 'RUNNING'
-        ) {
-          if (this.run) {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['RUNNING'].action,
-              0.6
+      if(!this.body.classList.contains('open_options')) {
+        if (this.moveForward) {
+          this.playerVelocity.add(
+            this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
+          )
+          this.cube.position.copy(this.perso.position)
+          this.playerBB.setFromObject(this.cube)
+          if (
+            this.currentBaseAction != 'WALKING' &&
+            this.currentBaseAction != 'RUNNING'
+          ) {
+            if (this.run) {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['RUNNING'].action,
+                0.6
+              )
+              this.speedP = 0.01
+            } else {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['WALKING'].action,
+                0.6
+              )
+            }
+          }
+          this.lerpOrientation()
+        }
+        if (this.moveBackward) {
+          const step = this.params.lerpSpeed * this.time.delta
+          this.quat = new Quaternion()
+          this.camera.container.quaternion.clone(this.quat)
+          this.quat.multiplyQuaternions(
+            this.camera.container.quaternion,
+            this.quat
+          )
+          this.perso.quaternion.rotateTowards(
+            this.quat.multiply(
+              new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)
+            ),
+            step
+          )
+          this.playerVelocity.add(
+            this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
+          )
+          this.cube.position.copy(this.perso.position)
+          this.playerBB.setFromObject(this.cube)
+          if (
+            this.currentBaseAction != 'WALKING' &&
+            this.currentBaseAction != 'RUNNING'
+          ) {
+            if (this.run) {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['RUNNING'].action,
+                0.6
+              )
+              this.speedP = 0.01
+            } else {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['WALKING'].action,
+                0.6
+              )
+            }
+          }
+          // this.lerpOrientation()
+        }
+        if (this.moveLeft) {
+          if (this.moveBackward) {
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * Math.PI * 0.2 * this.speedP
+              )
             )
-            this.speedP = 0.01
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step / 10
+            )
           } else {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['WALKING'].action,
-              0.6
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * Math.PI * 0.2 * this.speedP
+              )
+            )
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step
             )
           }
         }
-        this.lerpOrientation()
-      }
-      if (this.moveBackward) {
-        const step = this.params.lerpSpeed * this.time.delta
-        this.quat = new Quaternion()
-        this.camera.container.quaternion.clone(this.quat)
-        this.quat.multiplyQuaternions(
-          this.camera.container.quaternion,
-          this.quat
-        )
-        this.perso.quaternion.rotateTowards(
-          this.quat.multiply(
-            new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)
-          ),
-          step
-        )
-        this.playerVelocity.add(
-          this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
-        )
-        this.cube.position.copy(this.perso.position)
-        this.playerBB.setFromObject(this.cube)
-        if (
-          this.currentBaseAction != 'WALKING' &&
-          this.currentBaseAction != 'RUNNING'
-        ) {
-          if (this.run) {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['RUNNING'].action,
-              0.6
+        if (this.moveRight) {
+          if (this.moveBackward) {
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * -Math.PI * 0.2 * this.speedP
+              )
             )
-            this.speedP = 0.01
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step / 10
+            )
           } else {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['WALKING'].action,
-              0.6
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * -Math.PI * 0.2 * this.speedP
+              )
+            )
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step
             )
           }
-        }
-        // this.lerpOrientation()
-      }
-      if (this.moveLeft) {
-        if (this.moveBackward) {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step / 10
-          )
-        } else {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step
-          )
-        }
-      }
-      if (this.moveRight) {
-        if (this.moveBackward) {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * -Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step / 10
-          )
-        } else {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * -Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step
-          )
         }
       }
       if (this.mouse.grab === true) {
