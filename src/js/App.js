@@ -93,8 +93,9 @@ export default class App {
     // Set background color
     this.renderer.setClearColor(0xfafafa, 1)
     // Set renderer pixel ratio & sizes
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.setSize(this.sizes.viewport.width, this.sizes.viewport.height)
+    this.renderer.info.autoReset = false
     // Resize renderer on resize event
     this.sizes.on('resize', () => {
       this.renderer.setSize(
@@ -109,7 +110,9 @@ export default class App {
         // }
         
         if(this.composer) {
+          this.renderer.info.reset()
           this.composer.render(this.time.delta * 0.0001)
+          console.log( this.renderer.info.render.calls )
         }else {
           this.renderer.render(this.scene, this.camera.camera)
         }

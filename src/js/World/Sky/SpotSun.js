@@ -23,6 +23,7 @@ export default class SpotSun {
 
   createAmbientLight() {
     this.light = new SpotLight(this.params.color, this.intensity, this.distanceSpot, this.angleSpot, 1, 2, 1)
+    this.light.castShadow = false
     this.light.position.set(this.position.x, this.position.y, this.position.z)
 
 

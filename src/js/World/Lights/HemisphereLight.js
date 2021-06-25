@@ -26,6 +26,7 @@ export default class HemisphereLightSource {
       this.params.groundcolor,
       this.params.intensity
     )
+    this.light.castShadow = false
     this.container.add(this.light)
   }
   setDebug() {

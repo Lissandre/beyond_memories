@@ -18,6 +18,7 @@ export default class AmbientLightSource {
   }
   createAmbientLight() {
     this.light = new AmbientLight(this.params.color, 1)
+    this.light.castShadow = false
     this.container.add(this.light)
   }
   setDebug() {

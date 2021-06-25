@@ -3,9 +3,6 @@ import {
   DirectionalLight,
   DirectionalLightHelper,
   Vector3,
-  SphereGeometry,
-  MeshBasicMaterial,
-  Mesh,
   Color
 } from 'three'
 
@@ -38,20 +35,19 @@ export default class Sun {
     this.light.castShadow = true
     this.light.shadow.mapSize.width = 4096; // default
     this.light.shadow.mapSize.height = 4096; // default
-    this.light.shadow.bias = 0.01;
-    this.light.shadow.camera.top = 150
-    this.light.shadow.camera.bottom = -150
-    this.light.shadow.camera.left = -150
-    this.light.shadow.camera.right = 150
+    // this.light.shadow.bias = 0.01;
+    this.light.shadow.camera.top = 120
+    this.light.shadow.camera.bottom = -120
+    this.light.shadow.camera.left = -120
+    this.light.shadow.camera.right = 120
     this.target = new Vector3(0, 0, 0)
-
-   
-    this.helper = new DirectionalLightHelper(this.light, 10)
 
     this.container.add(this.light)
   }
 
   setDebug() {
+    this.helper = new DirectionalLightHelper(this.light, 10)
+
     this.debugFolder = this.debug.addFolder('Sun')
     this.debugFolder
       .addColor(this.params, 'color')
