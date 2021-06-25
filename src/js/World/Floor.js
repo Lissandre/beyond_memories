@@ -53,7 +53,7 @@ export default class Floor {
   getAmbianceRangeValue() {
     this.ambianceRange.addEventListener('input', ()=> {
       this.ambianceFinVol = this.ambianceRange.value / 50
-      console.log(this.ambianceFinVol);
+      
       this.riverSound.setVolume(this.ambianceFinVol)
       this.oceanSound.setVolume(this.ambianceFinVol)
       this.js_ambianceVol.innerHTML = this.ambianceRange.value

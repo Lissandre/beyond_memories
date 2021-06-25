@@ -383,7 +383,7 @@ export default class World {
   getMusicRangeValue() {
     this.musicRange.addEventListener('input', ()=> {
       this.musicFinVol = this.musicRange.value / 100
-      console.log(this.musicFinVol);
+      
       this.music.volume = this.musicFinVol
       this.js_musicVol.innerHTML = this.musicRange.value
     })
@@ -393,7 +393,6 @@ export default class World {
     this.muteButton.addEventListener('click', ()=> {
       this.oldMusicValue = this.musicFinVol
       this.oldAmbianceValue = this.floor.ambianceFinVol
-      console.log(this.oldMusicValue, this.oldAmbianceValue);
       this.music.volume = 0
       this.floor.oceanSound.setVolume(0)
       this.floor.riverSound.setVolume(0)
@@ -477,10 +476,10 @@ export default class World {
       if (this.playerInventory.length < 8) {
         this.elementEntered.isCollected = true
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
-        console.log(this.playerInventory)
+        
         this.createItemCrad()
+        this.appThis.checkInventoryLength()
       } else {
-        console.log("trop d'item mon pote")
       }
     }
   }
@@ -536,7 +535,6 @@ export default class World {
         return element.data_object !== event.target.dataset.object
       })
       this.boxObjectManager.boxesArr[event.target.dataset.object].isCollected = false
-      console.log(this.playerInventory);
   }
 
   closeDiag() {

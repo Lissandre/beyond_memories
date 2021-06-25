@@ -46,7 +46,6 @@ export default class Particles {
     this.particles.setAttribute('position', new Float32BufferAttribute(this.vertices, 3))
 
     this.particlesMesh = new Points(this.particles, this.pMaterial)
-    console.log();
     this.container.add(this.particlesMesh)
   }
   setDebug() {
@@ -63,7 +62,6 @@ export default class Particles {
       this.count = 1
       this.counter = 0
       this.simplex = new Noise()
-      console.log(this.simplex);
       this.time.on('tick', ()=>{
         this.counter ++
         
