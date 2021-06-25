@@ -36,7 +36,7 @@ export default class Perso {
     )
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
-    this.GRAVITY = 30
+    this.GRAVITY = 25
     this.speedP = 0.005
     this.clock = new Clock()
 
@@ -101,7 +101,7 @@ export default class Perso {
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
     const helper = new Box3Helper(this.playerBB, 0xffff00)
-    this.container.add(this.cube)
+    // this.container.add(this.cube)
   }
   setListeners() {
     document.addEventListener(

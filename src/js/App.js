@@ -46,6 +46,9 @@ export default class App {
     this.muteButton = options.muteButton
     this.unmuteButton = options.unmuteButton
 
+    this.openOptions = options.openOptions
+    this.closeOptions = options.closeOptions
+
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
@@ -67,8 +70,6 @@ export default class App {
     this.checkInventoryLength()
     this.openInventoryMethod()
     this.closeInventoryMethod()
-    this.openOptionsMethod()
-    this.closeOptionsMethod()
   }
 
   setRenderer() {
@@ -194,7 +195,9 @@ export default class App {
       js_ambianceVol: this.js_ambianceVol,
       muteButton: this.muteButton,
       unmuteButton: this.unmuteButton,
-      outline: this.outlinePass
+      outline: this.outlinePass,
+      openOptions: this.openOptions,
+      closeOptions: this.closeOptions
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -219,22 +222,6 @@ export default class App {
       this.body.classList.remove('open_inventory')
     })
   }
-
-  openOptionsMethod() {
-    this.openOptions.addEventListener('click', () => {
-      this.body.classList.add('open_options')
-      if(this.body.classList.contains('open_inventory')) {
-        this.body.classList.remove('open_inventory')
-      }
-    })
-  }
-
-  closeOptionsMethod() {
-    this.closeOptions.addEventListener('click', () => {
-      this.body.classList.remove('open_options')
-    })
-  }
-
 
   checkInventoryLength() {
     this.invLength = this.world.playerInventory.length

@@ -31,6 +31,9 @@ export default class World {
     this.initButton = options.initButton
     this.music = options.music
 
+    this.openOptions = options.openOptions
+    this.closeOptions = options.closeOptions
+
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
     this.js_musicVol = options.js_musicVol
@@ -74,6 +77,11 @@ export default class World {
     this.setPerso()
     this.setAudioListener()
     this.setFloor()
+
+    this.createUi()
+    // this.openOptionsMethod()
+    // this.closeOptionsMethod()
+
     this.setSeagull()
     this.setSeagull2()
     this.setSeagull3()
@@ -365,7 +373,8 @@ export default class World {
   setParticules() {
     this.particules = new Particles({
       debug: this.debug,
-      time: this.time
+      time: this.time,
+      assets: this.assets
     })
     this.container.add(this.particules.container)
   }
@@ -580,4 +589,31 @@ export default class World {
       }
     })
   }
+
+  createUi() {
+    this.optionDiv = document.querySelector('.options')
+    
+    this.optionButton = document.createElement('button')
+    this.optionButton.classList.add('js_optionsBtn')
+    this.optionButton.classList.add('intBTN')
+    this.optionButton.classList.add('options_button')
+    
+    this.optionDiv.appendChild(this.optionButton)
+  }
+
+  openOptionsMethod() {
+    this.openOptions.addEventListener('click', () => {
+      this.body.classList.add('open_options')
+      if(this.body.classList.contains('open_inventory')) {
+        this.body.classList.remove('open_inventory')
+      }
+    })
+  }
+
+  closeOptionsMethod() {
+    this.closeOptions.addEventListener('click', () => {
+      this.body.classList.remove('open_options')
+    })
+  }
+
 }

@@ -98,7 +98,7 @@ export default class Floor {
       uSurfaceColor: new Color(this.debugObject.surfaceColor),
       uColorOffset: 0.25,
       uColorMultiplier: 1.13,
-      uHeightWave: 2.0,
+      uHeightWave: 1.2,
 			
     }
 
