@@ -1,0 +1,92 @@
+.definition
+    position: absolute
+    width: 100%
+    height: 100%
+    background-color #000
+    transition: .3s ease-in-out
+    z-index 100
+
+    &_container 
+        position relative
+        display flex
+        align-items: center
+        width 100%
+        height 100%
+
+    &_content
+        width: 80%
+        margin: auto
+        display: flex
+        flex-flow column nowrap
+        align-items: center
+        justify-content: space-around
+
+    &_title
+        text-align center
+        margin-bottom 40px
+
+    &_titleText
+        font-family Francesco
+        font-size 24px
+        line-height 31px
+        margin: 0
+        font-weight normal
+        position: relative
+
+        &::before
+            display block
+            content ''
+            background-color #fff
+            height 1px
+            width: 25px
+            position: absolute
+            left: -40px
+            top: 50%
+            transform: translateY(-50%)
+
+        &::after
+            display block
+            content ''
+            background-color #fff
+            height 1px
+            width: 25px
+            position: absolute
+            right: -40px
+            top: 50%
+            transform: translateY(-50%)
+            
+    &_items 
+        display: flex
+        flex-flow: row nowrap
+        align-items: center
+        justify-content: space-between
+        width: 100%
+
+    &_item
+        width: 30%
+        text-align center
+    
+    .defCta
+        background-color transparent
+        border none
+        color: #fff
+        font-family Francesco
+        font-size 100px
+        line-height 128px
+        cursor: pointer
+        position relative
+
+        &:hover
+            &::after
+                transform: scaleX(1)
+
+        &::after
+            content: ''
+            display block
+            position absolute
+            bottom: 0
+            width: 100%
+            height: 2px
+            background-color #fff
+            transform: scaleX(0)
+            transition: .3s ease-in-out

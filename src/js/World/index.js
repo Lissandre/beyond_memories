@@ -32,6 +32,9 @@ export default class World {
     this.initButton = options.initButton
     this.music = options.music
 
+    this.qualityButton = options.qualityButton
+    this.qualityDiv = options.qualityDiv
+
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
 
@@ -116,15 +119,10 @@ export default class World {
       })
 
       this.assets.on('ressourcesReady', () => {
-        this.initButton.addEventListener('click', ()=> {
-          this.init()
-          this.music.play()
-          this.music.volume = this.musicFinVol
-          this.loadDiv.style.opacity = 0
-          setTimeout(() => {
-            this.loadDiv.remove()
-          }, 550)
-        })
+        this.loadDiv.style.opacity = 0
+        setTimeout(() => {
+          this.loadDiv.remove()
+        }, 550)
       })
     }
   }

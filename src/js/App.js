@@ -39,6 +39,9 @@ export default class App {
     this.initButton = options.initButton
     this.music = options.music
 
+    this.qualityButton = options.qualityButton
+    this.qualityDiv = options.qualityDiv
+
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
     this.js_musicVol = options.js_musicVol
@@ -70,6 +73,7 @@ export default class App {
     this.checkInventoryLength()
     this.openInventoryMethod()
     this.closeInventoryMethod()
+    this.selectDefinition()
   }
 
   setRenderer() {
@@ -200,7 +204,9 @@ export default class App {
       unmuteButton: this.unmuteButton,
       outline: this.outlinePass,
       openOptions: this.openOptions,
-      closeOptions: this.closeOptions
+      closeOptions: this.closeOptions,
+      qualityButton: this.qualityButton,
+      qualityDiv: this.qualityDiv
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -237,6 +243,22 @@ export default class App {
       console.log(this.world.floor.materialOcean.uniforms)
     }
     console.log(this.world.playerInventory.length);
+  }
+
+  selectDefinition () {
+    this.qualityButton.forEach(element => {
+      element.addEventListener('click', ()=> {
+        this.choosenDefinition = element.dataset.definition
+        console.log(this.choosenDefinition);
+        this.world.init()
+        this.world.music.play()
+        this.world.music.volume = this.world.musicFinVol
+        this.qualityDiv.style.opacity = 0
+        setTimeout(() => {
+          this.qualityDiv.remove()
+        }, 550)
+      })
+    });
   }
 
   composerCreator() {
