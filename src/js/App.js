@@ -326,6 +326,8 @@ export default class App {
           this.homeDiv.style.opacity = 0
           
           this.introVideoContainer.style.opacity = 1
+          // this.introVideoContainer.remove()
+          
           this.introVideoSkipButton.addEventListener('click', ()=> {
             this.introVideoContainer.style.opacity = 0
             this.introVideo.pause()
@@ -334,10 +336,15 @@ export default class App {
             this.world.music.volume = this.world.musicFinVol
             this.world.init()
             setTimeout(() => {
-              this.introVideoContainer.remove()
+              console.log('remove video');
               this.introVideo.remove()
+              this.introVideo.style.display = 'none'
+            }, 550)
+            setTimeout(() => {
+              this.introVideoContainer.remove()
             }, 2000)
           })
+
           this.introVideo.addEventListener('ended', ()=> {
             console.log('fin de video');
             this.introVideoContainer.style.opacity = 0
@@ -347,6 +354,7 @@ export default class App {
             setTimeout(() => {
               this.introVideoContainer.remove()
               this.introVideo.remove()
+              this.introVideo.style.display = 'none'
             }, 2000)
           })
           

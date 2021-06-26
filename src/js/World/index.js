@@ -78,8 +78,8 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPerso()
     this.setAudioListener()
+    this.setPerso()
     this.setFloor()
 
     this.createUi()
@@ -159,7 +159,8 @@ export default class World {
       camera: this.camera,
       debug: this.debug,
       worldOctree: this.worldOctree,
-      body: this.body
+      body: this.body,
+      listener: this.listener,
     })
     this.container.add(this.perso.container)
   }

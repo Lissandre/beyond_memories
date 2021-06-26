@@ -70,7 +70,7 @@ export default class Floor {
       this.riverSound.setRefDistance( 5 )
       this.riverSound.setLoop(true)
       this.riverSound.setVolume(this.ambianceFinVol)
-      this.riverSound.play()
+      // this.riverSound.play()
     })
 
     this.oceanSound = new PositionalAudio( this.listener )
@@ -80,7 +80,7 @@ export default class Floor {
       this.oceanSound.setRefDistance( 5 )
       this.oceanSound.setLoop(true)
       this.oceanSound.setVolume(this.ambianceFinVol)
-      this.oceanSound.play()
+      // this.oceanSound.play()
     })
 
 
