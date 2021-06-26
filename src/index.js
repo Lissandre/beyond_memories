@@ -24,5 +24,6 @@ new App({
   js_startAll: document.querySelector('.js_startAll'),
   js_waitingOptions: document.querySelector('.js_waitingOptions'),
   homeDiv: document.querySelector('.home'),
-  introVideo: document.querySelector('.videoIntro')
+  introVideo: document.querySelector('.videoIntro'),
+  introVideoContainer: document.querySelector('.videoContainer')
 })

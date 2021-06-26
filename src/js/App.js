@@ -11,6 +11,9 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
+import { Timeline } from 'gsap';
+
+
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -46,6 +49,7 @@ export default class App {
 
     this.homeDiv = options.homeDiv
     this.introVideo = options.introVideo
+    this.introVideoContainer = options.introVideoContainer
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -56,6 +60,8 @@ export default class App {
 
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
+
+    // this.gTimeline = new gsap.timeline()
 
     // Set up
     this.time = new Time()
@@ -317,15 +323,15 @@ export default class App {
           this.musicWaiting.pause()
           this.homeDiv.style.opacity = 0
           
-          this.introVideo.style.opacity = 1
+          this.introVideoContainer.style.opacity = 1
           this.introVideo.addEventListener('ended', ()=> {
             console.log('fin de video');
-            this.introVideo.style.opacity = 0
+            this.introVideoContainer.style.opacity = 0
             this.world.music.play()
             this.world.music.volume = this.world.musicFinVol
             this.world.init()
             setTimeout(() => {
-              this.introVideo.remove()
+              this.introVideoContainer.remove()
             }, 2000)
           })
           
