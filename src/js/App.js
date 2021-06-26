@@ -321,12 +321,12 @@ export default class App {
           this.introVideo.addEventListener('ended', ()=> {
             console.log('fin de video');
             this.introVideo.style.opacity = 0
-            this.world.init()
             this.world.music.play()
             this.world.music.volume = this.world.musicFinVol
+            this.world.init()
             setTimeout(() => {
               this.introVideo.remove()
-            }, 550)
+            }, 2000)
           })
           
           this.isWaitingScreen = false
