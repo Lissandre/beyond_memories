@@ -182,6 +182,7 @@ export default class App {
     this.world = new World({
       time: this.time,
       debug: this.debug,
+      sizes: this.sizes,
       assets: this.assets,
       camera: this.camera,
       scene: this.scene,

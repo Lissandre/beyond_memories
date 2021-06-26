@@ -18,6 +18,7 @@ export default class World {
   constructor(options) {
     // Set options
     this.time = options.time
+    this.sizes = options.sizes
     this.debug = options.debug
     this.assets = options.assets
     this.camera = options.camera
@@ -598,14 +599,14 @@ export default class World {
     function handleScroll(e) {
       that.docWidth = inv.offsetWidth
   
-      if (that.scrollValue - e.deltaY / 1.4 > 0) {
+      if (that.scrollValue - e.deltaY > 0) {
         that.scrollValue = 0;
-      } else if (that.scrollValue - e.deltaY / 1.4 < -that.docWidth) {
-        that.scrollValue = -that.docWidth;
+      } else if (that.scrollValue - e.deltaY < -that.docWidth + that.sizes.viewport.width) {
+        that.scrollValue = -that.docWidth + that.sizes.viewport.width;
       } else {
-        that.scrollValue -= e.deltaY / 1.4;
+        that.scrollValue -= e.deltaY;
       }
-      that.scrollValuePercentage = (that.scrollValue/(that.docWidth+50)) * 100
+      that.scrollValuePercentage = (that.scrollValue/(that.docWidth + that.sizes.viewport.width)) * 100
       console.log(inv);
       console.log(that.scrollValuePercentage);
       inv.style.transform = `translateX(${that.scrollValuePercentage}%)`
