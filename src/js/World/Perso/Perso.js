@@ -162,7 +162,9 @@ export default class Perso {
           case 'KeyW': // w
             this.moveForward = true
             this.playWalk = true
-            this.walkingSound.play()
+            if(this.playWalk === true) {
+              this.walkingSound.play()
+            }
             console.log(this.playWalk);
             break
           case 'ArrowLeft': // left
@@ -199,7 +201,6 @@ export default class Perso {
             break
           case 'Space': // space
             if (this.playerOnFloor) {
-              this.walkingSound.pause()
               this.jumpingSound.play()
               // this.baseActions['JUMP'].action.loop = LoopOnce
               this.temp = this.currentBaseAction
@@ -237,7 +238,9 @@ export default class Perso {
           case 'KeyW': // w
             this.moveForward = false
             this.playWalk = false
-            this.walkingSound.pause()
+            if(this.playWalk === false) {
+              this.walkingSound.pause()
+            }
             console.log(this.playWalk);
             break
           case 'ArrowLeft': // left
