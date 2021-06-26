@@ -114,7 +114,7 @@ export default class IntroCam {
         this.targetPos1 =  new Vector3(61, 34.8, 23)
         this.camera.position.lerp(this.targetPos1, 0.00025)
         console.log(this.camera.position);
-        if(this.camera.position.z > 17) {
+        if(this.camera.position.z > 17.1) {
           this.homeDiv.style.backgroundColor = "#000"
         }
         if(this.camera.position.z > 17.22) {
