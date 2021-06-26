@@ -75,7 +75,7 @@ export default class App {
       fogFar: 248
     }
 
-    this.isWaitingScreen = true
+    this.isWaitingScreen = false
     this.musicWaitingFinVol = 1
 
     this.composer 
@@ -131,6 +131,7 @@ export default class App {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
         // }
+        // console.log(this.isWaitingScreen);
         if(this.isWaitingScreen === true) {
           if(this.composer) {
             this.renderer.info.reset()
@@ -316,7 +317,8 @@ export default class App {
         console.log(this.choosenDefinition);
         this.waitingScreen.init()
         this.qualityDiv.style.opacity = 0
-
+        // this.homeDiv.remove()
+        // this.introVideoContainer.remove()
         this.musicWaiting.play()
         this.musicWaiting.volume = this.musicWaitingFinVol
 

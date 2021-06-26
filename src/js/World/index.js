@@ -5,6 +5,7 @@ import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
+import Elmo from './Elmo/Elmo'
 import Skybox from './Sky/Sky'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
@@ -80,12 +81,13 @@ export default class World {
     this.setHemisphereLight()
     this.setAudioListener()
     this.setPerso()
+    this.setElmo()
     this.setFloor()
-
+    
     this.createUi()
     this.openOptionsMethod()
     this.closeOptionsMethod()
-
+    
     this.setSeagull()
     this.setSeagull2()
     this.setSeagull3()
@@ -97,6 +99,7 @@ export default class World {
     this.setParticules()
     this.setBoxObjectManager()
     this.PlayerEnterObjectArea()
+    this.PlayerEnterElmoArea()
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
@@ -163,6 +166,19 @@ export default class World {
       listener: this.listener,
     })
     this.container.add(this.perso.container)
+  }
+
+  setElmo() {
+    this.elmo = new Elmo({
+      time: this.time,
+      assets: this.assets,
+      camera: this.camera,
+      debug: this.debug,
+      worldOctree: this.worldOctree,
+      body: this.body,
+      perso: this.perso
+    })
+    this.container.add(this.elmo.container)
   }
   setSky() {
     this.sky = new Skybox({
@@ -446,8 +462,12 @@ export default class World {
     // }
     switch (event.code) {
       case 'KeyE': // e
-        if (this.elementEntered !== null) {
-          this.collecteObject()
+      // console.log(this.elementEnteredzz);
+      //   if (this.elementEntered !== null) {
+      //     this.collecteObject()
+      //   }
+        if(this.playerEnteredInElmo === true) {
+          this.interactWithElmo()
         }
         break
     }
@@ -472,9 +492,8 @@ export default class World {
   // }
 
   interactWithElmo() {
-    this.text_01.style.opacity = 0
-    this.container.add(this.videoScreen.container)
-    this.videoScreen.videoLoad.play()
+    this.container.remove(this.elmo.container)
+    this.perso.container.add(this.elmo.container)
   }
 
   interactWithCar() {
@@ -587,6 +606,19 @@ export default class World {
             this.elementEntered = null
             this.outline.selectedObjects = []
           }
+        }
+      }
+    })
+  }
+
+  PlayerEnterElmoArea() {
+    
+    this.time.on('tick', ()=> {
+      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
+        this.playerEnteredInElmo = this.elmo.elmoBB.intersectsBox(this.perso.playerBB)
+        if(this.playerEnteredInElmo === true) {
+          console.log('whallah elmo');
+          this.openDiagOne()
         }
       }
     })

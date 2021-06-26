@@ -37,15 +37,12 @@ export default class Perso {
 
     // Set up
     this.container = new Object3D()
+    this.container.name = 'perso'
 
-    this.playerCollider = new Capsule(
-      new Vector3(0, 2, 0),
-      new Vector3(0, 3.5, 0),
-      0.35
-    )
+    
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
-    this.GRAVITY = 25
+    this.GRAVITY = 30
     this.speedP = 0.005
     this.clock = new Clock()
 
@@ -107,8 +104,16 @@ export default class Perso {
 
     this.perso.add(this.walkingSound, this.runningSound, this.jumpingSound)
 
-    this.container.add(this.perso)
-    this.perso.position.set(0, 0, 3)
+    
+    this.perso.position.set(-31, 10, 20)
+    this.container.position.set(0,0,0)
+    this.playerCollider = new Capsule(
+      new Vector3(this.perso.position.x, this.perso.position.y, this.perso.position.z),
+      new Vector3(this.perso.position.x, this.perso.position.y + 1.5, this.perso.position.z),
+      0.35
+      )
+      this.container.add(this.perso)
+    
   }
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)
@@ -117,7 +122,7 @@ export default class Perso {
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
     const helper = new Box3Helper(this.playerBB, 0xffff00)
-    // this.container.add(this.cube)
+    this.container.add(helper)
   }
 
   setSounds() {
@@ -165,7 +170,6 @@ export default class Perso {
             if(this.playWalk === true) {
               this.walkingSound.play()
             }
-            console.log(this.playWalk);
             break
           case 'ArrowLeft': // left
           case 'KeyA': // a
@@ -216,7 +220,7 @@ export default class Perso {
                   1.3
                 )
               // }, 1.9)
-              this.playerVelocity.y = 8
+              this.playerVelocity.y = 10
               this.oldSpeedP = this.speedP
               this.speedP = 0.0005
               setTimeout(() => {
@@ -241,7 +245,6 @@ export default class Perso {
             if(this.playWalk === false) {
               this.walkingSound.pause()
             }
-            console.log(this.playWalk);
             break
           case 'ArrowLeft': // left
           case 'KeyA': // a
