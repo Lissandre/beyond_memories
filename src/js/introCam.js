@@ -11,7 +11,7 @@ export default class IntroCam {
     // Set up
     this.container = new Object3D()
     // this.container.translateY(0.75)
-    this.container.name = 'Camera'
+    this.container.name = 'Intro cam'
 
     this.setCamera()
     this.setPosition()

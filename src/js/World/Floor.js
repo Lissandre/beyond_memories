@@ -27,8 +27,8 @@ export default class Floor {
 
     this.ambianceRange = options.ambianceRange
     this.js_ambianceVol = options.js_ambianceVol
+    this.ambianceFinVol = options.ambianceFinVol
 
-    this.ambianceFinVol = 1
 
     // Set up
     this.container = new Object3D()
@@ -69,7 +69,7 @@ export default class Floor {
       this.riverSound.setBuffer( buffer )
       this.riverSound.setRefDistance( 5 )
       this.riverSound.setLoop(true)
-      this.riverSound.setVolume(1)
+      this.riverSound.setVolume(this.ambianceFinVol)
       this.riverSound.play()
     })
 
@@ -79,7 +79,7 @@ export default class Floor {
       this.oceanSound.setBuffer( buffer )
       this.oceanSound.setRefDistance( 5 )
       this.oceanSound.setLoop(true)
-      this.oceanSound.setVolume(1)
+      this.oceanSound.setVolume(this.ambianceFinVol)
       this.oceanSound.play()
     })
 

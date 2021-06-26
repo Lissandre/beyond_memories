@@ -12,6 +12,7 @@ new App({
   screenShot: document.querySelector('.js_screenShot'),
   initButton: document.querySelector('.js_initButton'),
   music: document.querySelector('.js_music'),
+  musicWaiting: document.querySelector('.js_musicWaiting'),
   musicRange: document.querySelector('#_music'),
   ambianceRange: document.querySelector('#_ambiance'),
   js_musicVol: document.querySelector('.js_musicVol'),
@@ -19,5 +20,7 @@ new App({
   muteButton: document.querySelector('.js_muteSound'),
   unmuteButton: document.querySelector('.js_unmuteSound'),
   qualityButton: document.querySelectorAll('.js_DefinitionButton'),
-  qualityDiv: document.querySelector('.definition')
+  qualityDiv: document.querySelector('.definition'),
+  js_startAll: document.querySelector('.js_startAll'),
+  homeDiv: document.querySelector('.home')
 })

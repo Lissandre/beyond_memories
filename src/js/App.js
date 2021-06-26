@@ -36,10 +36,14 @@ export default class App {
     this.itemsInventory = options.itemsInventory
     this.screenShot = options.screenShot
     this.initButton = options.initButton
+    this.js_startAll = options.js_startAll
     this.music = options.music
+    this.musicWaiting = options.musicWaiting
 
     this.qualityButton = options.qualityButton
     this.qualityDiv = options.qualityDiv
+
+    this.homeDiv = options.homeDiv
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -62,6 +66,7 @@ export default class App {
     }
 
     this.isWaitingScreen = true
+    this.musicWaitingFinVol = 1
 
     this.composer 
 
@@ -123,21 +128,16 @@ export default class App {
           }else {
             this.renderer.render(this.scene, this.introCam.camera)
           }
-        }else {
+        }else if(this.isWaitingScreen === false){
           if(this.composer) {
+            console.log('passe dans le composeur de jeu');
             this.renderer.info.reset()
             this.composer.render(this.time.delta * 0.0001)
           }else {
+            console.log('reste dans le render jeu sans composer');
             this.renderer.render(this.scene, this.camera.camera)
           }
         }
-        // if(this.nodepost || this.composer) {
-          // this.frame.update( this.time.delta)
-          // this.composer.render(this.time.delta * 0.0001)
-          // this.nodepost.render( this.scene, this.camera.camera, this.frame )
-        // }else {
-        //   this.renderer.render(this.scene, this.camera.camera)
-        // }
 
       this.debug && this.stats.end()
     })
@@ -305,12 +305,29 @@ export default class App {
         this.choosenDefinition = element.dataset.definition
         console.log(this.choosenDefinition);
         this.waitingScreen.init()
-        this.waitingScreen.music.play()
-        this.waitingScreen.music.volume = this.waitingScreen.musicFinVol
         this.qualityDiv.style.opacity = 0
+
+        this.musicWaiting.play()
+        this.musicWaiting.volume = this.musicWaitingFinVol
+
+        this.js_startAll.addEventListener('click', ()=> {
+          this.musicWaiting.pause()
+          this.isWaitingScreen = false
+          this.world.init()
+          this.renderPass.camera = this.camera.camera
+          this.world.music.play()
+          this.world.music.volume = this.world.musicFinVol
+          this.scene.remove(this.waitingScreen.container)
+          this.scene.remove(this.introCam.container)
+          this.homeDiv.style.opacity = 0
+          setTimeout(() => {
+            this.homeDiv.remove()
+          }, 550)
+        })
+
         setTimeout(() => {
           this.qualityDiv.remove()
-        }, 550)
+        }, 6000)
       })
     });
   }
@@ -327,11 +344,7 @@ export default class App {
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
     // Render
-    if(this.isWaitingScreen === true) {
-      this.renderPass = new RenderPass(this.scene, this.introCam.camera)
-    }else {
-      this.renderPass = new RenderPass(this.scene, this.camera.camera)
-    }
+    this.renderPass = new RenderPass(this.scene, this.introCam.camera)
     this.composer.addPass(this.renderPass)
     
     // Grain (film pass)

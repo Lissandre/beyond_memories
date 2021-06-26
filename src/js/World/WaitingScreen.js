@@ -50,7 +50,7 @@ export default class WaitingScreen {
     // Set up
     this.container = new Object3D()
     this.worldOctree = new Octree()
-    this.container.name = 'World'
+    this.container.name = 'Waiting screen'
 
     this.playerInventory = []
     this.elementEnteredArray = []
@@ -115,7 +115,8 @@ export default class WaitingScreen {
       scene: this.scene,
       listener: this.listener,
       ambianceRange: this.ambianceRange,
-      js_ambianceVol: this.js_ambianceVol
+      js_ambianceVol: this.js_ambianceVol,
+      ambianceFinVol: 0
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)

@@ -146,7 +146,8 @@ export default class World {
       scene: this.scene,
       listener: this.listener,
       ambianceRange: this.ambianceRange,
-      js_ambianceVol: this.js_ambianceVol
+      js_ambianceVol: this.js_ambianceVol,
+      ambianceFinVol: 1
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
