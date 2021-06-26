@@ -123,7 +123,7 @@ export default class IntroCam {
         this.targetPos2 =  new Vector3(-70, 12.8, 108.5)
         this.camera.position.lerp(this.targetPos2, 0.0001)
         console.log(this.camera.position);
-        if(this.camera.position.x > -83) {
+        if(this.camera.position.x > -84.3) {
           this.stateCam = 3
           this.camera.position.set(this.thirdTravel.x, this.thirdTravel.y, this.thirdTravel.z)
           this.camera.rotation.set(this.thirdRota.x, this.thirdRota.y, this.thirdRota.z)
@@ -133,7 +133,7 @@ export default class IntroCam {
         this.targetPos3 =  new Vector3(-40, 6.7, -88.8)
         this.camera.position.lerp(this.targetPos3, 0.0001)
         console.log(this.camera.position);
-        if(this.camera.position.x > -52) {
+        if(this.camera.position.x > -56.4) {
           this.stateCam = 1
           this.camera.position.set(this.firstTravel.x, this.firstTravel.y, this.firstTravel.z)
           this.camera.rotation.set(this.firstRota.x, this.firstRota.y, this.firstRota.z)
