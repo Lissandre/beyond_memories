@@ -97,13 +97,11 @@ export default class WaitingScreen {
   
   setAmbientLight() {
     this.ambientlight = new AmbientLightSource({
-      debug: this.debugFolder,
     })
     this.container.add(this.ambientlight.container)
   }
   setHemisphereLight() {
     this.light = new HemisphereLightSource({
-      debug: this.debugFolder,
     })
     this.container.add(this.light.container)
   }
@@ -111,7 +109,6 @@ export default class WaitingScreen {
     this.floor = new Floor({
       assets: this.assets,
       time: this.time,
-      debug: this.debug,
       scene: this.scene,
       listener: this.listener,
       ambianceRange: this.ambianceRange,
@@ -125,7 +122,6 @@ export default class WaitingScreen {
   setSky() {
     this.sky = new Skybox({
       time: this.time,
-      debug: this.debug,
       renderer: this.renderer,
       composer: this.composer,
       sphereTopColor: 0x0096ff,
@@ -323,7 +319,6 @@ export default class WaitingScreen {
 
   setParticules() {
     this.particules = new Particles({
-      debug: this.debug,
       time: this.time,
       assets: this.assets
     })

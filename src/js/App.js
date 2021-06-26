@@ -130,11 +130,9 @@ export default class App {
           }
         }else if(this.isWaitingScreen === false){
           if(this.composer) {
-            console.log('passe dans le composeur de jeu');
             this.renderer.info.reset()
             this.composer.render(this.time.delta * 0.0001)
           }else {
-            console.log('reste dans le render jeu sans composer');
             this.renderer.render(this.scene, this.camera.camera)
           }
         }
@@ -197,6 +195,7 @@ export default class App {
       sizes: this.sizes,
       renderer: this.renderer,
       debug: this.debug,
+      time: this.time
     })
     // Add camera to scene
     this.scene.add(this.introCam.container)

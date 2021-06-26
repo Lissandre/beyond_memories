@@ -1,9 +1,10 @@
-import { Object3D, PerspectiveCamera } from 'three'
+import { Object3D, PerspectiveCamera, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 export default class IntroCam {
   constructor(options) {
     // Set Options
+    this.time = options.time
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.debug = options.debug
@@ -13,8 +14,20 @@ export default class IntroCam {
     // this.container.translateY(0.75)
     this.container.name = 'Intro cam'
 
+    this.stateCam = 1
+
+    this.firstTravel = new Vector3(62, 25.8,7.2)
+    this.firstRota = new Vector3(5.5556, 1.239, 0.628)
+
+    this.secTravel =  new Vector3(-89.3, 12.8, 108.5)
+    this.secRota =  new Vector3(0, 5.923, 0)
+
+    this.thirdTravel =  new Vector3(-61.4, 6.7, -88.8)
+    this.thirdRota = new Vector3(0.261, 2.99, 0)
+
     this.setCamera()
     this.setPosition()
+    this.animateCam()
     // this.setOrbitControls()
     if(this.debug) {
       this.setDebug()
@@ -39,13 +52,14 @@ export default class IntroCam {
   }
   setPosition() {
     // Set camera position
-    this.camera.position.x = 64.3
-    this.camera.position.y = 25.8
-    this.camera.position.z = 7.2
-
-    this.camera.rotation.x = 5.5556
-    this.camera.rotation.y = 1.239
-    this.camera.rotation.z = 0.628
+      this.camera.position.x = 62
+      this.camera.position.y = 25.8
+      this.camera.position.z = 7.2
+  
+      this.camera.rotation.x = 5.5556
+      this.camera.rotation.y = 1.239
+      this.camera.rotation.z = 0.628
+    
     // this.cameraUpdate(this.container.position)
   }
   cameraUpdate(position) {
@@ -91,6 +105,42 @@ export default class IntroCam {
         .min(0)
         .max(7)
         .step(0.001)
+  }
+
+  animateCam() {
+    this.time.on('tick', ()=> {
+      if(this.stateCam === 1) {
+        this.targetPos1 =  new Vector3(61, 34.8, 23)
+        this.camera.position.lerp(this.targetPos1, 0.0001)
+        console.log(this.camera.position);
+        if(this.camera.position.z > 12) {
+          this.stateCam = 2
+          this.camera.position.set(this.secTravel.x, this.secTravel.y, this.secTravel.z)
+          this.camera.rotation.set(this.secRota.x, this.secRota.y, this.secRota.z)
+          console.log(this.stateCam);
+        }
+      }else if(this.stateCam === 2) {
+        this.targetPos2 =  new Vector3(-70, 12.8, 108.5)
+        this.camera.position.lerp(this.targetPos2, 0.0001)
+        console.log(this.camera.position);
+        if(this.camera.position.x > -83) {
+          this.stateCam = 3
+          this.camera.position.set(this.thirdTravel.x, this.thirdTravel.y, this.thirdTravel.z)
+          this.camera.rotation.set(this.thirdRota.x, this.thirdRota.y, this.thirdRota.z)
+          console.log(this.stateCam);
+        }
+      }else if(this.stateCam === 3) {
+        this.targetPos3 =  new Vector3(-40, 6.7, -88.8)
+        this.camera.position.lerp(this.targetPos3, 0.0001)
+        console.log(this.camera.position);
+        if(this.camera.position.x > -52) {
+          this.stateCam = 1
+          this.camera.position.set(this.firstTravel.x, this.firstTravel.y, this.firstTravel.z)
+          this.camera.rotation.set(this.firstRota.x, this.firstRota.y, this.firstRota.z)
+          console.log(this.stateCam);
+        }
+      }
+    })
   }
 
   setOrbitControls() {
