@@ -69,7 +69,7 @@ import {
     //   this.setDebug()
     }
     setElmo() {
-      this.elmo = this.assets.models.ELMO.scene
+      this.elmo = this.assets.models.elmo.scene
       this.elmo.children[0].rotation.set(0, 0, 0)
       this.elmo.traverse((child) => {
         if (child.isMesh) {
@@ -201,8 +201,8 @@ import {
 
 
     setAnimation() {
-      const animations = this.assets.models.ELMO.animations
-      this.mixer = new AnimationMixer(this.assets.models.ELMO.scene)
+      const animations = this.assets.models.elmo.animations
+      this.mixer = new AnimationMixer(this.assets.models.elmo.scene)
       this.numAnimations = animations.length
       for (let i = 0; i !== this.numAnimations; ++i) {
         let clip = animations[i]
