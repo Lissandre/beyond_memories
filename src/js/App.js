@@ -358,7 +358,7 @@ export default class App {
           setTimeout(() => {
             this.homeDiv.remove()
             this.introVideo.play()
-          }, 2000)
+          }, 800)
         })
 
         this.js_waitingOptions.addEventListener('click',()=> {

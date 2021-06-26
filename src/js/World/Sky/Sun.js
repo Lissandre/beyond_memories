@@ -36,17 +36,17 @@ export default class Sun {
     this.light.shadow.mapSize.width = 4096; // default
     this.light.shadow.mapSize.height = 4096; // default
     this.light.shadow.bias = 0.00035;
-    this.light.shadow.camera.top = 120
-    this.light.shadow.camera.bottom = -120
-    this.light.shadow.camera.left = -120
-    this.light.shadow.camera.right = 120
+    this.light.shadow.camera.top = 160
+    this.light.shadow.camera.bottom = -160
+    this.light.shadow.camera.left = -160
+    this.light.shadow.camera.right = 160
     this.target = new Vector3(0, 0, 0)
 
-    this.container.add(this.light)
+    this.helper = new DirectionalLightHelper(this.light, 10)
+    this.container.add(this.light, this.helper)
   }
 
   setDebug() {
-    this.helper = new DirectionalLightHelper(this.light, 10)
 
     this.debugFolder = this.debug.addFolder('Sun')
     this.debugFolder
