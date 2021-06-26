@@ -195,7 +195,8 @@ export default class App {
       sizes: this.sizes,
       renderer: this.renderer,
       debug: this.debug,
-      time: this.time
+      time: this.time,
+      homeDiv: this.homeDiv
     })
     // Add camera to scene
     this.scene.add(this.introCam.container)

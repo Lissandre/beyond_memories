@@ -8,6 +8,7 @@ export default class IntroCam {
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.debug = options.debug
+    this.homeDiv = options.homeDiv
 
     // Set up
     this.container = new Object3D()
@@ -111,33 +112,29 @@ export default class IntroCam {
     this.time.on('tick', ()=> {
       if(this.stateCam === 1) {
         this.targetPos1 =  new Vector3(61, 34.8, 23)
-        this.camera.position.lerp(this.targetPos1, 0.0001)
+        this.camera.position.lerp(this.targetPos1, 0.00025)
         console.log(this.camera.position);
-        if(this.camera.position.z > 12) {
+        if(this.camera.position.z > 17) {
+          this.homeDiv.style.backgroundColor = "#000"
+        }
+        if(this.camera.position.z > 17.22) {
           this.stateCam = 2
+          this.homeDiv.style.backgroundColor = "transparent"
           this.camera.position.set(this.secTravel.x, this.secTravel.y, this.secTravel.z)
           this.camera.rotation.set(this.secRota.x, this.secRota.y, this.secRota.z)
-          console.log(this.stateCam);
         }
       }else if(this.stateCam === 2) {
         this.targetPos2 =  new Vector3(-70, 12.8, 108.5)
-        this.camera.position.lerp(this.targetPos2, 0.0001)
+        this.camera.position.lerp(this.targetPos2, 0.00025)
         console.log(this.camera.position);
-        if(this.camera.position.x > -84.3) {
-          this.stateCam = 3
-          this.camera.position.set(this.thirdTravel.x, this.thirdTravel.y, this.thirdTravel.z)
-          this.camera.rotation.set(this.thirdRota.x, this.thirdRota.y, this.thirdRota.z)
-          console.log(this.stateCam);
+        if(this.camera.position.x > -79.5) {
+          this.homeDiv.style.backgroundColor = "#000"
         }
-      }else if(this.stateCam === 3) {
-        this.targetPos3 =  new Vector3(-40, 6.7, -88.8)
-        this.camera.position.lerp(this.targetPos3, 0.0001)
-        console.log(this.camera.position);
-        if(this.camera.position.x > -56.4) {
+        if(this.camera.position.x > -79.3) {
           this.stateCam = 1
+          this.homeDiv.style.backgroundColor = "transparent"
           this.camera.position.set(this.firstTravel.x, this.firstTravel.y, this.firstTravel.z)
           this.camera.rotation.set(this.firstRota.x, this.firstRota.y, this.firstRota.z)
-          console.log(this.stateCam);
         }
       }
     })
