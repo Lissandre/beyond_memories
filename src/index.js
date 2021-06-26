@@ -22,5 +22,7 @@ new App({
   qualityButton: document.querySelectorAll('.js_DefinitionButton'),
   qualityDiv: document.querySelector('.definition'),
   js_startAll: document.querySelector('.js_startAll'),
-  homeDiv: document.querySelector('.home')
+  js_waitingOptions: document.querySelector('.js_waitingOptions'),
+  homeDiv: document.querySelector('.home'),
+  introVideo: document.querySelector('.videoIntro')
 })

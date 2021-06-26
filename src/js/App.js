@@ -37,6 +37,7 @@ export default class App {
     this.screenShot = options.screenShot
     this.initButton = options.initButton
     this.js_startAll = options.js_startAll
+    this.js_waitingOptions = options.js_waitingOptions
     this.music = options.music
     this.musicWaiting = options.musicWaiting
 
@@ -44,6 +45,7 @@ export default class App {
     this.qualityDiv = options.qualityDiv
 
     this.homeDiv = options.homeDiv
+    this.introVideo = options.introVideo
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -311,23 +313,45 @@ export default class App {
         this.musicWaiting.volume = this.musicWaitingFinVol
 
         this.js_startAll.addEventListener('click', ()=> {
+          
           this.musicWaiting.pause()
+          this.homeDiv.style.opacity = 0
+          
+          this.introVideo.style.opacity = 1
+          this.introVideo.addEventListener('ended', ()=> {
+            console.log('fin de video');
+            this.introVideo.style.opacity = 0
+            this.world.init()
+            this.world.music.play()
+            this.world.music.volume = this.world.musicFinVol
+            setTimeout(() => {
+              this.introVideo.remove()
+            }, 550)
+          })
+          
           this.isWaitingScreen = false
-          this.world.init()
           this.renderPass.camera = this.camera.camera
-          this.world.music.play()
-          this.world.music.volume = this.world.musicFinVol
           this.scene.remove(this.waitingScreen.container)
           this.scene.remove(this.introCam.container)
-          this.homeDiv.style.opacity = 0
+          
           setTimeout(() => {
             this.homeDiv.remove()
-          }, 550)
+            this.introVideo.play()
+          }, 2000)
         })
+
+        this.js_waitingOptions.addEventListener('click',()=> {
+          this.body.classList.add('open_options')
+          if(this.body.classList.contains('open_inventory')) {
+            this.body.classList.remove('open_inventory')
+          }
+        })
+        this.world.createUi()
+        this.world.closeOptionsMethod()
 
         setTimeout(() => {
           this.qualityDiv.remove()
-        }, 6000)
+        }, 4000)
       })
     });
   }
