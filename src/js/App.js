@@ -50,6 +50,8 @@ export default class App {
     this.homeDiv = options.homeDiv
     this.introVideo = options.introVideo
     this.introVideoContainer = options.introVideoContainer
+    this.introVideoSkipContainer = options.introVideoSkipContainer
+    this.introVideoSkipButton = options.introVideoSkipButton
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -324,6 +326,18 @@ export default class App {
           this.homeDiv.style.opacity = 0
           
           this.introVideoContainer.style.opacity = 1
+          this.introVideoSkipButton.addEventListener('click', ()=> {
+            this.introVideoContainer.style.opacity = 0
+            this.introVideo.pause()
+            this.introVideo.currenTime = 0
+            this.world.music.play()
+            this.world.music.volume = this.world.musicFinVol
+            this.world.init()
+            setTimeout(() => {
+              this.introVideoContainer.remove()
+              this.introVideo.remove()
+            }, 2000)
+          })
           this.introVideo.addEventListener('ended', ()=> {
             console.log('fin de video');
             this.introVideoContainer.style.opacity = 0
@@ -332,6 +346,7 @@ export default class App {
             this.world.init()
             setTimeout(() => {
               this.introVideoContainer.remove()
+              this.introVideo.remove()
             }, 2000)
           })
           

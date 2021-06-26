@@ -25,5 +25,7 @@ new App({
   js_waitingOptions: document.querySelector('.js_waitingOptions'),
   homeDiv: document.querySelector('.home'),
   introVideo: document.querySelector('.videoIntro'),
-  introVideoContainer: document.querySelector('.videoContainer')
+  introVideoContainer: document.querySelector('.videoContainer'),
+  introVideoSkipContainer: document.querySelector('.videoButton'),
+  introVideoSkipButton: document.querySelector('.js_videoSkip')
 })
