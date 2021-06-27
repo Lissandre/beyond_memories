@@ -179,9 +179,10 @@ export default class Floor {
         child.name.includes('ARBRE') ||
         child.name.includes('Arbre') ||
         child.name.includes('arbre') ||
-        child.name.includes('cabane01') ||
         child.name.includes('PALETTE') ||
-        child.name.includes('pont')
+        child.name.includes('pont') ||
+        child.name.includes('BUSH') ||
+        child.name.includes('HERBE')
       ) {
         if (this.perf != 'low') {
           child.castShadow = true
@@ -218,6 +219,15 @@ export default class Floor {
           child.castShadow = true
           child.receiveShadow = true
         }
+      }
+      if (child.name.includes('CABANE')) {
+        child.traverse((children) => {
+          children.castShadow = true
+          children.receiveShadow = true
+          if (children.material?.name.includes('Leaf')) {
+            children.material.transparent = true
+          }
+        })
       }
       if (child.name.includes('ROCKS') || child.name.includes('FALAISE')) {
         if (this.perf != 'low') {
