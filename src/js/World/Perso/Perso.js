@@ -128,7 +128,7 @@ export default class Perso {
     this.cube = new Mesh(this.geometry, this.material)
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
-    // const helper = new Box3Helper(this.playerBB, 0xffff00)
+    const helper = new Box3Helper(this.playerBB, 0xffff00)
     // this.container.add(helper)
   }
 

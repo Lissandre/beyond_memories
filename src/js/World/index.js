@@ -595,9 +595,7 @@ export default class World {
                 this.meshes.push(child)
               }
             })
-            if (this.elementEntered.isCollected === false) {
-              this.outline.selectedObjects = this.meshes
-            }
+            this.outline.selectedObjects = this.meshes
             this.keyPressAction()
           }
           // else{

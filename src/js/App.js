@@ -20,6 +20,8 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
+import * as Gsap from 'gsap'
+
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
 
@@ -308,11 +310,59 @@ export default class App {
     this.invLength = this.world.playerInventory.length
     this.depthColorFor3 = new Color(0x0a3772)
     this.surfaceColorFor3 = new Color(0x43b1d9)
-    if (this.invLength >= 3) {
-      this.world.floor.materialOcean.uniforms.uHeightWave.value = 4
-      this.world.floor.materialOcean.uniforms.uDepthColor.value = this.depthColorFor3
-      this.world.floor.materialOcean.uniforms.uSurfaceColor.value = this.surfaceColorFor3
-      console.log(this.world.floor.materialOcean.uniforms)
+    this.timelineG = new Gsap.TimelineLite
+    if (this.invLength === 2) {
+
+      this.timelineG
+        .to(this.effectVignette.uniforms['darkness'],
+            .5, {value: 0.7543, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
+            1, {value: 4, ease: Gsap.Circ})
+        .to(this.effectVignette.uniforms['offset'],
+            .5, {value: 0.431, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+    }
+
+    if (this.invLength === 4) {
+
+      this.timelineG
+        .to(this.effectVignette.uniforms['darkness'],
+            .5, {value: 0.8823, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
+            1, {value: 4, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+    }
+
+    if (this.invLength === 6) {
+
+      this.timelineG
+        .to(this.effectVignette.uniforms['darkness'],
+            .5, {value: 1, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
+            1, {value: 4, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+    }
+
+    if (this.invLength === 8) {
+
+      this.timelineG
+        .to(this.effectVignette.uniforms['darkness'],
+            .5, {value: 1.1, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
+            1, {value: 4, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
     }
     console.log(this.world.playerInventory.length)
   }
@@ -602,52 +652,15 @@ export default class App {
         .add(this.effectVignette.uniforms['offset'], 'value')
         .name('Offset')
         .min(0.0)
-        .max(3.0)
+        .max(2.0)
         .step(0.0001)
       folderVign
         .add(this.effectVignette.uniforms['darkness'], 'value')
         .name('Darkness')
         .min(-1.0)
-        .max(1.0)
+        .max(10.0)
         .step(0.0001)
-      const folderGrain = this.debug.addFolder('Grain')
-      folderGrain
-        .add(this.filmPass.material.uniforms.nIntensity, 'value')
-        .name('Quantité')
-        .min(0.0)
-        .max(3.0)
-        .step(0.0001)
-      folderGrain
-        .add(this.filmPass.material.uniforms.sCount, 'value')
-        .name('Lignes')
-        .min(0.0)
-        .max(2000.0)
-        .step(1.0)
-      folderGrain
-        .add(this.filmPass.material.uniforms.sIntensity, 'value')
-        .name('Intensitée')
-        .min(0.0)
-        .max(3.0)
-        .step(0.0001)
-      const folderBloom = this.debug.addFolder('Bloom')
-      folderBloom
-        .add(params, 'bloomThreshold')
-        .name('Threshold')
-        .min(0.0)
-        .max(3.0)
-        .step(0.0001)
-      folderBloom
-        .add(params, 'bloomStrength')
-        .name('Strength')
-        .min(0.0)
-        .max(2000.0)
-        .step(1.0)
-      folderBloom
-        .add(params, 'bloomRadius')
-        .name('Radius')
-        .min(0.0)
-        .max(3.0)
-        .step(0.0001)
+      
     }
   }
 }
