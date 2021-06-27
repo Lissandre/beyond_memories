@@ -6,7 +6,6 @@ import {
   Vector3,
   Quaternion,
   Box3,
-  Box3Helper,
 } from 'three'
 
 export default class BoxObjectInteractif {

@@ -28,6 +28,8 @@ export default class Elmo {
     this.container = new Object3D()
     this.container.name = 'Elmo'
 
+    this.getPeted = false
+
     this.elmoCollider = new Capsule(
       new Vector3(0, 2, 0),
       new Vector3(0, 3.5, 0),
@@ -75,7 +77,7 @@ export default class Elmo {
     })
     this.elmo.castShadow = true
     this.elmo.scale.set(0.4, 0.4, 0.4)
-    this.elmo.position.set(1, 10, 3)
+    this.elmo.position.set(1, 2, 3)
 
     this.container.position.set(0, 0, 0)
     this.playerCollider = new Capsule(
@@ -96,7 +98,7 @@ export default class Elmo {
   }
 
   setCollider() {
-    this.geometry = new BoxGeometry(3, 3, 3)
+    this.geometry = new BoxGeometry(2.5, 3, 2.5)
     this.material = new MeshBasicMaterial({
       color: 0x00ff00,
       wireframe: true,
@@ -104,7 +106,7 @@ export default class Elmo {
       transparent: true,
     })
     this.cube = new Mesh(this.geometry, this.material)
-    this.cube.position.set(0, 0.5, 0)
+    this.cube.position.copy(this.elmo.position)
     this.elmoBB = new Box3().setFromObject(this.cube)
     const helper = new Box3Helper(this.elmoBB, 0xffff00)
     this.container.add(helper)
@@ -128,52 +130,53 @@ export default class Elmo {
       this.elmoPos = new Vector2(this.elmo.position.x, this.elmo.position.z)
       this.nextPos = new Vector2(this.persoPos.x - 2, this.persoPos.z - 3)
 
-      if (this.elmoPos.distanceTo(this.nextPos) <= 1.8) {
-        this.speedP = 0
-        this.elmo.lookAt(this.lookNext)
-        if (this.currentBaseAction !== 'IDLE') {
-          this.prepareCrossFade(
-            this.baseActions[this.currentBaseAction].action,
-            this.baseActions['IDLE'].action,
-            0.6
+      if (this.getPeted === true) {
+        if (this.elmoPos.distanceTo(this.nextPos) <= 1.8) {
+          this.speedP = 0
+          this.elmo.lookAt(this.lookNext)
+          if (this.currentBaseAction !== 'IDLE') {
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['IDLE'].action,
+              0.6
+            )
+          }
+        } else if (this.elmoPos.distanceTo(this.nextPos) >= 4) {
+          this.speedP = 0.01
+          this.elmo.lookAt(
+            this.nextTarget.x,
+            this.elmo.position.y,
+            this.nextTarget.z
           )
+          if (this.currentBaseAction !== 'RUNNING') {
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['RUNNING'].action,
+              0.6
+            )
+          }
+        } else if (this.elmoPos.distanceTo(this.nextPos) > 1.8) {
+          this.speedP = 0.005
+          this.elmo.lookAt(
+            this.nextTarget.x,
+            this.elmo.position.y,
+            this.nextTarget.z
+          )
+          if (this.currentBaseAction !== 'WALKING') {
+            this.prepareCrossFade(
+              this.baseActions[this.currentBaseAction].action,
+              this.baseActions['WALKING'].action,
+              0.6
+            )
+          }
         }
-      } else if (this.elmoPos.distanceTo(this.nextPos) >= 4) {
-        this.speedP = 0.01
-        this.elmo.lookAt(
-          this.nextTarget.x,
-          this.elmo.position.y,
-          this.nextTarget.z
+
+        this.elmoVelocity.add(
+          this.getForwardVector().multiplyScalar(this.speedP * this.time.delta)
         )
-        if (this.currentBaseAction !== 'RUNNING') {
-          this.prepareCrossFade(
-            this.baseActions[this.currentBaseAction].action,
-            this.baseActions['RUNNING'].action,
-            0.6
-          )
-        }
-      } else if (this.elmoPos.distanceTo(this.nextPos) > 1.8) {
-        this.speedP = 0.005
-        this.elmo.lookAt(
-          this.nextTarget.x,
-          this.elmo.position.y,
-          this.nextTarget.z
-        )
-        if (this.currentBaseAction !== 'WALKING') {
-          this.prepareCrossFade(
-            this.baseActions[this.currentBaseAction].action,
-            this.baseActions['WALKING'].action,
-            0.6
-          )
-        }
       }
-
-      //
-
-      this.elmoVelocity.add(
-        this.getForwardVector().multiplyScalar(this.speedP * this.time.delta)
-      )
-
+      this.cube.position.copy(this.elmo.position)
+      this.elmoBB.setFromObject(this.cube)
       const delta = Math.min(0.1, this.clock.getDelta())
       this.updateElmo(delta)
     })

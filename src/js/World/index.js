@@ -82,6 +82,9 @@ export default class World {
     this.setPerso()
     this.setElmo()
     this.setFloor()
+    this.setBoxObjectManager()
+    this.PlayerEnterObjectArea()
+    this.PlayerEnterElmoArea()
 
     this.createUi()
     this.openOptionsMethod()
@@ -96,13 +99,11 @@ export default class World {
     this.setButterfly()
     this.setButterfly2()
     this.setParticules()
-    this.setBoxObjectManager()
-    this.PlayerEnterObjectArea()
-    this.PlayerEnterElmoArea()
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
     this.unmuteSoundMethod()
+    this.openDiagOne()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -449,18 +450,29 @@ export default class World {
     // )
   }
 
+  keyPressAction() {
+    document.addEventListener('keyup', this.handleKeyE.bind(this), false)
+    // document.addEventListener(
+    //   'keydown',
+    //   this.handleKeyF.bind(this),
+    //   false
+    // )
+  }
+
   handleKeyE(event) {
     // if(!this.playerEnteredInElmo ) {
     //   return
     // }
     switch (event.code) {
       case 'KeyE': // e
-        // console.log(this.elementEnteredzz);
-        //   if (this.elementEntered !== null) {
-        //     this.collecteObject()
-        //   }
+        if (this.elementEntered !== null) {
+          console.log('collect object')
+          this.collecteObject()
+        }
+
         if (this.playerEnteredInElmo === true) {
-          this.interactWithElmo()
+          console.log('click sur elmo')
+          this.getElmo()
         }
         break
     }
@@ -484,9 +496,8 @@ export default class World {
   //   }
   // }
 
-  interactWithElmo() {
-    this.container.remove(this.elmo.container)
-    this.perso.container.add(this.elmo.container)
+  getElmo() {
+    this.elmo.getPeted = true
   }
 
   interactWithCar() {
@@ -589,9 +600,10 @@ export default class World {
                 this.meshes.push(child)
               }
             })
-            this.outline.selectedObjects = this.meshes
-
-            this.openDiagOne()
+            if (this.elementEntered.isCollected === false) {
+              this.outline.selectedObjects = this.meshes
+            }
+            this.keyPressAction()
           }
           // else{
           // this.appThis.outlinePass.selectedObjects.pop()
@@ -621,7 +633,6 @@ export default class World {
           this.perso.playerBB
         )
         if (this.playerEnteredInElmo === true) {
-          console.log('whallah elmo')
           this.openDiagOne()
         }
       }

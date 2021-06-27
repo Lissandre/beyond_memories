@@ -1,6 +1,4 @@
-import {
-  Object3D,
-} from 'three'
+import { Object3D } from 'three'
 import BoxObjectVanilla from './BoxObjectVanilla'
 import BoxObjectInteractif from './BoxObjectInteractif'
 
@@ -35,7 +33,7 @@ export default class BoxObjectManager {
         })
         const name = child.name
         this.boxesArr[name] = this.boxObjectInt
-        this.container.add(this.boxObjectVanilla.container)
+        this.container.add(this.boxObjectInt.container)
       }
     })
   }
