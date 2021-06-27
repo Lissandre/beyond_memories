@@ -75,6 +75,7 @@ export default class App {
 
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
+    this.bubbleOption = options.bubbleOption
 
     this.gTimeline = new gsap.timeline()
 
@@ -288,7 +289,8 @@ export default class App {
       closeInventory: this.closeInventory,
       bubbleInventory: this.bubbleInventory,
       inventoryItems: this.inventoryItems,
-      musicObject: this.musicObject
+      musicObject: this.musicObject,
+      bubbleOption: this.bubbleOption
     })
     // Add world to scene
     this.scene.add(this.world.container)

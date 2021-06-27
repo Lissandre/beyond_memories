@@ -46,6 +46,7 @@ export default class World {
     this.closeInventory = options.closeInventory
     this.bubbleInventory = options.bubbleInventory
     this.inventoryItems = options.inventoryItems
+    this.bubbleOption = options.bubbleOption
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -79,6 +80,12 @@ export default class World {
 
     this.inventoryTL = new gsap.timeline()
     this.showPictureTL = new gsap.timeline()
+    this.optionTL = new gsap.timeline()
+    this.tutoTL = new gsap.timeline()
+    this.speechTl = new gsap.timeline()
+
+    this.showInventory = document.querySelector('.inventoryButton')
+    this.showOptions = document.querySelector('.options')
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -494,7 +501,7 @@ export default class World {
         this.elmo.victoryAnimation()
         this.appThis.checkInventoryLength()
         this.showPictureObject(Data.monde_1[this.elementEntered.child.name])
-        this.musicObject.volume = 0.5
+        this.musicObject.volume = 0.25
         this.musicObject.play()
       }
     }
@@ -515,7 +522,6 @@ export default class World {
     this.showPictureTL
       .to(this.imageShow, { duration: 1, scale: 0.45, rotate: '10deg', ease: 'Power4.inOut'})
       .to(this.divShowedPic, {duration: 1, scale: 0.3,x: '-400%', y: '110%', ease: 'Power4.inOut'}, '+=1.5')
-    console.log(this.imageShow);
   }
 
   setItemCard() {
@@ -566,7 +572,6 @@ export default class World {
   openInventoryMethod() {
     this.openInventory.addEventListener('click', () => {
       this.itemProps = document.querySelectorAll('.inventory_content_items_item')
-      // console.log(this.itemProps);
       this.body.classList.add('open_inventory')
     
       this.inventoryTL
@@ -579,12 +584,11 @@ export default class World {
 
   closeInventoryMethod() {
     this.closeInventory.addEventListener('click', () => {
-      console.log(this.itemProps);
       this.inventoryTL
-      .to(this.itemProps, {duration: 1, x: '50%', opacity: 0, ease: 'Power4.out',stagger: 0.1})
-      .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'}, '-=1')
-      .to(this.bubbleInventory, {duration: 1.2, transform: 'scale(1)', ease: 'Power4.inOut'}, '-=1' )
-      .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+        .to(this.itemProps, {duration: 1, x: '50%', opacity: 0, ease: 'Power4.out',stagger: 0.1})
+        .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'}, '-=1')
+        .to(this.bubbleInventory, {duration: 1.2, transform: 'scale(1)', ease: 'Power4.inOut'}, '-=1' )
+        .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
       setTimeout(()=> {
 
         this.body.classList.remove('open_inventory')
@@ -690,14 +694,50 @@ export default class World {
     }
     this.optionButton = document.querySelector('.js_optionsBtn')
     this.closeOptionButton = document.querySelector('.js_closeOptions')
+    setTimeout(()=> {
+      this.tutoTL
+        .to(this.showInventory, {duration: 1, opacity: 1, ease: 'Power4.out'})
+        .to(this.showOptions, {duration: 1, opacity: 1, ease: 'Power4.out'}, '-=1')
+    }, 1500)
+
+    setTimeout(()=> {
+      this.playTuto()
+    }, 3500)
   }
 
   openOptionsMethod() {
+
+    this.mute = document.querySelector('.sound_mute')
+    this.optionsTitle = document.querySelector('.options_titleText')
+    this.optionSounds = document.querySelector('.options_sounds')
+    this.optionReplayCta = document.querySelector('.options_container_replay')
+    this.blobOption = document.querySelector('.blobOption')
+
     this.optionButton.addEventListener('click', () => {
       this.body.classList.add('open_options')
       if (this.body.classList.contains('open_inventory')) {
-        this.body.classList.remove('open_inventory')
+        this.inventoryTL
+          .to(this.itemProps, {duration: 1, x: '50%', opacity: 0, ease: 'Power4.out',stagger: 0.1})
+          .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'}, '-=1')
+          .to(this.bubbleInventory, {duration: 1.2, transform: 'scale(1)', ease: 'Power4.inOut'}, '-=1' )
+          .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+          
+        setTimeout(()=> {
+
+          this.body.classList.remove('open_inventory')
+        },2000)
       }
+
+      this.optionTL
+        .to(this.optionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.out'})
+        .to(this.bubbleOption, {duration: 1.2, transform: `scale(380)`, ease: 'Power4.inOut'}, '-=1')
+        .to(this.closeOptionButton, {duration: 1, opacity: 1, display: 'block', ease: 'Power4.out'}, '-=1')
+        .to(this.mute, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+        .to(this.blobOption, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+        .to(this.optionsTitle, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionSounds, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionReplayCta, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+
     })
   }
 
@@ -705,11 +745,83 @@ export default class World {
     this.replayCta = document.querySelector('.js_replayCta')
 
     this.closeOptionButton.addEventListener('click', () => {
-      this.body.classList.remove('open_options')
+      this.optionTL
+        .to(this.closeOptionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'})
+        .to(this.mute, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.blobOption, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionsTitle, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionSounds, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionReplayCta, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.bubbleOption, {duration: 1.2, transform: 'scale(0)', ease: 'Power4.inOut'})
+        .to(this.optionButton, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+
+      setTimeout(()=> {
+        this.body.classList.remove('open_options')
+      },2000)
     })
 
     this.replayCta.addEventListener('click', () => {
-      this.body.classList.remove('open_options')
+      this.optionTL
+        .to(this.closeOptionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'})
+        .to(this.mute, {duration: 1, opacity: 0, ease: 'Power4.inOut'})
+        .to(this.blobOption, {duration: 1, opacity: 0, ease: 'Power4.inOut'},'-=1')
+        .to(this.optionsTitle, {duration: 1, opacity: 0, ease: 'Power4.inOut'},'-=1')
+        .to(this.optionSounds, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionReplayCta, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+        .to(this.bubbleOption, {duration: 1.2, transform: 'scale(0)', ease: 'Power4.inOut'}, '-=1' )
+        .to(this.optionButton, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+
+      setTimeout(()=> {
+        this.body.classList.remove('open_options')
+      },2000)
     })
+  }
+
+  playTuto() {
+    this.tutorial = document.querySelectorAll('.tutorial')
+    this.keyboardTuto = document.querySelector('.keyboardTuto')
+    this.mouseTuto = document.querySelector('.mouseTuto')
+    this.shiftKey = document.querySelector('.shiftKey')
+    this.eKey = document.querySelector('.eKey')
+    this.spaceKey = document.querySelector('.spaceKey')
+
+    this.subtitle = document.querySelector('.subtitle')
+    this.subtitleTitle = document.querySelector('.subtitle_Title')
+    this.speechKeyboard = document.querySelector('.speechKeyboard')
+    this.speechMouse = document.querySelector('.speechMouse')
+    this.speechShift = document.querySelector('.speechShift')
+    this.speechKeyE = document.querySelector('.speechKeyE')
+    this.speechSpace = document.querySelector('.speechSpace')
+
+    this.tutoTL
+      .to(this.tutorial, {duration: 1, opacity: 1, display: 'block', ease: 'Power4.inOut'})
+      .to(this.keyboardTuto, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+      .to(this.keyboardTuto, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.mouseTuto, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.mouseTuto, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.shiftKey, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.shiftKey, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.eKey, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.eKey, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.spaceKey, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.spaceKey, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.tutorial, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
+
+    this.speechTl
+      .to(this.subtitle, {duration: 1, opacity: 1, display:'block', ease: 'Power4.inOut'})
+      .to(this.subtitleTitle, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+      .to(this.speechKeyboard, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+      .to(this.speechKeyboard, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.speechMouse, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.speechMouse, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.speechShift, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.speechShift, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.speechKeyE, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.speechKeyE, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.speechSpace, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
+      .to(this.speechSpace, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '+=4')
+      .to(this.subtitleTitle, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
+      .to(this.subtitle, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
+      
   }
 }

@@ -10,14 +10,13 @@
     position fixed
     top: 2%
     right: 2%
-    z-index: 10
-    opacity: 1
+    z-index: 400
+    opacity: 0
 
     &_container
         width: 100%
         height: 100%
         position: absolute
-        background-color rgba(#262626, 0.95)
         display none
         align-items: center
         z-index 250
@@ -31,6 +30,7 @@
             align-items: center
 
         &_replay
+            opacity: 0
             position: absolute
             bottom: 5%
             left: 50%
@@ -54,10 +54,12 @@
             font-family Francesco
             font-weight normal
             margin: 0
+            opacity: 0
     
     &_sounds
         display: flex
         flex-flow: column nowrap
+        opacity: 0
 
         .sound_item
             display: flex
@@ -144,6 +146,7 @@
 
 .sound_mute
     margin-right 20px
+    opacity: 0
     .js_unmuteSound
         display none
         padding-right 10px
@@ -169,3 +172,23 @@
     svg 
         width: 20px
         height: auto
+
+.bubbleOptions
+  display block
+  position: absolute
+  top: 0
+  right: 0
+  width: 10px
+  height: 10px
+  border-radius 50%
+  background-color #000
+  z-index 50
+  transform: scale(0)
+
+.blobOption
+    position:  absolute
+    z-index -1
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    opacity: 0
