@@ -1,6 +1,6 @@
 import { AudioListener, AxesHelper, Object3D } from 'three'
 import { Octree } from 'three/examples/jsm/math/Octree'
-import {gsap, Power3, Power4} from 'gsap'
+import {gsap, Power3, Power4, Back} from 'gsap'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -34,6 +34,7 @@ export default class World {
     this.composer = options.composer
     this.initButton = options.initButton
     this.music = options.music
+    this.musicObject = options.musicObject
 
     
     this.qualityButton = options.qualityButton
@@ -77,6 +78,7 @@ export default class World {
     this.scrollValue = 0
 
     this.inventoryTL = new gsap.timeline()
+    this.showPictureTL = new gsap.timeline()
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -480,11 +482,6 @@ export default class World {
     this.elmo.getPeted = true
   }
 
-  interactWithCar() {
-    this.text_01.style.opacity = 0
-    this.appThis.watchCar = true
-  }
-
   collecteObject() {
     if (this.elementEntered.isCollected === false) {
       if (this.playerInventory.length < 8) {
@@ -496,8 +493,29 @@ export default class World {
         this.perso.victoryAnimation()
         this.elmo.victoryAnimation()
         this.appThis.checkInventoryLength()
+        this.showPictureObject(Data.monde_1[this.elementEntered.child.name])
+        this.musicObject.volume = 0.5
+        this.musicObject.play()
       }
     }
+  }
+
+  showPictureObject(image) {
+    
+    this.imageShow = document.createElement('img')
+    this.imageShow.src = image.links.image
+    this.imageShow.classList.add('js_showPictureObject', 'showedPicture')
+    
+    this.divShowedPic = document.createElement('div')
+    this.divShowedPic.classList.add('showedpicDiv')
+    
+    this.divShowedPic.appendChild(this.imageShow)
+    this.body.appendChild(this.divShowedPic)
+
+    this.showPictureTL
+      .to(this.imageShow, { duration: 1, scale: 0.45, rotate: '10deg', ease: 'Power4.inOut'})
+      .to(this.divShowedPic, {duration: 1, scale: 0.3,x: '-400%', y: '110%', ease: 'Power4.inOut'}, '+=1.5')
+    console.log(this.imageShow);
   }
 
   setItemCard() {

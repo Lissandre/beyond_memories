@@ -53,6 +53,7 @@ export default class App {
     this.js_waitingOptions = options.js_waitingOptions
     this.music = options.music
     this.musicWaiting = options.musicWaiting
+    this.musicObject = options.msuicObject
 
     this.qualityButton = options.qualityButton
     this.qualityDiv = options.qualityDiv
@@ -286,7 +287,8 @@ export default class App {
       openInventory: this.openInventory,
       closeInventory: this.closeInventory,
       bubbleInventory: this.bubbleInventory,
-      inventoryItems: this.inventoryItems
+      inventoryItems: this.inventoryItems,
+      musicObject: this.musicObject
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -461,8 +463,6 @@ export default class App {
         this.setWorld()
         this.setWaitingScreen()
         this.checkInventoryLength()
-        this.openInventoryMethod()
-        this.closeInventoryMethod()
 
         if (this.choosenDefinition === 'low') {
           this.renderer.shadowMap.enabled = false

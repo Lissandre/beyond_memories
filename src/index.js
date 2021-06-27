@@ -31,5 +31,6 @@ new App({
   introVideoSkipContainer: document.querySelector('.videoButton'),
   introVideoSkipButton: document.querySelector('.js_videoSkip'),
   bubbleInventory: document.querySelector('.bubbleInventory'),
-  inventoryItems: document.querySelector('.inventory_content_items')
+  inventoryItems: document.querySelector('.inventory_content_items'),
+  msuicObject: document.querySelector('.js_musicObject')
 })
