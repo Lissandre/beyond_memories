@@ -1,18 +1,24 @@
-import { Color, Fog, Scene, sRGBEncoding, WebGLRenderer, Vector2, PCFSoftShadowMap, CineonToneMapping, Vector3, LinearEncoding } from 'three'
+import {
+  Color,
+  Fog,
+  Scene,
+  sRGBEncoding,
+  WebGLRenderer,
+  Vector2,
+  PCFSoftShadowMap,
+  Vector3,
+} from 'three'
 
 // Post Pro
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
-import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
-import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
-import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js'
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-
-import { Timeline } from 'gsap';
-
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -23,8 +29,8 @@ import Assets from '@tools/Loader'
 
 import Camera from './Camera'
 import World from '@world/index'
-import WaitingScreen from '@world/WaitingScreen';
-import IntroCam from './introCam';
+import WaitingScreen from '@world/WaitingScreen'
+import IntroCam from './introCam'
 
 export default class App {
   constructor(options) {
@@ -72,13 +78,13 @@ export default class App {
     this.params = {
       fogColor: 0xa2dcfc,
       fogNear: 0,
-      fogFar: 248
+      fogFar: 248,
     }
 
     this.isWaitingScreen = false
     this.musicWaitingFinVol = 1
 
-    this.composer 
+    this.composer
 
     this.setConfig()
     this.setRenderer()
@@ -97,7 +103,11 @@ export default class App {
     // Set scene
     this.scene = new Scene()
     // Set fog
-    this.scene.fog = new Fog(this.params.fogColor, this.params.fogNear, this.params.fogFar)
+    this.scene.fog = new Fog(
+      this.params.fogColor,
+      this.params.fogNear,
+      this.params.fogFar
+    )
     // Set renderer
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
@@ -130,28 +140,26 @@ export default class App {
     this.time.on('tick', () => {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
-        // }
-        // console.log(this.isWaitingScreen);
-        if(this.isWaitingScreen === true) {
-          if(this.composer) {
-            this.renderer.info.reset()
-            this.composer.render(this.time.delta * 0.0001)
-          }else {
-            this.renderer.render(this.scene, this.introCam.camera)
-          }
-        }else if(this.isWaitingScreen === false){
-          if(this.composer) {
-            this.renderer.info.reset()
-            this.composer.render(this.time.delta * 0.0001)
-          }else {
-            this.renderer.render(this.scene, this.camera.camera)
-          }
+      // }
+      // console.log(this.isWaitingScreen);
+      if (this.isWaitingScreen === true) {
+        if (this.composer) {
+          this.renderer.info.reset()
+          this.composer.render(this.time.delta * 0.0001)
+        } else {
+          this.renderer.render(this.scene, this.introCam.camera)
         }
+      } else if (this.isWaitingScreen === false) {
+        if (this.composer) {
+          this.renderer.info.reset()
+          this.composer.render(this.time.delta * 0.0001)
+        } else {
+          this.renderer.render(this.scene, this.camera.camera)
+        }
+      }
 
       this.debug && this.stats.end()
     })
-
-   
 
     if (this.debug) {
       this.renderOnBlur = { activated: true }
@@ -175,7 +183,7 @@ export default class App {
         .min(0.0)
         .max(500)
         .step(1)
-        .onChange(()=> {
+        .onChange(() => {
           this.scene.fog.near = this.params.fogNear
         })
       folder
@@ -184,7 +192,7 @@ export default class App {
         .min(0.0)
         .max(500)
         .step(1)
-        .onChange(()=> {
+        .onChange(() => {
           this.scene.fog.far = this.params.fogFar
         })
     }
@@ -207,7 +215,7 @@ export default class App {
       renderer: this.renderer,
       debug: this.debug,
       time: this.time,
-      homeDiv: this.homeDiv
+      homeDiv: this.homeDiv,
     })
     // Add camera to scene
     this.scene.add(this.introCam.container)
@@ -239,7 +247,7 @@ export default class App {
       openOptions: this.openOptions,
       closeOptions: this.closeOptions,
       qualityButton: this.qualityButton,
-      qualityDiv: this.qualityDiv
+      qualityDiv: this.qualityDiv,
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -271,7 +279,7 @@ export default class App {
       openOptions: this.openOptions,
       closeOptions: this.closeOptions,
       qualityButton: this.qualityButton,
-      qualityDiv: this.qualityDiv
+      qualityDiv: this.qualityDiv,
     })
     // Add world to scene
     this.scene.add(this.waitingScreen.container)
@@ -301,20 +309,20 @@ export default class App {
     this.invLength = this.world.playerInventory.length
     this.depthColorFor3 = new Color(0x0a3772)
     this.surfaceColorFor3 = new Color(0x43b1d9)
-    if(this.invLength >= 3) {
+    if (this.invLength >= 3) {
       this.world.floor.materialOcean.uniforms.uHeightWave.value = 4
       this.world.floor.materialOcean.uniforms.uDepthColor.value = this.depthColorFor3
       this.world.floor.materialOcean.uniforms.uSurfaceColor.value = this.surfaceColorFor3
       console.log(this.world.floor.materialOcean.uniforms)
     }
-    console.log(this.world.playerInventory.length);
+    console.log(this.world.playerInventory.length)
   }
 
-  selectDefinition () {
-    this.qualityButton.forEach(element => {
-      element.addEventListener('click', ()=> {
+  selectDefinition() {
+    this.qualityButton.forEach((element) => {
+      element.addEventListener('click', () => {
         this.choosenDefinition = element.dataset.definition
-        console.log(this.choosenDefinition);
+        console.log(this.choosenDefinition)
         this.waitingScreen.init()
         this.qualityDiv.style.opacity = 0
         // this.homeDiv.remove()
@@ -322,15 +330,14 @@ export default class App {
         this.musicWaiting.play()
         this.musicWaiting.volume = this.musicWaitingFinVol
 
-        this.js_startAll.addEventListener('click', ()=> {
-          
+        this.js_startAll.addEventListener('click', () => {
           this.musicWaiting.pause()
           this.homeDiv.style.opacity = 0
-          
+
           this.introVideoContainer.style.opacity = 1
           // this.introVideoContainer.remove()
-          
-          this.introVideoSkipButton.addEventListener('click', ()=> {
+
+          this.introVideoSkipButton.addEventListener('click', () => {
             this.introVideoContainer.style.opacity = 0
             this.introVideo.pause()
             this.introVideo.currenTime = 0
@@ -338,7 +345,7 @@ export default class App {
             this.world.music.volume = this.world.musicFinVol
             this.world.init()
             setTimeout(() => {
-              console.log('remove video');
+              console.log('remove video')
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
             }, 550)
@@ -347,8 +354,8 @@ export default class App {
             }, 2000)
           })
 
-          this.introVideo.addEventListener('ended', ()=> {
-            console.log('fin de video');
+          this.introVideo.addEventListener('ended', () => {
+            console.log('fin de video')
             this.introVideoContainer.style.opacity = 0
             this.world.music.play()
             this.world.music.volume = this.world.musicFinVol
@@ -359,21 +366,21 @@ export default class App {
               this.introVideo.style.display = 'none'
             }, 2000)
           })
-          
+
           this.isWaitingScreen = false
           this.renderPass.camera = this.camera.camera
           this.scene.remove(this.waitingScreen.container)
           this.scene.remove(this.introCam.container)
-          
+
           setTimeout(() => {
             this.homeDiv.remove()
             this.introVideo.play()
           }, 800)
         })
 
-        this.js_waitingOptions.addEventListener('click',()=> {
+        this.js_waitingOptions.addEventListener('click', () => {
           this.body.classList.add('open_options')
-          if(this.body.classList.contains('open_inventory')) {
+          if (this.body.classList.contains('open_inventory')) {
             this.body.classList.remove('open_inventory')
           }
         })
@@ -384,14 +391,13 @@ export default class App {
           this.qualityDiv.remove()
         }, 4000)
       })
-    });
+    })
   }
 
   composerCreator() {
-    
     //Composer
-    this.composer = new EffectComposer( this.renderer );
-    
+    this.composer = new EffectComposer(this.renderer)
+
     // this.composer.outputEncoding = sRGBEncoding
     this.composer.renderer.outputEncoding = sRGBEncoding
     // this.composer.renderer.gammaFactor = 2
@@ -401,10 +407,10 @@ export default class App {
     // Render
     this.renderPass = new RenderPass(this.scene, this.introCam.camera)
     this.composer.addPass(this.renderPass)
-    
+
     // Grain (film pass)
-    this.filmPass = new FilmPass(0.5,0,0,false)
-    
+    this.filmPass = new FilmPass(0.5, 0, 0, false)
+
     this.filmPass.renderToScreen = true
     // this.composer.addPass(this.filmPass)
 
@@ -412,14 +418,17 @@ export default class App {
       exposure: 0,
       bloomStrength: 0.12,
       bloomThreshold: 0,
-      bloomRadius: 0
+      bloomRadius: 0,
     }
-    const bloomPass = new UnrealBloomPass( new Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 1 )
+    const bloomPass = new UnrealBloomPass(
+      new Vector2(window.innerWidth, window.innerHeight),
+      1.5,
+      0.4,
+      1
+    )
     bloomPass.threshold = params.bloomThreshold
     bloomPass.strength = params.bloomStrength
     bloomPass.radius = params.bloomRadius
-
-    
 
     // this.bokehPass = new BokehPass(this.scene, this.camera.camera, {
     //   focus: 20.0,
@@ -430,15 +439,13 @@ export default class App {
     // })
     // this.composer.addPass(this.bokehPass)
 
-    
-
     // Tint pass
     const TintShader = {
       uniforms: {
         tDiffuse: { value: null },
-        uTint: { value: null }
+        uTint: { value: null },
       },
-      vertexShader:`
+      vertexShader: `
         varying vec2 vUv;
 
         void main()
@@ -460,28 +467,24 @@ export default class App {
   
           gl_FragColor = color;
         }
-      `
+      `,
     }
 
-    this.tintPass = new ShaderPass( TintShader)
-    this.tintPass.material.uniforms.uTint.value = new Vector3() 
-    
+    this.tintPass = new ShaderPass(TintShader)
+    this.tintPass.material.uniforms.uTint.value = new Vector3()
 
     // LUT
-    this.shaderPassGammaCorr = new ShaderPass( GammaCorrectionShader )
-    
+    this.shaderPassGammaCorr = new ShaderPass(GammaCorrectionShader)
+
     //Vignette
-    
+
     const VignetteShader = {
-      
       uniforms: {
-        
-        "tDiffuse": { type: "t", value: null },
-        "offset":   { type: "f", value: 1.0 },
-        "darkness": { type: "f", value: 1.0 }
-        
+        tDiffuse: { type: 't', value: null },
+        offset: { type: 'f', value: 1.0 },
+        darkness: { type: 'f', value: 1.0 },
       },
-      
+
       vertexShader: `
       varying vec2 vUv;
       
@@ -491,9 +494,7 @@ export default class App {
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
         
       }`,
-      
-      
-      
+
       fragmentShader: `
       uniform float offset;
       uniform float darkness;
@@ -521,43 +522,44 @@ export default class App {
         
        
       }
-      `
-      
-      
-      
-    };
-    
-    this.shaderVignette = VignetteShader
-	  this.effectVignette = new ShaderPass( this.shaderVignette )
-	  this.effectVignette.renderToScreen = true;
-    this.effectVignette.uniforms[ "offset" ].value = 0.15;
-	  this.effectVignette.uniforms[ "darkness" ].value = 0.8 ;
+      `,
+    }
 
-    this.outlinePass = new OutlinePass( new Vector2( this.sizes.width, this.sizes.height ), this.scene, this.camera.camera )
+    this.shaderVignette = VignetteShader
+    this.effectVignette = new ShaderPass(this.shaderVignette)
+    this.effectVignette.renderToScreen = true
+    this.effectVignette.uniforms['offset'].value = 0.15
+    this.effectVignette.uniforms['darkness'].value = 0.8
+
+    this.outlinePass = new OutlinePass(
+      new Vector2(this.sizes.width, this.sizes.height),
+      this.scene,
+      this.camera.camera
+    )
     this.outlinePass.edgeThickness = 1.5
     this.outlinePass.edgeStrength = 5
     this.outlinePass.visibleEdgeColor = new Color(0xffffff)
     this.outlinePass.hiddenEdgeColor = new Color(0xffffff)
     // this.outlinePass.pulsePeriod = 2
 
-    this.fxaaPass = new ShaderPass( FXAAShader )
+    this.fxaaPass = new ShaderPass(FXAAShader)
     const pixelRatio = this.renderer.getPixelRatio()
 
-    this.fxaaPass.material.uniforms[ 'resolution' ].value.x = 1 / ( this.sizes.width * pixelRatio );
-    this.fxaaPass.material.uniforms[ 'resolution' ].value.y = 1 / ( this.sizes.height * pixelRatio );
+    this.fxaaPass.material.uniforms['resolution'].value.x =
+      1 / (this.sizes.width * pixelRatio)
+    this.fxaaPass.material.uniforms['resolution'].value.y =
+      1 / (this.sizes.height * pixelRatio)
 
-    this.composer.addPass( this.tintPass)
-    
+    this.composer.addPass(this.tintPass)
+
     // this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
     // this.composer.addPass(this.filmPass)
-    this.composer.addPass( bloomPass )
-    this.composer.addPass( this.outlinePass )
-    this.composer.addPass( this.fxaaPass )
-    this.composer.addPass( this.shaderPassGammaCorr )
-    
-    
-    
+    this.composer.addPass(bloomPass)
+    this.composer.addPass(this.outlinePass)
+    this.composer.addPass(this.fxaaPass)
+    this.composer.addPass(this.shaderPassGammaCorr)
+
     if (this.debug) {
       const folder = this.debug.addFolder('Teinte')
       folder
@@ -580,56 +582,55 @@ export default class App {
         .step(0.0001)
       const folderVign = this.debug.addFolder('Vignette')
       folderVign
-          .add(this.effectVignette.uniforms["offset"], 'value')
-          .name('Offset')
-          .min(0.0)
-          .max(3.0)
-          .step(0.0001)
-        folderVign
-          .add(this.effectVignette.uniforms["darkness"], 'value')
-          .name('Darkness')
-          .min(-1.0)
-          .max(1.0)
-          .step(0.0001)
+        .add(this.effectVignette.uniforms['offset'], 'value')
+        .name('Offset')
+        .min(0.0)
+        .max(3.0)
+        .step(0.0001)
+      folderVign
+        .add(this.effectVignette.uniforms['darkness'], 'value')
+        .name('Darkness')
+        .min(-1.0)
+        .max(1.0)
+        .step(0.0001)
       const folderGrain = this.debug.addFolder('Grain')
-          folderGrain
-            .add(this.filmPass.material.uniforms.nIntensity, 'value')
-            .name('Quantité')
-            .min(0.0)
-            .max(3.0)
-            .step(0.0001)
-          folderGrain
-            .add(this.filmPass.material.uniforms.sCount, 'value')
-            .name('Lignes')
-            .min(0.0)
-            .max(2000.0)
-            .step(1.0)
-          folderGrain
-            .add(this.filmPass.material.uniforms.sIntensity, 'value')
-            .name('Intensitée')
-            .min(0.0)
-            .max(3.0)
-            .step(0.0001)
+      folderGrain
+        .add(this.filmPass.material.uniforms.nIntensity, 'value')
+        .name('Quantité')
+        .min(0.0)
+        .max(3.0)
+        .step(0.0001)
+      folderGrain
+        .add(this.filmPass.material.uniforms.sCount, 'value')
+        .name('Lignes')
+        .min(0.0)
+        .max(2000.0)
+        .step(1.0)
+      folderGrain
+        .add(this.filmPass.material.uniforms.sIntensity, 'value')
+        .name('Intensitée')
+        .min(0.0)
+        .max(3.0)
+        .step(0.0001)
       const folderBloom = this.debug.addFolder('Bloom')
-          folderBloom
-            .add(params, 'bloomThreshold')
-            .name('Threshold')
-            .min(0.0)
-            .max(3.0)
-            .step(0.0001)
-          folderBloom
-            .add(params, 'bloomStrength')
-            .name('Strength')
-            .min(0.0)
-            .max(2000.0)
-            .step(1.0)
-          folderBloom
-            .add(params, 'bloomRadius')
-            .name('Radius')
-            .min(0.0)
-            .max(3.0)
-            .step(0.0001)
+      folderBloom
+        .add(params, 'bloomThreshold')
+        .name('Threshold')
+        .min(0.0)
+        .max(3.0)
+        .step(0.0001)
+      folderBloom
+        .add(params, 'bloomStrength')
+        .name('Strength')
+        .min(0.0)
+        .max(2000.0)
+        .step(1.0)
+      folderBloom
+        .add(params, 'bloomRadius')
+        .name('Radius')
+        .min(0.0)
+        .max(3.0)
+        .step(0.0001)
     }
-
   }
 }

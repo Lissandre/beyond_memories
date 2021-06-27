@@ -11,10 +11,8 @@ import {
   Mesh,
   Box3,
   Box3Helper,
-  LoopOnce,
   PositionalAudio,
-  AudioLoader
-
+  AudioLoader,
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
@@ -39,7 +37,6 @@ export default class Perso {
     this.container = new Object3D()
     this.container.name = 'perso'
 
-    
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
     this.GRAVITY = 30
@@ -82,7 +79,6 @@ export default class Perso {
 
     this.playWalk = false
 
-
     this.setSounds()
     this.setPerso()
     this.setCollider()
@@ -104,20 +100,31 @@ export default class Perso {
 
     this.perso.add(this.walkingSound, this.runningSound, this.jumpingSound)
 
-    
     this.perso.position.set(-31, 10, 20)
-    this.container.position.set(0,0,0)
+    this.container.position.set(0, 0, 0)
     this.playerCollider = new Capsule(
-      new Vector3(this.perso.position.x, this.perso.position.y, this.perso.position.z),
-      new Vector3(this.perso.position.x, this.perso.position.y + 1.5, this.perso.position.z),
+      new Vector3(
+        this.perso.position.x,
+        this.perso.position.y,
+        this.perso.position.z
+      ),
+      new Vector3(
+        this.perso.position.x,
+        this.perso.position.y + 1.5,
+        this.perso.position.z
+      ),
       0.35
-      )
-      this.container.add(this.perso)
-    
+    )
+    this.container.add(this.perso)
   }
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)
-    this.material = new MeshBasicMaterial({ color: 0x00ff00, wireframe: true, opacity: 0, transparent: true })
+    this.material = new MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true,
+      opacity: 0,
+      transparent: true,
+    })
     this.cube = new Mesh(this.geometry, this.material)
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
@@ -126,37 +133,33 @@ export default class Perso {
   }
 
   setSounds() {
-    this.walkingSound = new PositionalAudio( this.listener )
+    this.walkingSound = new PositionalAudio(this.listener)
     const audioLoaderW = new AudioLoader()
-    audioLoaderW.load( walkingSound, (buffer)=> {
-      this.walkingSound.setBuffer( buffer )
-      this.walkingSound.setRefDistance( 5 )
+    audioLoaderW.load(walkingSound, (buffer) => {
+      this.walkingSound.setBuffer(buffer)
+      this.walkingSound.setRefDistance(5)
       this.walkingSound.setLoop(true)
       this.walkingSound.setVolume(3)
-      
     })
 
-    this.runningSound = new PositionalAudio( this.listener )
+    this.runningSound = new PositionalAudio(this.listener)
     const audioLoaderR = new AudioLoader()
-    audioLoaderR.load( runningSound, (buffer)=> {
-      this.runningSound.setBuffer( buffer )
-      this.runningSound.setRefDistance( 5 )
+    audioLoaderR.load(runningSound, (buffer) => {
+      this.runningSound.setBuffer(buffer)
+      this.runningSound.setRefDistance(5)
       this.runningSound.setLoop(true)
       this.runningSound.setVolume(1)
-     
     })
 
-    this.jumpingSound = new PositionalAudio( this.listener )
+    this.jumpingSound = new PositionalAudio(this.listener)
     const audioLoaderJ = new AudioLoader()
-    audioLoaderJ.load( jumpingSound, (buffer)=> {
-      this.jumpingSound.setBuffer( buffer )
-      this.jumpingSound.setRefDistance( 5 )
+    audioLoaderJ.load(jumpingSound, (buffer) => {
+      this.jumpingSound.setBuffer(buffer)
+      this.jumpingSound.setRefDistance(5)
       this.jumpingSound.setLoop(false)
       this.jumpingSound.setVolume(3)
-     
     })
   }
-
 
   setListeners() {
     document.addEventListener(
@@ -167,7 +170,7 @@ export default class Perso {
           case 'KeyW': // w
             this.moveForward = true
             this.playWalk = true
-            if(this.playWalk === true) {
+            if (this.playWalk === true) {
               this.walkingSound.play()
             }
             break
@@ -185,15 +188,14 @@ export default class Perso {
             break
           case 'ShiftLeft':
             this.run = true
-            if(this.moveForward === true) {
+            if (this.moveForward === true) {
               this.walkingSound.pause()
               this.runningSound.play()
             }
             if (
               this.currentBaseAction != 'IDLE' &&
               this.currentBaseAction != 'RUNNING' &&
-              (this.moveForward == true ||
-                this.moveBackward == true)
+              (this.moveForward == true || this.moveBackward == true)
             ) {
               this.prepareCrossFade(
                 this.baseActions[this.currentBaseAction].action,
@@ -214,11 +216,11 @@ export default class Perso {
                 0
               )
               // setTimeout(() => {
-                this.prepareCrossFade(
-                  this.baseActions['JUMP'].action,
-                  this.baseActions[this.temp].action,
-                  1.3
-                )
+              this.prepareCrossFade(
+                this.baseActions['JUMP'].action,
+                this.baseActions[this.temp].action,
+                1.3
+              )
               // }, 1.9)
               this.playerVelocity.y = 10
               this.oldSpeedP = this.speedP
@@ -228,7 +230,7 @@ export default class Perso {
               }, 500)
             }
             this.playerOnFloor = false
-            
+
             break
         }
       },
@@ -242,7 +244,7 @@ export default class Perso {
           case 'KeyW': // w
             this.moveForward = false
             this.playWalk = false
-            if(this.playWalk === false) {
+            if (this.playWalk === false) {
               this.walkingSound.pause()
             }
             break
@@ -263,7 +265,12 @@ export default class Perso {
             this.runningSound.pause()
             break
         }
-        if (this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+        if (
+          this.moveForward == false &&
+          this.moveBackward == false &&
+          this.moveLeft == false &&
+          this.moveRight == false
+        ) {
           this.prepareCrossFade(
             this.baseActions[this.currentBaseAction].action,
             this.baseActions['IDLE'].action,
@@ -289,11 +296,13 @@ export default class Perso {
   }
   setMovements() {
     this.time.on('tick', () => {
-      if(!this.body.classList.contains('open_options')) {
+      if (!this.body.classList.contains('open_options')) {
         if (this.moveForward) {
           this.playWalk = true
           this.playerVelocity.add(
-            this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
+            this.getForwardVector().multiplyScalar(
+              -this.speedP * this.time.delta
+            )
           )
           this.cube.position.copy(this.perso.position)
           // this.walkingSound.play()
@@ -334,7 +343,9 @@ export default class Perso {
             step
           )
           this.playerVelocity.add(
-            this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
+            this.getForwardVector().multiplyScalar(
+              -this.speedP * this.time.delta
+            )
           )
           this.cube.position.copy(this.perso.position)
           this.playerBB.setFromObject(this.cube)
@@ -557,7 +568,7 @@ export default class Perso {
     // if (this.currentBaseAction === 'JUMP') {
     //   this.synchronizeCrossFade(startAction, endAction, duration)
     // } else {
-      this.executeCrossFade(startAction, endAction, duration)
+    this.executeCrossFade(startAction, endAction, duration)
     // }
     // Update control colors
     if (endAction) {

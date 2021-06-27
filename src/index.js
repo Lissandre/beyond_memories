@@ -27,5 +27,5 @@ new App({
   introVideo: document.querySelector('.videoIntro'),
   introVideoContainer: document.querySelector('.videoContainer'),
   introVideoSkipContainer: document.querySelector('.videoButton'),
-  introVideoSkipButton: document.querySelector('.js_videoSkip')
+  introVideoSkipButton: document.querySelector('.js_videoSkip'),
 })

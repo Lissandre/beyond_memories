@@ -17,20 +17,20 @@ export default class IntroCam {
 
     this.stateCam = 1
 
-    this.firstTravel = new Vector3(62, 25.8,7.2)
+    this.firstTravel = new Vector3(62, 25.8, 7.2)
     this.firstRota = new Vector3(5.5556, 1.239, 0.628)
 
-    this.secTravel =  new Vector3(-89.3, 12.8, 108.5)
-    this.secRota =  new Vector3(0, 5.923, 0)
+    this.secTravel = new Vector3(-89.3, 12.8, 108.5)
+    this.secRota = new Vector3(0, 5.923, 0)
 
-    this.thirdTravel =  new Vector3(-61.4, 6.7, -88.8)
+    this.thirdTravel = new Vector3(-61.4, 6.7, -88.8)
     this.thirdRota = new Vector3(0.261, 2.99, 0)
 
     this.setCamera()
     this.setPosition()
     this.animateCam()
     // this.setOrbitControls()
-    if(this.debug) {
+    if (this.debug) {
       this.setDebug()
     }
   }
@@ -53,14 +53,14 @@ export default class IntroCam {
   }
   setPosition() {
     // Set camera position
-      this.camera.position.x = 62
-      this.camera.position.y = 25.8
-      this.camera.position.z = 7.2
-  
-      this.camera.rotation.x = 5.5556
-      this.camera.rotation.y = 1.239
-      this.camera.rotation.z = 0.628
-    
+    this.camera.position.x = 62
+    this.camera.position.y = 25.8
+    this.camera.position.z = 7.2
+
+    this.camera.rotation.x = 5.5556
+    this.camera.rotation.y = 1.239
+    this.camera.rotation.z = 0.628
+
     // this.cameraUpdate(this.container.position)
   }
   cameraUpdate(position) {
@@ -70,71 +70,87 @@ export default class IntroCam {
 
   setDebug() {
     this.debugFolder = this.debug.addFolder('IntroCam')
-      this.debugFolder
-        .add(this.camera.position, 'x')
-        .name('Xcam')
-        .min(-200)
-        .max(100)
-        .step(0.1)
-      this.debugFolder
-        .add(this.camera.position, 'y')
-        .name('Ycam')
-        .min(0)
-        .max(70)
-        .step(0.1)
-      this.debugFolder
-        .add(this.camera.position, 'z')
-        .name('Zcam')
-        .min(-100)
-        .max(200)
-        .step(0.1)
-      this.debugFolder
-        .add(this.camera.rotation, 'x')
-        .name('X rot')
-        .min(0)
-        .max(7)
-        .step(0.001)
-      this.debugFolder
-        .add(this.camera.rotation, 'y')
-        .name('Y rot')
-        .min(0)
-        .max(7)
-        .step(0.001)
-      this.debugFolder
-        .add(this.camera.rotation, 'z')
-        .name('Z rot')
-        .min(0)
-        .max(7)
-        .step(0.001)
+    this.debugFolder
+      .add(this.camera.position, 'x')
+      .name('Xcam')
+      .min(-200)
+      .max(100)
+      .step(0.1)
+    this.debugFolder
+      .add(this.camera.position, 'y')
+      .name('Ycam')
+      .min(0)
+      .max(70)
+      .step(0.1)
+    this.debugFolder
+      .add(this.camera.position, 'z')
+      .name('Zcam')
+      .min(-100)
+      .max(200)
+      .step(0.1)
+    this.debugFolder
+      .add(this.camera.rotation, 'x')
+      .name('X rot')
+      .min(0)
+      .max(7)
+      .step(0.001)
+    this.debugFolder
+      .add(this.camera.rotation, 'y')
+      .name('Y rot')
+      .min(0)
+      .max(7)
+      .step(0.001)
+    this.debugFolder
+      .add(this.camera.rotation, 'z')
+      .name('Z rot')
+      .min(0)
+      .max(7)
+      .step(0.001)
   }
 
   animateCam() {
-    this.time.on('tick', ()=> {
-      if(this.stateCam === 1) {
-        this.targetPos1 =  new Vector3(61, 34.8, 23)
+    this.time.on('tick', () => {
+      if (this.stateCam === 1) {
+        this.targetPos1 = new Vector3(61, 34.8, 23)
         this.camera.position.lerp(this.targetPos1, 0.00025)
         // console.log(this.camera.position);
-        if(this.camera.position.z > 17.1) {
-          this.homeDiv.style.backgroundColor = "#000"
+        if (this.camera.position.z > 17.1) {
+          this.homeDiv.style.backgroundColor = '#000'
         }
-        if(this.camera.position.z > 17.22) {
+        if (this.camera.position.z > 17.22) {
           this.stateCam = 2
-          this.homeDiv.style.backgroundColor = "transparent"
-          this.camera.position.set(this.secTravel.x, this.secTravel.y, this.secTravel.z)
-          this.camera.rotation.set(this.secRota.x, this.secRota.y, this.secRota.z)
+          this.homeDiv.style.backgroundColor = 'transparent'
+          this.camera.position.set(
+            this.secTravel.x,
+            this.secTravel.y,
+            this.secTravel.z
+          )
+          this.camera.rotation.set(
+            this.secRota.x,
+            this.secRota.y,
+            this.secRota.z
+          )
         }
-      }else if(this.stateCam === 2) {
-        this.targetPos2 =  new Vector3(-70, 12.8, 108.5)
+      } else if (this.stateCam === 2) {
+        this.targetPos2 = new Vector3(-70, 12.8, 108.5)
         this.camera.position.lerp(this.targetPos2, 0.00025)
         // console.log(this.camera.position);
-        if(this.camera.position.x > -79.5) {
-          this.homeDiv.style.backgroundColor = "#000"
+        if (this.camera.position.x > -79.5) {
+          this.homeDiv.style.backgroundColor = '#000'
         }
-        if(this.camera.position.x > -79.3) {
+        if (this.camera.position.x > -79.3) {
           this.stateCam = 1
-          this.homeDiv.style.backgroundColor = "transparent"
-          this.camera.position.set(this.firstTravel.x, this.firstTravel.y, this.firstTravel.z)
-          this.camera.rotation.set(this.firstRota.x, this.firstRota.y, this.firstRota.z)
+          this.homeDiv.style.backgroundColor = 'transparent'
+          this.camera.position.set(
+            this.firstTravel.x,
+            this.firstTravel.y,
+            this.firstTravel.z
+          )
+          this.camera.rotation.set(
+            this.firstRota.x,
+            this.firstRota.y,
+            this.firstRota.z
+          )
         }
       }
     })
