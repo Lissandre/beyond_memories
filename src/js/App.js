@@ -19,7 +19,7 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
-import { gsap, Power3, Circ } from ''
+import { gsap, Power3, Circ } from 'gsap'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
