@@ -77,7 +77,7 @@ export default class Elmo {
     })
     this.elmo.castShadow = true
     this.elmo.scale.set(0.4, 0.4, 0.4)
-    this.elmo.position.set(1, 2, 3)
+    this.elmo.position.set(8.4, 14, -33.8)
 
     this.container.position.set(0, 0, 0)
     this.playerCollider = new Capsule(
