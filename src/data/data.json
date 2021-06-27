@@ -1,5 +1,15 @@
 {
     "monde_1": {
+        "empty": {
+            "id": 1,
+            "name": "Champignon Mario",
+            "data_object": "mod_mario",
+            "description": "la desc du truc",
+            "type": "media",
+            "links": {
+                "image": "./assets/MARIO.png"
+            }
+        },
         "mod_starwars": {
             "id": 0,
             "name": "X-wings StarWars",

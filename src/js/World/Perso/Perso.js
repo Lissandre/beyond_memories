@@ -96,7 +96,12 @@ export default class Perso {
   }
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)
-    this.material = new MeshBasicMaterial({ color: 0x00ff00, wireframe: true, opacity: 0, transparent: true })
+    this.material = new MeshBasicMaterial({
+      color: 0x00ff00,
+      wireframe: true,
+      opacity: 0,
+      transparent: true,
+    })
     this.cube = new Mesh(this.geometry, this.material)
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
@@ -129,8 +134,7 @@ export default class Perso {
             if (
               this.currentBaseAction != 'IDLE' &&
               this.currentBaseAction != 'RUNNING' &&
-              (this.moveForward == true ||
-                this.moveBackward == true)
+              (this.moveForward == true || this.moveBackward == true)
             ) {
               this.prepareCrossFade(
                 this.baseActions[this.currentBaseAction].action,
@@ -150,11 +154,11 @@ export default class Perso {
                 0
               )
               // setTimeout(() => {
-                this.prepareCrossFade(
-                  this.baseActions['JUMP'].action,
-                  this.baseActions[this.temp].action,
-                  1.3
-                )
+              this.prepareCrossFade(
+                this.baseActions['JUMP'].action,
+                this.baseActions[this.temp].action,
+                1.3
+              )
               // }, 1.9)
               this.playerVelocity.y = 8
               this.oldSpeedP = this.speedP
@@ -193,7 +197,12 @@ export default class Perso {
             this.run = false
             break
         }
-        if (this.moveForward == false && this.moveBackward == false && this.moveLeft == false && this.moveRight == false) {
+        if (
+          this.moveForward == false &&
+          this.moveBackward == false &&
+          this.moveLeft == false &&
+          this.moveRight == false
+        ) {
           this.prepareCrossFade(
             this.baseActions[this.currentBaseAction].action,
             this.baseActions['IDLE'].action,
@@ -483,7 +492,7 @@ export default class Perso {
     // if (this.currentBaseAction === 'JUMP') {
     //   this.synchronizeCrossFade(startAction, endAction, duration)
     // } else {
-      this.executeCrossFade(startAction, endAction, duration)
+    this.executeCrossFade(startAction, endAction, duration)
     // }
     // Update control colors
     if (endAction) {

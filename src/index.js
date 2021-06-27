@@ -17,5 +17,5 @@ new App({
   js_musicVol: document.querySelector('.js_musicVol'),
   js_ambianceVol: document.querySelector('.js_ambianceVol'),
   muteButton: document.querySelector('.js_muteSound'),
-  unmuteButton: document.querySelector('.js_unmuteSound')
+  unmuteButton: document.querySelector('.js_unmuteSound'),
 })

@@ -67,26 +67,25 @@ export default class Skybox {
     this.sunObj = new Sun({
       debug: this.debug,
       time: this.time,
-      color: 0xFFE49E,
+      color: 0xffe49e,
       intensity: 0.7,
     })
     this.sunObj.container.position.set(-96.6, 70, -70)
     this.container.add(this.sunObj.container)
-}
+  }
 
-setSpotSun() {
+  setSpotSun() {
     this.sunSpot = new SpotSun({
-        position: {
-            x: this.sunObj.container.position.x,
-            y: this.sunObj.container.position.y,
-            z: this.sunObj.container.position.z - 100
-        },
-        intensity: 2.6,
-        distanceSpot: 414.3,
-        angleSpot: 20,
-        debug: this.debug
+      position: {
+        x: this.sunObj.container.position.x,
+        y: this.sunObj.container.position.y,
+        z: this.sunObj.container.position.z - 100,
+      },
+      intensity: 2.6,
+      distanceSpot: 414.3,
+      angleSpot: 20,
+      debug: this.debug,
     })
     this.container.add(this.sunSpot.container)
-}
-
+  }
 }

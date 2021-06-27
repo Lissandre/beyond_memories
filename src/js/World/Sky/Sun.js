@@ -3,7 +3,7 @@ import {
   DirectionalLight,
   DirectionalLightHelper,
   Vector3,
-  Color
+  Color,
 } from 'three'
 
 export default class Sun {
@@ -17,15 +17,15 @@ export default class Sun {
 
     this.params = {
       color: 0xffc942,
-      intensity: 2.64
+      intensity: 2.64,
     }
 
     // Set up
     this.container = new Object3D()
-    this.container.name = "sun"
+    this.container.name = 'sun'
 
     this.createSun()
-    if(this.debug) {
+    if (this.debug) {
       this.setDebug()
     }
   }
@@ -33,9 +33,9 @@ export default class Sun {
   createSun() {
     this.light = new DirectionalLight(this.color, this.params.intensity)
     this.light.castShadow = true
-    this.light.shadow.mapSize.width = 4096; // default
-    this.light.shadow.mapSize.height = 4096; // default
-    this.light.shadow.bias = 0.00035;
+    this.light.shadow.mapSize.width = 4096 // default
+    this.light.shadow.mapSize.height = 4096 // default
+    this.light.shadow.bias = 0.00035
     this.light.shadow.camera.top = 120
     this.light.shadow.camera.bottom = -120
     this.light.shadow.camera.left = -120

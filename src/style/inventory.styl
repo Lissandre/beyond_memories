@@ -23,9 +23,10 @@ random(min,max)
   display none
   align-items: center
   &_close
-    position fixed
-    top: 5%
-    right: 2%
+    position absolute
+    bottom: 5%
+    left: 2%
+    z-index 2000
 
 .inventory_content
   margin auto
@@ -36,6 +37,21 @@ random(min,max)
   align-items: flex-start
   justify-content: space-between
   transition .69s ease transform
+  &_item
+    position relative
+    & button
+      opacity 0
+      position absolute
+      top 0
+      left 0
+      height 100%
+      width 100%
+      border none
+      background rgba(0, 0, 0, 0.3)
+      border-radius 30px
+      color #fff
+      font-size 32px
+      transition 0.42s ease opacity
 
 .inventory_container_screenShot
   display none
@@ -53,6 +69,8 @@ for num in (1..8)
       transform scale(1.05)
       & img
         transform rotate(0deg)
+      & button
+        opacity 1
     & img
       width 100%
       transform rotate(random(-3, 3) deg)

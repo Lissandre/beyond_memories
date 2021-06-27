@@ -6,48 +6,41 @@
  * http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js
  */
 
+this.VignetteShader = {
+  uniforms: {
+    tDiffuse: { type: 't', value: null },
+    offset: { type: 'f', value: 1.0 },
+    darkness: { type: 'f', value: 1.0 },
+  },
 
- this.VignetteShader = {
+  vertexShader: [
+    'varying vec2 vUv;',
 
-	uniforms: {
+    'void main() {',
 
-		"tDiffuse": { type: "t", value: null },
-		"offset":   { type: "f", value: 1.0 },
-		"darkness": { type: "f", value: 1.0 }
+    'vUv = uv;',
+    'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
 
-	},
+    '}',
+  ].join('\n'),
 
-	vertexShader: [
+  fragmentShader: [
+    'uniform float offset;',
+    'uniform float darkness;',
 
-		"varying vec2 vUv;",
+    'uniform sampler2D tDiffuse;',
 
-		"void main() {",
+    'varying vec2 vUv;',
 
-			"vUv = uv;",
-			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
+    'void main() {',
 
-		"}"
+    // Eskil's vignette
 
-	].join("\n"),
+    'vec4 texel = texture2D( tDiffuse, vUv );',
+    'vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );',
+    'gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );',
 
-	fragmentShader: [
-
-		"uniform float offset;",
-		"uniform float darkness;",
-
-		"uniform sampler2D tDiffuse;",
-
-		"varying vec2 vUv;",
-
-		"void main() {",
-
-			// Eskil's vignette
-
-			"vec4 texel = texture2D( tDiffuse, vUv );",
-			"vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );",
-			"gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );",
-
-			/*
+    /*
 			// alternative version from glfx.js
 			// this one makes more "dusty" look (as opposed to "burned")
 
@@ -57,8 +50,6 @@
 			"gl_FragColor = color;",
 			*/
 
-		"}"
-
-	].join("\n")
-
-};
+    '}',
+  ].join('\n'),
+}

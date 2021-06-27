@@ -53,12 +53,12 @@ export default class World {
     this.elementEnteredArray = []
     this.curves = [
       [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-      ]
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098],
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422],
+        [23.712326049804688, -27.731792449951172, 21.446821212768555],
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+      ],
     ]
 
     this.musicFinVol = 1
@@ -118,7 +118,7 @@ export default class World {
       })
 
       this.assets.on('ressourcesReady', () => {
-        this.initButton.addEventListener('click', ()=> {
+        this.initButton.addEventListener('click', () => {
           this.init()
           this.music.play()
           this.music.volume = this.musicFinVol
@@ -150,7 +150,7 @@ export default class World {
       scene: this.scene,
       listener: this.listener,
       ambianceRange: this.ambianceRange,
-      js_ambianceVol: this.js_ambianceVol
+      js_ambianceVol: this.js_ambianceVol,
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -174,7 +174,7 @@ export default class World {
       sphereTopColor: 0x0096ff,
       sphereBottomColor: 0xa2dcfc,
       offset: 20,
-      exponent: 2
+      exponent: 2,
     })
     this.container.add(this.sky.container)
   }
@@ -188,7 +188,7 @@ export default class World {
       heightDecal: 20,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.001
+      speed: 0.001,
     })
     this.container.add(this.seagull.container)
   }
@@ -198,17 +198,17 @@ export default class World {
       time: this.time,
       assets: this.assets,
       curve: [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098],
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422],
+        [23.712326049804688, -27.731792449951172, 21.446821212768555],
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ],
       decal: -57,
       heightDecal: 22,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.00104
+      speed: 0.00104,
     })
     this.container.add(this.seagull2.container)
   }
@@ -218,17 +218,17 @@ export default class World {
       time: this.time,
       assets: this.assets,
       curve: [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098],
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422],
+        [23.712326049804688, -27.731792449951172, 21.446821212768555],
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ],
       decal: -63,
       heightDecal: 18,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.00102
+      speed: 0.00102,
     })
     this.container.add(this.seagull3.container)
   }
@@ -238,17 +238,17 @@ export default class World {
       time: this.time,
       assets: this.assets,
       curve: [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098],
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422],
+        [23.712326049804688, -27.731792449951172, 21.446821212768555],
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ].reverse(),
       decal: -55,
       heightDecal: 24,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.001
+      speed: 0.001,
     })
     this.container.add(this.seagull4.container)
   }
@@ -258,17 +258,17 @@ export default class World {
       time: this.time,
       assets: this.assets,
       curve: [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098],
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422],
+        [23.712326049804688, -27.731792449951172, 21.446821212768555],
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ].reverse(),
       decal: -52,
       heightDecal: 26,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.00104
+      speed: 0.00104,
     })
     this.container.add(this.seagull5.container)
   }
@@ -278,17 +278,17 @@ export default class World {
       time: this.time,
       assets: this.assets,
       curve: [
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
-        [-127.65484619140625, 88.41449737548828, 11.899239540100098] ,
-        [-87.81683349609375, -54.887062072753906, 24.988933563232422] ,
-        [23.712326049804688, -27.731792449951172, 21.446821212768555] ,
-        [47.69215774536133, 103.88478088378906, 9.540440559387207] ,
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
+        [-127.65484619140625, 88.41449737548828, 11.899239540100098],
+        [-87.81683349609375, -54.887062072753906, 24.988933563232422],
+        [23.712326049804688, -27.731792449951172, 21.446821212768555],
+        [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ].reverse(),
       decal: -58,
       heightDecal: 22,
       lineVisible: false,
       rotation: Math.PI,
-      speed: 0.00102
+      speed: 0.00102,
     })
     this.container.add(this.seagull6.container)
   }
@@ -321,7 +321,7 @@ export default class World {
         [-5.803896903991699, 9.718185424804688, 5.0827462673187256],
         [1.8961199522018433, 6.00206995010376, 5],
         [2.0, 0.0, -0.18960541486740112],
-      ]
+      ],
     })
     this.container.add(this.butterfly.container)
   }
@@ -354,7 +354,7 @@ export default class World {
         [-5.803896903991699, 9.718185424804688, 5.0827462673187256],
         [1.8961199522018433, 6.00206995010376, 5],
         [2.0, 0.0, -0.18960541486740112],
-      ].reverse()
+      ].reverse(),
     })
     this.container.add(this.butterfly2.container)
   }
@@ -377,32 +377,31 @@ export default class World {
     this.particules = new Particles({
       debug: this.debug,
       time: this.time,
-      assets: this.assets
+      assets: this.assets,
     })
     this.container.add(this.particules.container)
   }
 
-
   screenCanvas() {
-    this.screenShot.addEventListener('click', ()=> {
+    this.screenShot.addEventListener('click', () => {
       this.CanvasResult = new CanvasResult({
         playerInventory: this.playerInventory,
-        body: this.body
+        body: this.body,
       })
     })
   }
 
   getMusicRangeValue() {
-    this.musicRange.addEventListener('input', ()=> {
+    this.musicRange.addEventListener('input', () => {
       this.musicFinVol = this.musicRange.value / 100
-      
+
       this.music.volume = this.musicFinVol
       this.js_musicVol.innerHTML = this.musicRange.value
     })
   }
 
   muteSoundMethod() {
-    this.muteButton.addEventListener('click', ()=> {
+    this.muteButton.addEventListener('click', () => {
       this.oldMusicValue = this.musicFinVol
       this.oldAmbianceValue = this.floor.ambianceFinVol
       this.music.volume = 0
@@ -412,28 +411,23 @@ export default class World {
       this.ambianceRange.disabled = true
       this.muteButton.style.display = 'none'
       this.unmuteButton.style.display = 'block'
-      
     })
   }
 
   unmuteSoundMethod() {
-    this.unmuteButton.addEventListener('click', ()=> {
-        this.music.volume = this.oldMusicValue
-        this.floor.oceanSound.setVolume(this.oldAmbianceValue)
-        this.floor.riverSound.setVolume(this.oldAmbianceValue)
-        this.musicRange.disabled = false
-        this.ambianceRange.disabled = false
-        this.muteButton.style.display = 'block'
-        this.unmuteButton.style.display = 'none'
+    this.unmuteButton.addEventListener('click', () => {
+      this.music.volume = this.oldMusicValue
+      this.floor.oceanSound.setVolume(this.oldAmbianceValue)
+      this.floor.riverSound.setVolume(this.oldAmbianceValue)
+      this.musicRange.disabled = false
+      this.ambianceRange.disabled = false
+      this.muteButton.style.display = 'block'
+      this.unmuteButton.style.display = 'none'
     })
   }
 
   openDiagOne() {
-    document.addEventListener(
-      'keydown',
-      this.handleKeyE.bind(this),
-      false
-    )
+    document.addEventListener('keydown', this.handleKeyE.bind(this), false)
     // document.addEventListener(
     //   'keydown',
     //   this.handleKeyF.bind(this),
@@ -488,52 +482,57 @@ export default class World {
       if (this.playerInventory.length < 8) {
         this.elementEntered.isCollected = true
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
-        
-        this.createItemCrad()
+
+        this.createItemCard()
         this.appThis.checkInventoryLength()
       } else {
       }
     }
   }
 
-
-  createItemCrad() {
-    let item = document.createElement('div')
-    item.classList.add('inventory_content_items_item')
-
-    let item_image = document.createElement('img')
-    item_image.setAttribute(
-      'src',
-      Data.monde_1[this.elementEntered.child.name].links.image
+  createItemCard() {
+    let emptySpaces = document.querySelector(
+      '.inventory_content_items_item.empty'
     )
+    emptySpaces.classList.remove('empty')
+    let cardImg = emptySpaces.querySelector(
+      `img[src*="${Data.monde_1.empty.links.image}"]`
+    )
+    cardImg.src = Data.monde_1[this.elementEntered.child.name].links.image
 
-    item.appendChild(item_image)
-
-    let buttonDelete = document.createElement("button")
-    buttonDelete.classList.add("item_button")
-    let spanL = document.createElement("span")
-    let spanR = document.createElement("span")
-    spanL.classList.add("button_bar")
-    spanR.classList.add("button_bar")
-    spanL.classList.add("leftBar")
-    spanR.classList.add("rightBar")
-    buttonDelete.dataset.dataJs = "js_deleteObject"
-    buttonDelete.dataset.object = Data.monde_1[this.elementEntered.child.name].data_object
-    buttonDelete.appendChild(spanL)
-    buttonDelete.appendChild(spanR)
+    let buttonDelete = document.createElement('button')
+    buttonDelete.classList.add('item_button')
+    buttonDelete.innerText = 'Supprimer ?'
+    buttonDelete.dataset.dataJs = 'js_deleteObject'
+    buttonDelete.dataset.object =
+      Data.monde_1[this.elementEntered.child.name].data_object
     buttonDelete.addEventListener('click', this.deleteItemCard.bind(this))
 
-    item.appendChild(buttonDelete)
+    emptySpaces.appendChild(buttonDelete)
+  }
+
+  createInventory() {
+    let item = document.createElement('div')
+    item.classList.add('inventory_content_items_item', 'empty')
+
+    let item_image = document.createElement('img')
+    item_image.setAttribute('src', Data.monde_1['mod_mario'].links.image)
+
+    item.appendChild(item_image)
     this.itemsIventory.appendChild(item)
   }
 
   deleteItemCard(event) {
-      event.target.parentNode.parentNode.removeChild(event.target.parentNode)
-      this.playerInventory = this.playerInventory.filter((element) => {
-        
-        return element.data_object !== event.target.dataset.object
-      })
-      this.boxObjectManager.boxesArr[event.target.dataset.object].isCollected = false
+    event.target.parentNode.querySelector('img').src =
+      Data.monde_1.empty.links.image
+    event.target.parentNode.classList.add('empty')
+    event.target.parentNode.removeChild(event.target)
+    this.playerInventory = this.playerInventory.filter((element) => {
+      return element.data_object !== event.target.dataset.object
+    })
+    this.boxObjectManager.boxesArr[
+      event.target.dataset.object
+    ].isCollected = false
   }
 
   closeDiag() {
@@ -542,21 +541,26 @@ export default class World {
   }
 
   PlayerEnterObjectArea() {
-    
-    this.time.on('tick', ()=> {
-      if(this.perso.moveForward || this.perso.moveBackward || this.perso.moveLeft || this.perso.moveRight) {
-        
+    this.time.on('tick', () => {
+      if (
+        this.perso.moveForward ||
+        this.perso.moveBackward ||
+        this.perso.moveLeft ||
+        this.perso.moveRight
+      ) {
         // console.log(this.elementEnteredArray);
 
         for (const elementName in this.boxObjectManager.boxesArr) {
-          const element = this.boxObjectManager.boxesArr[elementName];
-          this.playerenteredInObject = element.objectBB.intersectsBox(this.perso.playerBB)
-          
-          if(this.playerenteredInObject === true) {
+          const element = this.boxObjectManager.boxesArr[elementName]
+          this.playerenteredInObject = element.objectBB.intersectsBox(
+            this.perso.playerBB
+          )
+
+          if (this.playerenteredInObject === true) {
             this.elementEntered = element
             this.meshes = []
             this.elementEntered.child.traverse((child) => {
-              if(child.isMesh) {
+              if (child.isMesh) {
                 this.meshes.push(child)
               }
             })
@@ -565,7 +569,7 @@ export default class World {
             this.openDiagOne()
           }
           // else{
-            // this.appThis.outlinePass.selectedObjects.pop()
+          // this.appThis.outlinePass.selectedObjects.pop()
           // }
 
           if (
@@ -582,41 +586,47 @@ export default class World {
 
   createUi() {
     this.optionDiv = document.querySelector('.options')
-    
+
     this.optionButton = document.createElement('button')
     this.optionButton.classList.add('js_optionsBtn')
     this.optionButton.classList.add('intBTN')
     this.optionButton.classList.add('options_button')
-    
+
     this.optionDiv.appendChild(this.optionButton)
 
-    const inv = document.querySelector(".inventory_content_items")
+    const inv = document.querySelector('.inventory_content_items')
+    for (let i = 1; i <= 8; i++) {
+      this.createInventory()
+    }
+    // this.items = [... document.querySelectorAll('inventory_content_items_item')]
     // window.addEventListener("MozMousePixelScroll", handleScroll(event, this))
-    window.addEventListener("wheel", handleScroll)
+    window.addEventListener('wheel', handleScroll)
     // window.addEventListener("mousewheel", handleScroll(event, this))
     // window.addEventListener("DOMMouseScroll", handleScroll(event, this))
     let that = this
     function handleScroll(e) {
       that.docWidth = inv.offsetWidth
-  
+
       if (that.scrollValue - e.deltaY > 0) {
-        that.scrollValue = 0;
-      } else if (that.scrollValue - e.deltaY < -that.docWidth + that.sizes.viewport.width) {
-        that.scrollValue = -that.docWidth + that.sizes.viewport.width;
+        that.scrollValue = 0
+      } else if (
+        that.scrollValue - e.deltaY <
+        -that.docWidth + that.sizes.viewport.width
+      ) {
+        that.scrollValue = -that.docWidth + that.sizes.viewport.width
       } else {
-        that.scrollValue -= e.deltaY;
+        that.scrollValue -= e.deltaY
       }
-      that.scrollValuePercentage = (that.scrollValue/(that.docWidth + that.sizes.viewport.width)) * 100
-      console.log(inv);
-      console.log(that.scrollValuePercentage);
-      inv.style.transform = `translateX(${that.scrollValuePercentage}%)`
+      // that.scrollValuePercentage = (that.scrollValue/(that.docWidth - that.sizes.viewport.width)) * 100
+
+      inv.style.transform = `translateX(${that.scrollValue}px)`
     }
   }
 
   openOptionsMethod() {
     this.openOptions.addEventListener('click', () => {
       this.body.classList.add('open_options')
-      if(this.body.classList.contains('open_inventory')) {
+      if (this.body.classList.contains('open_inventory')) {
         this.body.classList.remove('open_inventory')
       }
     })
