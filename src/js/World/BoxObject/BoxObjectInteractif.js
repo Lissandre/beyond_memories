@@ -6,7 +6,6 @@ import {
   Vector3,
   Quaternion,
   Box3,
-  Box3Helper,
 } from 'three'
 
 export default class BoxObjectInteractif {
@@ -40,7 +39,7 @@ export default class BoxObjectInteractif {
     this.cube.quaternion.copy(this.child.quaternion)
     this.cube.position.copy(this.child.position)
     this.objectBB = new Box3().setFromObject(this.cube)
-    const helper = new Box3Helper(this.objectBB, 0xff0000)
+    // const helper = new Box3Helper(this.objectBB, 0xff0000)
     // this.container.add(this.cube)
     // console.log(this.child);
   }

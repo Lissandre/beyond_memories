@@ -27,8 +27,7 @@ export default class Floor {
 
     this.ambianceRange = options.ambianceRange
     this.js_ambianceVol = options.js_ambianceVol
-
-    this.ambianceFinVol = 1
+    this.ambianceFinVol = options.ambianceFinVol
 
     // Set up
     this.container = new Object3D()
@@ -67,7 +66,7 @@ export default class Floor {
       this.riverSound.setBuffer(buffer)
       this.riverSound.setRefDistance(5)
       this.riverSound.setLoop(true)
-      this.riverSound.setVolume(1)
+      this.riverSound.setVolume(this.ambianceFinVol)
       this.riverSound.play()
     })
 
@@ -77,7 +76,7 @@ export default class Floor {
       this.oceanSound.setBuffer(buffer)
       this.oceanSound.setRefDistance(5)
       this.oceanSound.setLoop(true)
-      this.oceanSound.setVolume(1)
+      this.oceanSound.setVolume(this.ambianceFinVol)
       this.oceanSound.play()
     })
 
@@ -156,17 +155,6 @@ export default class Floor {
     this.floor = this.assets.models.MAP.scene
     this.floor.traverse((child) => {
       if (
-        child.isMesh &&
-        !child.material.name.includes('LEAVES') &&
-        !child.material.name.includes('Leaf') &&
-        !child.material.name.includes('PLANT') &&
-        !child.material.name.includes('BUSH') &&
-        !child.name.includes('mod') &&
-        !child.name.includes('HERBES')
-      ) {
-        child.material.side = FrontSide
-      }
-      if (
         child.name.includes('Cone') ||
         child.name.includes('Cylinder') ||
         child.name.includes('Cube')
@@ -184,10 +172,14 @@ export default class Floor {
           }
         }
       }
-      if (child.name.includes('ARBUSTE')) {
+      if (child.name.includes('arbre')) {
         child.castShadow = true
         child.receiveShadow = true
-        if (child.material.name.includes('PLANT')) {
+        if (
+          child.material.name.includes('Leaf') ||
+          child.material.name.includes('rocks') ||
+          child.material.name.includes('LEAVES')
+        ) {
           child.material.transparent = true
         }
       }
@@ -202,24 +194,30 @@ export default class Floor {
         child.castShadow = true
         child.receiveShadow = true
       }
-      if (child.name.includes('CLOUD')) {
+      if (child.name.includes('CLOUDS')) {
         child.receiveShadow = true
         child.castShadow = true
       }
-      if (child.name.includes('ROCHER_MASSIF')) {
+      if (child.name.includes('ROCKS') || child.name.includes('FALAISE')) {
         child.castShadow = true
         child.receiveShadow = true
         child.material.side = FrontSide
       }
-      if (child.name.includes('BARRIERE')) {
-        child.castShadow = true
-        child.receiveShadow = true
+      if (child.name.includes('TIPI')) {
+        if (child.name.includes('Tipi')) {
+          child.material.side = DoubleSide
+        }
       }
-      if (child.name.includes('HERBES')) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-      if (child.name.includes('BUSH')) {
+      if (
+        child.name.includes('BARRIERE') ||
+        child.name.includes('TABLE') ||
+        child.name.includes('PONT') ||
+        child.name.includes('SAUT') ||
+        child.name.includes('TRONC') ||
+        child.name.includes('TIPI') ||
+        child.name.includes('PAVE') ||
+        child.name.includes('BUSH')
+      ) {
         child.castShadow = true
         child.receiveShadow = true
       }
@@ -237,11 +235,13 @@ export default class Floor {
         if (child.isMesh) {
           child.castShadow = true
           child.receiveShadow = true
+          child.material.side = DoubleSide
         } else {
           child.traverse((children) => {
             if (children.isMesh) {
               children.castShadow = true
               children.receiveShadow = true
+              // child.material.side = DoubleSide
             }
           })
         }

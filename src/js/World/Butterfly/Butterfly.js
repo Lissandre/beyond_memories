@@ -1,4 +1,11 @@
-import { AnimationClip, AnimationMixer, Clock, Object3D, Vector3 } from 'three'
+import {
+  AnimationClip,
+  AnimationMixer,
+  Clock,
+  Object3D,
+  Skeleton,
+  Vector3,
+} from 'three'
 
 export default class Butterfly {
   constructor(options) {

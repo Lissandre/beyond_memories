@@ -6,7 +6,6 @@ import {
   Vector3,
   CatmullRomCurve3,
   TubeGeometry,
-  Mesh,
   MeshLambertMaterial,
   BufferGeometry,
   Line,

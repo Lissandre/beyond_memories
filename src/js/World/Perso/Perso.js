@@ -11,11 +11,16 @@ import {
   Mesh,
   Box3,
   Box3Helper,
-  LoopOnce,
+  PositionalAudio,
+  AudioLoader,
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
 import Mouse from '@tools/Mouse'
+
+import walkingSound from '@sounds/Perso/bm_marche.ogg'
+import runningSound from '@sounds/Perso/bm_course.ogg'
+import jumpingSound from '@sounds/Perso/bm_jump.ogg'
 
 export default class Perso {
   constructor(options) {
@@ -25,18 +30,16 @@ export default class Perso {
     this.camera = options.camera
     this.debug = options.debug
     this.worldOctree = options.worldOctree
+    this.body = options.body
+    this.listener = options.listener
 
     // Set up
     this.container = new Object3D()
+    this.container.name = 'perso'
 
-    this.playerCollider = new Capsule(
-      new Vector3(0, 2, 0),
-      new Vector3(0, 3.5, 0),
-      0.35
-    )
     this.playerVelocity = new Vector3()
     this.playerDirection = new Vector3()
-    this.GRAVITY = 25
+    this.GRAVITY = 30
     this.speedP = 0.005
     this.clock = new Clock()
 
@@ -74,6 +77,9 @@ export default class Perso {
       lerpSpeed: 0.005,
     }
 
+    this.playWalk = false
+
+    this.setSounds()
     this.setPerso()
     this.setCollider()
     this.setListeners()
@@ -91,8 +97,25 @@ export default class Perso {
       }
     })
     this.perso.castShadow = true
-    this.container.add(this.perso)
-    this.perso.position.set(0, 0, 3)
+
+    this.perso.add(this.walkingSound, this.runningSound, this.jumpingSound)
+
+    this.perso.position.set(-33.5, 7, 75.5)
+    this.container.position.set(0, 0, 0)
+    this.playerCollider = new Capsule(
+      new Vector3(
+        this.perso.position.x,
+        this.perso.position.y,
+        this.perso.position.z
+      ),
+      new Vector3(
+        this.perso.position.x,
+        this.perso.position.y + 1.5,
+        this.perso.position.z
+      ),
+      0.35
+    )
+    // this.container.add(this.perso)
   }
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)
@@ -106,8 +129,38 @@ export default class Perso {
     this.cube.position.set(0, 0.5, 0)
     this.playerBB = new Box3().setFromObject(this.cube)
     const helper = new Box3Helper(this.playerBB, 0xffff00)
-    // this.container.add(this.cube)
+    this.container.add(helper)
   }
+
+  setSounds() {
+    this.walkingSound = new PositionalAudio(this.listener)
+    const audioLoaderW = new AudioLoader()
+    audioLoaderW.load(walkingSound, (buffer) => {
+      this.walkingSound.setBuffer(buffer)
+      this.walkingSound.setRefDistance(5)
+      this.walkingSound.setLoop(true)
+      this.walkingSound.setVolume(3)
+    })
+
+    this.runningSound = new PositionalAudio(this.listener)
+    const audioLoaderR = new AudioLoader()
+    audioLoaderR.load(runningSound, (buffer) => {
+      this.runningSound.setBuffer(buffer)
+      this.runningSound.setRefDistance(5)
+      this.runningSound.setLoop(true)
+      this.runningSound.setVolume(1)
+    })
+
+    this.jumpingSound = new PositionalAudio(this.listener)
+    const audioLoaderJ = new AudioLoader()
+    audioLoaderJ.load(jumpingSound, (buffer) => {
+      this.jumpingSound.setBuffer(buffer)
+      this.jumpingSound.setRefDistance(5)
+      this.jumpingSound.setLoop(false)
+      this.jumpingSound.setVolume(3)
+    })
+  }
+
   setListeners() {
     document.addEventListener(
       'keydown',
@@ -116,6 +169,10 @@ export default class Perso {
           case 'ArrowUp': // up
           case 'KeyW': // w
             this.moveForward = true
+            this.playWalk = true
+            if (this.playWalk === true) {
+              this.walkingSound.play()
+            }
             break
           case 'ArrowLeft': // left
           case 'KeyA': // a
@@ -131,6 +188,10 @@ export default class Perso {
             break
           case 'ShiftLeft':
             this.run = true
+            if (this.moveForward === true) {
+              this.walkingSound.pause()
+              this.runningSound.play()
+            }
             if (
               this.currentBaseAction != 'IDLE' &&
               this.currentBaseAction != 'RUNNING' &&
@@ -146,6 +207,7 @@ export default class Perso {
             break
           case 'Space': // space
             if (this.playerOnFloor) {
+              this.jumpingSound.play()
               // this.baseActions['JUMP'].action.loop = LoopOnce
               this.temp = this.currentBaseAction
               this.prepareCrossFade(
@@ -160,7 +222,7 @@ export default class Perso {
                 1.3
               )
               // }, 1.9)
-              this.playerVelocity.y = 8
+              this.playerVelocity.y = 10
               this.oldSpeedP = this.speedP
               this.speedP = 0.0005
               setTimeout(() => {
@@ -168,6 +230,7 @@ export default class Perso {
               }, 500)
             }
             this.playerOnFloor = false
+
             break
         }
       },
@@ -180,6 +243,10 @@ export default class Perso {
           case 'ArrowUp': // up
           case 'KeyW': // w
             this.moveForward = false
+            this.playWalk = false
+            if (this.playWalk === false) {
+              this.walkingSound.pause()
+            }
             break
           case 'ArrowLeft': // left
           case 'KeyA': // a
@@ -195,6 +262,7 @@ export default class Perso {
             break
           case 'ShiftLeft':
             this.run = false
+            this.runningSound.pause()
             break
         }
         if (
@@ -228,125 +296,133 @@ export default class Perso {
   }
   setMovements() {
     this.time.on('tick', () => {
-      if (this.moveForward) {
-        this.playerVelocity.add(
-          this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
-        )
-        this.cube.position.copy(this.perso.position)
-        this.playerBB.setFromObject(this.cube)
-        if (
-          this.currentBaseAction != 'WALKING' &&
-          this.currentBaseAction != 'RUNNING'
-        ) {
-          if (this.run) {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['RUNNING'].action,
-              0.6
+      if (!this.body.classList.contains('open_options')) {
+        if (this.moveForward) {
+          this.playWalk = true
+          this.playerVelocity.add(
+            this.getForwardVector().multiplyScalar(
+              -this.speedP * this.time.delta
             )
-            this.speedP = 0.01
+          )
+          this.cube.position.copy(this.perso.position)
+          // this.walkingSound.play()
+          this.playerBB.setFromObject(this.cube)
+          if (
+            this.currentBaseAction != 'WALKING' &&
+            this.currentBaseAction != 'RUNNING'
+          ) {
+            if (this.run) {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['RUNNING'].action,
+                0.6
+              )
+              this.speedP = 0.01
+            } else {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['WALKING'].action,
+                0.6
+              )
+            }
+          }
+          this.lerpOrientation()
+        }
+        if (this.moveBackward) {
+          const step = this.params.lerpSpeed * this.time.delta
+          this.quat = new Quaternion()
+          this.camera.container.quaternion.clone(this.quat)
+          this.quat.multiplyQuaternions(
+            this.camera.container.quaternion,
+            this.quat
+          )
+          this.perso.quaternion.rotateTowards(
+            this.quat.multiply(
+              new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)
+            ),
+            step
+          )
+          this.playerVelocity.add(
+            this.getForwardVector().multiplyScalar(
+              -this.speedP * this.time.delta
+            )
+          )
+          this.cube.position.copy(this.perso.position)
+          this.playerBB.setFromObject(this.cube)
+          if (
+            this.currentBaseAction != 'WALKING' &&
+            this.currentBaseAction != 'RUNNING'
+          ) {
+            if (this.run) {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['RUNNING'].action,
+                0.6
+              )
+              this.speedP = 0.01
+            } else {
+              this.prepareCrossFade(
+                this.baseActions[this.currentBaseAction].action,
+                this.baseActions['WALKING'].action,
+                0.6
+              )
+            }
+          }
+          // this.lerpOrientation()
+        }
+        if (this.moveLeft) {
+          if (this.moveBackward) {
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * Math.PI * 0.2 * this.speedP
+              )
+            )
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step / 10
+            )
           } else {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['WALKING'].action,
-              0.6
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * Math.PI * 0.2 * this.speedP
+              )
+            )
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step
             )
           }
         }
-        this.lerpOrientation()
-      }
-      if (this.moveBackward) {
-        const step = this.params.lerpSpeed * this.time.delta
-        this.quat = new Quaternion()
-        this.camera.container.quaternion.clone(this.quat)
-        this.quat.multiplyQuaternions(
-          this.camera.container.quaternion,
-          this.quat
-        )
-        this.perso.quaternion.rotateTowards(
-          this.quat.multiply(
-            new Quaternion().setFromAxisAngle(new Vector3(0, 1, 0), Math.PI)
-          ),
-          step
-        )
-        this.playerVelocity.add(
-          this.getForwardVector().multiplyScalar(-this.speedP * this.time.delta)
-        )
-        this.cube.position.copy(this.perso.position)
-        this.playerBB.setFromObject(this.cube)
-        if (
-          this.currentBaseAction != 'WALKING' &&
-          this.currentBaseAction != 'RUNNING'
-        ) {
-          if (this.run) {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['RUNNING'].action,
-              0.6
+        if (this.moveRight) {
+          if (this.moveBackward) {
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * -Math.PI * 0.2 * this.speedP
+              )
             )
-            this.speedP = 0.01
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step / 10
+            )
           } else {
-            this.prepareCrossFade(
-              this.baseActions[this.currentBaseAction].action,
-              this.baseActions['WALKING'].action,
-              0.6
+            this.perso.quaternion.multiply(
+              new Quaternion().setFromAxisAngle(
+                new Vector3(0, 1, 0),
+                4.0 * -Math.PI * 0.2 * this.speedP
+              )
+            )
+            const step = this.params.lerpSpeed * this.time.delta
+            this.camera.container.quaternion.rotateTowards(
+              this.perso.quaternion,
+              step
             )
           }
-        }
-        // this.lerpOrientation()
-      }
-      if (this.moveLeft) {
-        if (this.moveBackward) {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step / 10
-          )
-        } else {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step
-          )
-        }
-      }
-      if (this.moveRight) {
-        if (this.moveBackward) {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * -Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step / 10
-          )
-        } else {
-          this.perso.quaternion.multiply(
-            new Quaternion().setFromAxisAngle(
-              new Vector3(0, 1, 0),
-              4.0 * -Math.PI * 0.2 * this.speedP
-            )
-          )
-          const step = this.params.lerpSpeed * this.time.delta
-          this.camera.container.quaternion.rotateTowards(
-            this.perso.quaternion,
-            step
-          )
         }
       }
       if (this.mouse.grab === true) {

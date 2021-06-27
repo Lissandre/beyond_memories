@@ -6,9 +6,7 @@ import {
   WebGLRenderer,
   Vector2,
   PCFSoftShadowMap,
-  CineonToneMapping,
   Vector3,
-  LinearEncoding,
 } from 'three'
 
 // Post Pro
@@ -21,9 +19,6 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
-// import VignetteShader from '@shaders/Vignette/Vignette.js'
-
-import * as Nodes from 'three/examples/jsm/nodes/Nodes.js'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -34,6 +29,8 @@ import Assets from '@tools/Loader'
 
 import Camera from './Camera'
 import World from '@world/index'
+import WaitingScreen from '@world/WaitingScreen'
+import IntroCam from './introCam'
 
 export default class App {
   constructor(options) {
@@ -48,7 +45,19 @@ export default class App {
     this.itemsInventory = options.itemsInventory
     this.screenShot = options.screenShot
     this.initButton = options.initButton
+    this.js_startAll = options.js_startAll
+    this.js_waitingOptions = options.js_waitingOptions
     this.music = options.music
+    this.musicWaiting = options.musicWaiting
+
+    this.qualityButton = options.qualityButton
+    this.qualityDiv = options.qualityDiv
+
+    this.homeDiv = options.homeDiv
+    this.introVideo = options.introVideo
+    this.introVideoContainer = options.introVideoContainer
+    this.introVideoSkipContainer = options.introVideoSkipContainer
+    this.introVideoSkipButton = options.introVideoSkipButton
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -60,6 +69,8 @@ export default class App {
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
 
+    // this.gTimeline = new gsap.timeline()
+
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
@@ -70,16 +81,21 @@ export default class App {
       fogFar: 248,
     }
 
+    this.isWaitingScreen = false
+    this.musicWaitingFinVol = 1
     this.composer
-
+    
     this.setConfig()
     this.setRenderer()
     this.setCamera()
+    this.setIntroCam()
     this.composerCreator()
     this.setWorld()
+    this.setWaitingScreen()
     this.checkInventoryLength()
     this.openInventoryMethod()
     this.closeInventoryMethod()
+    this.selectDefinition()
   }
 
   setRenderer() {
@@ -95,7 +111,7 @@ export default class App {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      // antialias: true,
+      antialias: true,
       powerPreference: 'high-performance',
     })
     // this.renderer.toneMapping = CineonToneMapping
@@ -124,21 +140,21 @@ export default class App {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
       // }
-
-      if (this.composer) {
-        this.renderer.info.reset()
-        this.composer.render(this.time.delta * 0.0001)
-        // console.log( this.renderer.info.render.calls )
-      } else {
-        this.renderer.render(this.scene, this.camera.camera)
+      if (this.isWaitingScreen === true) {
+        if (this.composer) {
+          this.renderer.info.reset()
+          this.composer.render(this.time.delta * 0.0001)
+        } else {
+          this.renderer.render(this.scene, this.introCam.camera)
+        }
+      } else if (this.isWaitingScreen === false) {
+        if (this.composer) {
+          this.renderer.info.reset()
+          this.composer.render(this.time.delta * 0.0001)
+        } else {
+          this.renderer.render(this.scene, this.camera.camera)
+        }
       }
-      // if(this.nodepost || this.composer) {
-      // this.frame.update( this.time.delta)
-      // this.composer.render(this.time.delta * 0.0001)
-      // this.nodepost.render( this.scene, this.camera.camera, this.frame )
-      // }else {
-      //   this.renderer.render(this.scene, this.camera.camera)
-      // }
 
       this.debug && this.stats.end()
     })
@@ -189,6 +205,20 @@ export default class App {
     // Add camera to scene
     this.scene.add(this.camera.container)
   }
+
+  setIntroCam() {
+    // Create camera instance
+    this.introCam = new IntroCam({
+      sizes: this.sizes,
+      renderer: this.renderer,
+      debug: this.debug,
+      time: this.time,
+      homeDiv: this.homeDiv,
+    })
+    // Add camera to scene
+    this.scene.add(this.introCam.container)
+  }
+
   setWorld() {
     // Create world instance
     this.world = new World({
@@ -215,9 +245,43 @@ export default class App {
       outline: this.outlinePass,
       openOptions: this.openOptions,
       closeOptions: this.closeOptions,
+      qualityButton: this.qualityButton,
+      qualityDiv: this.qualityDiv,
     })
     // Add world to scene
     this.scene.add(this.world.container)
+  }
+
+  setWaitingScreen() {
+    // Create world instance
+    this.waitingScreen = new WaitingScreen({
+      time: this.time,
+      debug: this.debug,
+      assets: this.assets,
+      camera: this.camera,
+      scene: this.scene,
+      itemsInventory: this.itemsInventory,
+      screenShot: this.screenShot,
+      appThis: this,
+      body: this.body,
+      renderer: this.renderer,
+      composer: this.composer,
+      initButton: this.initButton,
+      music: this.music,
+      musicRange: this.musicRange,
+      ambianceRange: this.ambianceRange,
+      js_musicVol: this.js_musicVol,
+      js_ambianceVol: this.js_ambianceVol,
+      muteButton: this.muteButton,
+      unmuteButton: this.unmuteButton,
+      outline: this.outlinePass,
+      openOptions: this.openOptions,
+      closeOptions: this.closeOptions,
+      qualityButton: this.qualityButton,
+      qualityDiv: this.qualityDiv,
+    })
+    // Add world to scene
+    this.scene.add(this.waitingScreen.container)
   }
   setConfig() {
     if (window.location.hash === '#debug') {
@@ -253,6 +317,100 @@ export default class App {
     console.log(this.world.playerInventory.length)
   }
 
+  selectDefinition() {
+    this.qualityButton.forEach((element) => {
+      //  *****************
+      // Choose definition
+      // ******************
+      element.addEventListener('click', () => {
+        this.choosenDefinition = element.dataset.definition
+        console.log(this.choosenDefinition)
+        this.waitingScreen.init()
+        this.qualityDiv.style.opacity = 0
+        // this.homeDiv.remove()
+        // this.introVideoContainer.remove()
+        this.musicWaiting.play()
+        this.musicWaiting.volume = this.musicWaitingFinVol
+
+        // ***********************
+        // Click on start button
+        // ***********************
+        this.js_startAll.addEventListener('click', () => {
+          this.musicWaiting.pause()
+          this.homeDiv.style.opacity = 0
+
+          this.introVideoContainer.style.opacity = 1
+          // this.introVideoContainer.remove()
+
+          //***************
+          // Click on skip
+          // **************
+          this.introVideoSkipButton.addEventListener('click', () => {
+            this.introVideoContainer.style.opacity = 0
+            this.introVideo.pause()
+            this.introVideo.currenTime = 0
+            setTimeout(() => {
+              console.log('remove video')
+              this.world.music.play()
+              this.world.music.volume = this.world.musicFinVol
+              this.introVideo.remove()
+              this.introVideo.style.display = 'none'
+            }, 550)
+            setTimeout(() => {
+              console.log('delete video')
+              this.introVideoContainer.remove()
+            }, 2000)
+          })
+
+          // ************
+          // Video ended
+          // ************
+          this.introVideo.addEventListener('ended', () => {
+            console.log('fin de video')
+            this.introVideoContainer.style.opacity = 0
+            setTimeout(() => {
+              this.world.music.play()
+              this.world.music.volume = this.world.musicFinVol
+              this.introVideoContainer.remove()
+              this.introVideo.remove()
+              this.introVideo.style.display = 'none'
+            }, 2000)
+          })
+
+          this.isWaitingScreen = false
+          this.renderPass.camera = this.camera.camera
+          this.scene.remove(this.waitingScreen.container)
+          this.scene.remove(this.introCam.container)
+
+          setTimeout(() => {
+            this.homeDiv.remove()
+            this.introVideo.play()
+          }, 800)
+
+          setTimeout(() => {
+            this.world.init()
+          }, 1500)
+        })
+
+        // *************
+        // Open options
+        // *************
+        this.js_waitingOptions.addEventListener('click', () => {
+          this.body.classList.add('open_options')
+          if (this.body.classList.contains('open_inventory')) {
+            this.body.classList.remove('open_inventory')
+          }
+        })
+        this.world.createUi()
+        this.world.closeOptionsMethod()
+
+        setTimeout(() => {
+          this.qualityDiv.remove()
+        }, 4000)
+      })
+    })
+  }
+
   composerCreator() {
     //Composer
     this.composer = new EffectComposer(this.renderer)
@@ -264,7 +422,7 @@ export default class App {
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
     // Render
-    this.renderPass = new RenderPass(this.scene, this.camera.camera)
+    this.renderPass = new RenderPass(this.scene, this.introCam.camera)
     this.composer.addPass(this.renderPass)
 
     // Grain (film pass)
@@ -414,7 +572,7 @@ export default class App {
     // this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
     // this.composer.addPass(this.filmPass)
-    // this.composer.addPass( bloomPass )
+    this.composer.addPass(bloomPass)
     this.composer.addPass(this.outlinePass)
     this.composer.addPass(this.fxaaPass)
     this.composer.addPass(this.shaderPassGammaCorr)

@@ -5,6 +5,7 @@ import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
 import Floor from './Floor'
 import Perso from './Perso/Perso'
+import Elmo from './Elmo/Elmo'
 import Skybox from './Sky/Sky'
 import BoxObjectManager from './BoxObject/BoxObjectManager'
 import CanvasResult from './CanvasResult/CanvasResult'
@@ -31,6 +32,9 @@ export default class World {
     this.composer = options.composer
     this.initButton = options.initButton
     this.music = options.music
+
+    this.qualityButton = options.qualityButton
+    this.qualityDiv = options.qualityDiv
 
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
@@ -77,13 +81,17 @@ export default class World {
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
-    this.setPerso()
     this.setAudioListener()
+    this.setPerso()
+    this.setElmo()
     this.setFloor()
+    this.setBoxObjectManager()
+    this.PlayerEnterObjectArea()
+    this.PlayerEnterElmoArea()
 
     this.createUi()
-    // this.openOptionsMethod()
-    // this.closeOptionsMethod()
+    this.openOptionsMethod()
+    this.closeOptionsMethod()
 
     this.setSeagull()
     this.setSeagull2()
@@ -94,12 +102,11 @@ export default class World {
     this.setButterfly()
     this.setButterfly2()
     this.setParticules()
-    this.setBoxObjectManager()
-    this.PlayerEnterObjectArea()
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
     this.unmuteSoundMethod()
+    this.openDiagOne()
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loadScreen')
@@ -118,15 +125,10 @@ export default class World {
       })
 
       this.assets.on('ressourcesReady', () => {
-        this.initButton.addEventListener('click', () => {
-          this.init()
-          this.music.play()
-          this.music.volume = this.musicFinVol
-          this.loadDiv.style.opacity = 0
-          setTimeout(() => {
-            this.loadDiv.remove()
-          }, 550)
-        })
+        this.loadDiv.style.opacity = 0
+        setTimeout(() => {
+          this.loadDiv.remove()
+        }, 550)
       })
     }
   }
@@ -151,6 +153,7 @@ export default class World {
       listener: this.listener,
       ambianceRange: this.ambianceRange,
       js_ambianceVol: this.js_ambianceVol,
+      ambianceFinVol: 1,
     })
     this.container.add(this.floor.container)
     this.worldOctree.fromGraphNode(this.assets.models.PHYSICS.scene)
@@ -162,8 +165,23 @@ export default class World {
       camera: this.camera,
       debug: this.debug,
       worldOctree: this.worldOctree,
+      body: this.body,
+      listener: this.listener,
     })
     this.container.add(this.perso.container)
+  }
+
+  setElmo() {
+    this.elmo = new Elmo({
+      time: this.time,
+      assets: this.assets,
+      camera: this.camera,
+      debug: this.debug,
+      worldOctree: this.worldOctree,
+      body: this.body,
+      perso: this.perso,
+    })
+    this.container.add(this.elmo.container)
   }
   setSky() {
     this.sky = new Skybox({
@@ -435,6 +453,15 @@ export default class World {
     // )
   }
 
+  keyPressAction() {
+    document.addEventListener('keyup', this.handleKeyE.bind(this), false)
+    // document.addEventListener(
+    //   'keydown',
+    //   this.handleKeyF.bind(this),
+    //   false
+    // )
+  }
+
   handleKeyE(event) {
     // if(!this.playerEnteredInElmo ) {
     //   return
@@ -442,7 +469,13 @@ export default class World {
     switch (event.code) {
       case 'KeyE': // e
         if (this.elementEntered !== null) {
+          console.log('collect object')
           this.collecteObject()
+        }
+
+        if (this.playerEnteredInElmo === true) {
+          console.log('click sur elmo')
+          this.getElmo()
         }
         break
     }
@@ -466,10 +499,8 @@ export default class World {
   //   }
   // }
 
-  interactWithElmo() {
-    this.text_01.style.opacity = 0
-    this.container.add(this.videoScreen.container)
-    this.videoScreen.videoLoad.play()
+  getElmo() {
+    this.elmo.getPeted = true
   }
 
   interactWithCar() {
@@ -485,7 +516,6 @@ export default class World {
 
         this.createItemCard()
         this.appThis.checkInventoryLength()
-      } else {
       }
     }
   }
@@ -564,9 +594,10 @@ export default class World {
                 this.meshes.push(child)
               }
             })
-            this.outline.selectedObjects = this.meshes
-
-            this.openDiagOne()
+            if (this.elementEntered.isCollected === false) {
+              this.outline.selectedObjects = this.meshes
+            }
+            this.keyPressAction()
           }
           // else{
           // this.appThis.outlinePass.selectedObjects.pop()
@@ -579,6 +610,24 @@ export default class World {
             this.elementEntered = null
             this.outline.selectedObjects = []
           }
+        }
+      }
+    })
+  }
+
+  PlayerEnterElmoArea() {
+    this.time.on('tick', () => {
+      if (
+        this.perso.moveForward ||
+        this.perso.moveBackward ||
+        this.perso.moveLeft ||
+        this.perso.moveRight
+      ) {
+        this.playerEnteredInElmo = this.elmo.elmoBB.intersectsBox(
+          this.perso.playerBB
+        )
+        if (this.playerEnteredInElmo === true) {
+          this.openDiagOne()
         }
       }
     })
@@ -621,10 +670,12 @@ export default class World {
 
       inv.style.transform = `translateX(${that.scrollValue}px)`
     }
+    this.optionButton = document.querySelector('.js_optionsBtn')
+    this.closeOptionButton = document.querySelector('.js_closeOptions')
   }
 
   openOptionsMethod() {
-    this.openOptions.addEventListener('click', () => {
+    this.optionButton.addEventListener('click', () => {
       this.body.classList.add('open_options')
       if (this.body.classList.contains('open_inventory')) {
         this.body.classList.remove('open_inventory')
@@ -633,7 +684,13 @@ export default class World {
   }
 
   closeOptionsMethod() {
-    this.closeOptions.addEventListener('click', () => {
+    this.replayCta = document.querySelector('.js_replayCta')
+
+    this.closeOptionButton.addEventListener('click', () => {
+      this.body.classList.remove('open_options')
+    })
+
+    this.replayCta.addEventListener('click', () => {
       this.body.classList.remove('open_options')
     })
   }

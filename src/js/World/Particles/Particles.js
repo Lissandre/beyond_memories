@@ -4,9 +4,8 @@ import {
   PointsMaterial,
   Float32BufferAttribute,
   Points,
+  Color,
 } from 'three'
-
-import imageFlare from '@textures/PARTICLES.png'
 
 export default class Particles {
   constructor(options) {
