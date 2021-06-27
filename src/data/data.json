@@ -7,7 +7,7 @@
             "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/MARIO-min.png"
+                "image": "./assets/empty.png"
             }
         },
         "mod_starwars": {
@@ -217,7 +217,7 @@
           "description": "",
           "type": "media",
           "links": {
-              "image": "./assets/HUBBA-HUBBA-min.png"
+              "image": "./assets/SPORT.png"
           }
         },
         "mod_balancoire": {
@@ -227,7 +227,7 @@
           "description": "",
           "type": "media",
           "links": {
-              "image": "./assets/HUBBA-HUBBA-min.png"
+              "image": "./assets/BALANCELLE.png"
           }
         }
     }
