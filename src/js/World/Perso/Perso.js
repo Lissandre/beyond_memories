@@ -486,7 +486,7 @@ export default class Perso {
       this.updatePlayer(delta)
     })
   }
-  victoryAnimation(){
+  victoryAnimation() {
     this.oldSpeedP = this.speedP
     this.oldAction = this.currentBaseAction
     this.speedP = 0

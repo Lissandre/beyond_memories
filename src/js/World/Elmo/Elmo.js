@@ -134,7 +134,10 @@ export default class Elmo {
         if (this.elmoPos.distanceTo(this.nextPos) <= 1.8) {
           this.speedP = 0
           this.elmo.lookAt(this.lookNext)
-          if (this.currentBaseAction !== 'IDLE' && this.currentBaseAction !== 'CHEERING') {
+          if (
+            this.currentBaseAction !== 'IDLE' &&
+            this.currentBaseAction !== 'CHEERING'
+          ) {
             this.prepareCrossFade(
               this.baseActions[this.currentBaseAction].action,
               this.baseActions['IDLE'].action,
@@ -148,7 +151,10 @@ export default class Elmo {
             this.elmo.position.y,
             this.nextTarget.z
           )
-          if (this.currentBaseAction !== 'RUNNING' && this.currentBaseAction !== 'CHEERING') {
+          if (
+            this.currentBaseAction !== 'RUNNING' &&
+            this.currentBaseAction !== 'CHEERING'
+          ) {
             this.prepareCrossFade(
               this.baseActions[this.currentBaseAction].action,
               this.baseActions['RUNNING'].action,
@@ -162,7 +168,10 @@ export default class Elmo {
             this.elmo.position.y,
             this.nextTarget.z
           )
-          if (this.currentBaseAction !== 'WALKING' && this.currentBaseAction !== 'CHEERING') {
+          if (
+            this.currentBaseAction !== 'WALKING' &&
+            this.currentBaseAction !== 'CHEERING'
+          ) {
             this.prepareCrossFade(
               this.baseActions[this.currentBaseAction].action,
               this.baseActions['WALKING'].action,
@@ -181,7 +190,7 @@ export default class Elmo {
       this.updateElmo(delta)
     })
   }
-  victoryAnimation(){
+  victoryAnimation() {
     this.oldAction = this.currentBaseAction
     this.prepareCrossFade(
       this.baseActions[this.currentBaseAction].action,

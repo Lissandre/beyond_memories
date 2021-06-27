@@ -18,6 +18,7 @@ import Data from '../../data/data.json'
 export default class World {
   constructor(options) {
     // Set options
+    this.perf = options.perf
     this.time = options.time
     this.sizes = options.sizes
     this.debug = options.debug
@@ -74,8 +75,6 @@ export default class World {
       this.debugFolder = this.debug.addFolder('World')
       this.debugFolder.open()
     }
-
-    this.setLoader()
   }
   init() {
     this.setAmbientLight()
@@ -93,44 +92,22 @@ export default class World {
     this.openOptionsMethod()
     this.closeOptionsMethod()
 
-    this.setSeagull()
-    this.setSeagull2()
-    this.setSeagull3()
-    this.setSeagull4()
-    this.setSeagull5()
-    this.setSeagull6()
-    this.setButterfly()
-    this.setButterfly2()
-    this.setParticules()
+    if (this.perf != 'low') {
+      this.setSeagull()
+      this.setSeagull2()
+      this.setSeagull3()
+      this.setSeagull4()
+      this.setSeagull5()
+      this.setSeagull6()
+      this.setButterfly()
+      this.setButterfly2()
+      this.setParticules()
+    }
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
     this.unmuteSoundMethod()
     this.openDiagOne()
-  }
-  setLoader() {
-    this.loadDiv = document.querySelector('.loadScreen')
-    this.loadModels = this.loadDiv.querySelector('.load')
-    this.progress = this.loadDiv.querySelector('.progress')
-
-    if (this.assets.total === 0) {
-      this.init()
-      this.loadDiv.remove()
-    } else {
-      this.assets.on('ressourceLoad', () => {
-        this.progress.style.width = this.loadModels.innerHTML = `${
-          Math.floor((this.assets.done / this.assets.total) * 100) +
-          Math.floor((1 / this.assets.total) * this.assets.currentPercent)
-        }%`
-      })
-
-      this.assets.on('ressourcesReady', () => {
-        this.loadDiv.style.opacity = 0
-        setTimeout(() => {
-          this.loadDiv.remove()
-        }, 550)
-      })
-    }
   }
   setAmbientLight() {
     this.ambientlight = new AmbientLightSource({
@@ -146,6 +123,7 @@ export default class World {
   }
   setFloor() {
     this.floor = new Floor({
+      perf: this.perf,
       assets: this.assets,
       time: this.time,
       debug: this.debug,
@@ -597,7 +575,7 @@ export default class World {
                 this.meshes.push(child)
               }
             })
-            if(element.isCollected === false) {
+            if (element.isCollected === false) {
               this.outline.selectedObjects = this.meshes
             }
             this.keyPressAction()

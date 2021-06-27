@@ -45,9 +45,8 @@ export default class Skybox {
     this.uniforms['turbidity'].value = this.effectController.turbidity
     this.uniforms['rayleigh'].value = this.effectController.rayleigh
     this.uniforms['mieCoefficient'].value = this.effectController.mieCoefficient
-    this.uniforms[
-      'mieDirectionalG'
-    ].value = this.effectController.mieDirectionalG
+    this.uniforms['mieDirectionalG'].value =
+      this.effectController.mieDirectionalG
 
     this.phi = MathUtils.degToRad(90 - this.effectController.elevation)
     this.theta = MathUtils.degToRad(this.effectController.azimuth)

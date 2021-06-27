@@ -12,6 +12,7 @@ import Particles from './Particles/Particles'
 export default class WaitingScreen {
   constructor(options) {
     // Set options
+    this.perf = options.perf
     this.time = options.time
     this.debug = options.debug
     this.assets = options.assets
@@ -73,15 +74,17 @@ export default class WaitingScreen {
     this.setAudioListener()
     this.setFloor()
 
-    this.setSeagull()
-    this.setSeagull2()
-    this.setSeagull3()
-    this.setSeagull4()
-    this.setSeagull5()
-    this.setSeagull6()
-    this.setButterfly()
-    this.setButterfly2()
-    this.setParticules()
+    if (this.perf != 'low') {
+      this.setSeagull()
+      this.setSeagull2()
+      this.setSeagull3()
+      this.setSeagull4()
+      this.setSeagull5()
+      this.setSeagull6()
+      this.setButterfly()
+      this.setButterfly2()
+      this.setParticules()
+    }
 
     this.getMusicRangeValue()
     this.muteSoundMethod()
@@ -98,6 +101,7 @@ export default class WaitingScreen {
   }
   setFloor() {
     this.floor = new Floor({
+      perf: this.perf,
       assets: this.assets,
       time: this.time,
       scene: this.scene,

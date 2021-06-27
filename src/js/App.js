@@ -8,6 +8,7 @@ import {
   PCFSoftShadowMap,
   Vector3,
 } from 'three'
+import { getGPUTier } from 'detect-gpu'
 
 // Post Pro
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
@@ -87,19 +88,36 @@ export default class App {
     this.musicWaitingFinVol = 1
     this.composer
 
+    this.setLoader()
     this.setConfig()
     this.setRenderer()
     this.setCamera()
     this.setIntroCam()
-    this.composerCreator()
-    this.setWorld()
-    this.setWaitingScreen()
-    this.checkInventoryLength()
-    this.openInventoryMethod()
-    this.closeInventoryMethod()
     this.selectDefinition()
   }
+  setLoader() {
+    this.loadDiv = document.querySelector('.loadScreen')
+    this.loadModels = this.loadDiv.querySelector('.load')
+    this.progress = this.loadDiv.querySelector('.progress')
 
+    if (this.assets.total === 0) {
+      this.loadDiv.remove()
+    } else {
+      this.assets.on('ressourceLoad', () => {
+        this.progress.style.width = this.loadModels.innerHTML = `${
+          Math.floor((this.assets.done / this.assets.total) * 100) +
+          Math.floor((1 / this.assets.total) * this.assets.currentPercent)
+        }%`
+      })
+
+      this.assets.on('ressourcesReady', () => {
+        this.loadDiv.style.opacity = 0
+        setTimeout(() => {
+          this.loadDiv.remove()
+        }, 550)
+      })
+    }
+  }
   setRenderer() {
     // Set scene
     this.scene = new Scene()
@@ -224,6 +242,7 @@ export default class App {
   setWorld() {
     // Create world instance
     this.world = new World({
+      perf: this.choosenDefinition,
       time: this.time,
       debug: this.debug,
       sizes: this.sizes,
@@ -257,6 +276,7 @@ export default class App {
   setWaitingScreen() {
     // Create world instance
     this.waitingScreen = new WaitingScreen({
+      perf: this.choosenDefinition,
       time: this.time,
       debug: this.debug,
       assets: this.assets,
@@ -310,59 +330,107 @@ export default class App {
     this.invLength = this.world.playerInventory.length
     this.depthColorFor3 = new Color(0x0a3772)
     this.surfaceColorFor3 = new Color(0x43b1d9)
-    this.timelineG = new Gsap.TimelineLite
-    if (this.invLength === 2) {
+    if (this.choosenDefinition === 'high') {
+      this.timelineG = new Gsap.TimelineLite()
+      if (this.invLength === 2) {
+        this.timelineG
+          .to(this.effectVignette.uniforms['darkness'], 0.5, {
+            value: 0.7543,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
+            value: 4,
+            ease: Gsap.Circ,
+          })
+          .to(this.effectVignette.uniforms['offset'], 0.5, {
+            value: 0.431,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
+            r: this.depthColorFor3.r,
+            g: this.depthColorFor3.g,
+            b: this.depthColorFor3.b,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
+            r: this.surfaceColorFor3.r,
+            g: this.surfaceColorFor3.g,
+            b: this.surfaceColorFor3.b,
+            ease: Gsap.Circ,
+          })
+      }
 
-      this.timelineG
-        .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 0.7543, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
-        .to(this.effectVignette.uniforms['offset'],
-            .5, {value: 0.431, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
-    }
+      if (this.invLength === 4) {
+        this.timelineG
+          .to(this.effectVignette.uniforms['darkness'], 0.5, {
+            value: 0.8823,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
+            value: 4,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
+            r: this.depthColorFor3.r,
+            g: this.depthColorFor3.g,
+            b: this.depthColorFor3.b,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
+            r: this.surfaceColorFor3.r,
+            g: this.surfaceColorFor3.g,
+            b: this.surfaceColorFor3.b,
+            ease: Gsap.Circ,
+          })
+      }
 
-    if (this.invLength === 4) {
+      if (this.invLength === 6) {
+        this.timelineG
+          .to(this.effectVignette.uniforms['darkness'], 0.5, {
+            value: 1,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
+            value: 4,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
+            r: this.depthColorFor3.r,
+            g: this.depthColorFor3.g,
+            b: this.depthColorFor3.b,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
+            r: this.surfaceColorFor3.r,
+            g: this.surfaceColorFor3.g,
+            b: this.surfaceColorFor3.b,
+            ease: Gsap.Circ,
+          })
+      }
 
-      this.timelineG
-        .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 0.8823, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
-    }
-
-    if (this.invLength === 6) {
-
-      this.timelineG
-        .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 1, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
-    }
-
-    if (this.invLength === 8) {
-
-      this.timelineG
-        .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 1.1, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
-        .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+      if (this.invLength === 8) {
+        this.timelineG
+          .to(this.effectVignette.uniforms['darkness'], 0.5, {
+            value: 1.1,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
+            value: 4,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
+            r: this.depthColorFor3.r,
+            g: this.depthColorFor3.g,
+            b: this.depthColorFor3.b,
+            ease: Gsap.Circ,
+          })
+          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
+            r: this.surfaceColorFor3.r,
+            g: this.surfaceColorFor3.g,
+            b: this.surfaceColorFor3.b,
+            ease: Gsap.Circ,
+          })
+      }
     }
     console.log(this.world.playerInventory.length)
   }
@@ -372,9 +440,29 @@ export default class App {
       //  *****************
       // Choose definition
       // ******************
+      getGPUTier().then((result) => {
+        if (!document.querySelector('.recommended')) {
+          const recoSpan = document.createElement('span')
+          recoSpan.classList.add('recommended')
+          recoSpan.innerHTML = '(Recommandé pour vous)'
+          document
+            .querySelectorAll('.definition_item')
+            [result.tier - 1].appendChild(recoSpan)
+        }
+      })
       element.addEventListener('click', () => {
         this.choosenDefinition = element.dataset.definition
-        console.log(this.choosenDefinition)
+        this.composerCreator()
+        this.setWorld()
+        this.setWaitingScreen()
+        this.checkInventoryLength()
+        this.openInventoryMethod()
+        this.closeInventoryMethod()
+
+        // console.log(this.choosenDefinition)
+        if (this.choosenDefinition === 'low') {
+          this.renderer.shadowMap.enabled = false
+        }
         this.waitingScreen.init()
         this.qualityDiv.style.opacity = 0
         // this.homeDiv.remove()
@@ -471,133 +559,6 @@ export default class App {
     this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
-    // Render
-    this.renderPass = new RenderPass(this.scene, this.introCam.camera)
-    this.composer.addPass(this.renderPass)
-
-    // Grain (film pass)
-    this.filmPass = new FilmPass(0.5, 0, 0, false)
-
-    this.filmPass.renderToScreen = true
-    // this.composer.addPass(this.filmPass)
-
-    const params = {
-      exposure: 0,
-      bloomStrength: 0.12,
-      bloomThreshold: 0,
-      bloomRadius: 0,
-    }
-    const bloomPass = new UnrealBloomPass(
-      new Vector2(window.innerWidth, window.innerHeight),
-      1.5,
-      0.4,
-      1
-    )
-    bloomPass.threshold = params.bloomThreshold
-    bloomPass.strength = params.bloomStrength
-    bloomPass.radius = params.bloomRadius
-
-    // this.bokehPass = new BokehPass(this.scene, this.camera.camera, {
-    //   focus: 20.0,
-    //   aperture: 0.00002,
-    //   maxblur: 0.004,
-    //   width: this.sizes.viewport.width,
-    //   height: this.sizes.viewport.height,
-    // })
-    // this.composer.addPass(this.bokehPass)
-
-    // Tint pass
-    const TintShader = {
-      uniforms: {
-        tDiffuse: { value: null },
-        uTint: { value: null },
-      },
-      vertexShader: `
-        varying vec2 vUv;
-
-        void main()
-        {
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-
-          vUv = uv;
-        }
-      `,
-      fragmentShader: `
-        uniform sampler2D tDiffuse;
-        uniform vec3 uTint;
-        varying vec2 vUv;
-
-        void main()
-        {
-          vec4 color = texture2D(tDiffuse, vUv);
-          color.rgb += uTint;
-  
-          gl_FragColor = color;
-        }
-      `,
-    }
-
-    this.tintPass = new ShaderPass(TintShader)
-    this.tintPass.material.uniforms.uTint.value = new Vector3()
-
-    // LUT
-    this.shaderPassGammaCorr = new ShaderPass(GammaCorrectionShader)
-
-    //Vignette
-
-    const VignetteShader = {
-      uniforms: {
-        tDiffuse: { type: 't', value: null },
-        offset: { type: 'f', value: 1.0 },
-        darkness: { type: 'f', value: 1.0 },
-      },
-
-      vertexShader: `
-      varying vec2 vUv;
-      
-      void main() {
-        
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-        
-      }`,
-
-      fragmentShader: `
-      uniform float offset;
-      uniform float darkness;
-      
-      uniform sampler2D tDiffuse;
-      
-      varying vec2 vUv;
-      
-      void main() {
-        
-        // Eskil's vignette
-        
-        // vec4 texel = texture2D( tDiffuse, vUv );
-        // vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
-        // gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
-        
-        
-        // alternative version from glfx.js
-        // this one makes more dusty look (as opposed to burned)
-        
-        vec4 color = texture2D( tDiffuse, vUv );
-        float dist = distance( vUv, vec2( 0.5 ) );
-        color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
-        gl_FragColor = color;
-        
-       
-      }
-      `,
-    }
-
-    this.shaderVignette = VignetteShader
-    this.effectVignette = new ShaderPass(this.shaderVignette)
-    this.effectVignette.renderToScreen = true
-    this.effectVignette.uniforms['offset'].value = 0.15
-    this.effectVignette.uniforms['darkness'].value = 0.8
-
     this.outlinePass = new OutlinePass(
       new Vector2(this.sizes.width, this.sizes.height),
       this.scene,
@@ -609,58 +570,182 @@ export default class App {
     this.outlinePass.hiddenEdgeColor = new Color(0xffffff)
     // this.outlinePass.pulsePeriod = 2
 
-    this.fxaaPass = new ShaderPass(FXAAShader)
-    const pixelRatio = this.renderer.getPixelRatio()
-
-    this.fxaaPass.material.uniforms['resolution'].value.x =
-      1 / (this.sizes.width * pixelRatio)
-    this.fxaaPass.material.uniforms['resolution'].value.y =
-      1 / (this.sizes.height * pixelRatio)
-
-    this.composer.addPass(this.tintPass)
-
-    // this.composer.addPass( this.tintPass)
-    this.composer.addPass(this.effectVignette)
-    // this.composer.addPass(this.filmPass)
-    this.composer.addPass(bloomPass)
+    // Render
+    this.renderPass = new RenderPass(this.scene, this.introCam.camera)
+    this.composer.addPass(this.renderPass)
     this.composer.addPass(this.outlinePass)
-    this.composer.addPass(this.fxaaPass)
-    this.composer.addPass(this.shaderPassGammaCorr)
 
-    if (this.debug) {
-      const folder = this.debug.addFolder('Teinte')
-      folder
-        .add(this.tintPass.material.uniforms.uTint.value, 'x')
-        .name('Rouge')
-        .min(-1.0)
-        .max(1.0)
-        .step(0.0001)
-      folder
-        .add(this.tintPass.material.uniforms.uTint.value, 'y')
-        .name('Vert')
-        .min(-1.0)
-        .max(1.0)
-        .step(0.0001)
-      folder
-        .add(this.tintPass.material.uniforms.uTint.value, 'z')
-        .name('Bleu')
-        .min(-1.0)
-        .max(1.0)
-        .step(0.0001)
-      const folderVign = this.debug.addFolder('Vignette')
-      folderVign
-        .add(this.effectVignette.uniforms['offset'], 'value')
-        .name('Offset')
-        .min(0.0)
-        .max(2.0)
-        .step(0.0001)
-      folderVign
-        .add(this.effectVignette.uniforms['darkness'], 'value')
-        .name('Darkness')
-        .min(-1.0)
-        .max(10.0)
-        .step(0.0001)
-      
+    if (
+      this.choosenDefinition === 'high' ||
+      this.choosenDefinition === 'medium'
+    ) {
+      // Grain (film pass)
+      this.filmPass = new FilmPass(0.5, 0, 0, false)
+
+      this.filmPass.renderToScreen = true
+      // this.composer.addPass(this.filmPass)
+
+      if (this.choosenDefinition === 'high') {
+        const params = {
+          exposure: 0,
+          bloomStrength: 0.12,
+          bloomThreshold: 0,
+          bloomRadius: 0,
+        }
+        const bloomPass = new UnrealBloomPass(
+          new Vector2(window.innerWidth, window.innerHeight),
+          1.5,
+          0.4,
+          1
+        )
+        bloomPass.threshold = params.bloomThreshold
+        bloomPass.strength = params.bloomStrength
+        bloomPass.radius = params.bloomRadius
+
+        this.fxaaPass = new ShaderPass(FXAAShader)
+        const pixelRatio = this.renderer.getPixelRatio()
+
+        this.fxaaPass.material.uniforms['resolution'].value.x =
+          1 / (this.sizes.width * pixelRatio)
+        this.fxaaPass.material.uniforms['resolution'].value.y =
+          1 / (this.sizes.height * pixelRatio)
+
+        const VignetteShader = {
+          uniforms: {
+            tDiffuse: { type: 't', value: null },
+            offset: { type: 'f', value: 1.0 },
+            darkness: { type: 'f', value: 1.0 },
+          },
+
+          vertexShader: `
+            varying vec2 vUv;
+            
+            void main() {
+              
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+              
+            }`,
+
+          fragmentShader: `
+            uniform float offset;
+            uniform float darkness;
+            
+            uniform sampler2D tDiffuse;
+            
+            varying vec2 vUv;
+            
+            void main() {
+              
+              // Eskil's vignette
+              
+              // vec4 texel = texture2D( tDiffuse, vUv );
+              // vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
+              // gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
+              
+              
+              // alternative version from glfx.js
+              // this one makes more dusty look (as opposed to burned)
+              
+              vec4 color = texture2D( tDiffuse, vUv );
+              float dist = distance( vUv, vec2( 0.5 ) );
+              color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
+              gl_FragColor = color;
+              
+            
+            }
+            `,
+        }
+
+        this.shaderVignette = VignetteShader
+        this.effectVignette = new ShaderPass(this.shaderVignette)
+        this.effectVignette.renderToScreen = true
+        this.effectVignette.uniforms['offset'].value = 0.15
+        this.effectVignette.uniforms['darkness'].value = 0.8
+
+        this.composer.addPass(this.fxaaPass)
+        this.composer.addPass(this.effectVignette)
+        this.composer.addPass(bloomPass)
+      }
+
+      // Tint pass
+      const TintShader = {
+        uniforms: {
+          tDiffuse: { value: null },
+          uTint: { value: null },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+
+          void main()
+          {
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+            vUv = uv;
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D tDiffuse;
+          uniform vec3 uTint;
+          varying vec2 vUv;
+
+          void main()
+          {
+            vec4 color = texture2D(tDiffuse, vUv);
+            color.rgb += uTint;
+
+            gl_FragColor = color;
+          }
+        `,
+      }
+
+      this.tintPass = new ShaderPass(TintShader)
+      this.tintPass.material.uniforms.uTint.value = new Vector3()
+
+      // LUT
+      this.shaderPassGammaCorr = new ShaderPass(GammaCorrectionShader)
+
+      this.composer.addPass(this.tintPass)
+      // this.composer.addPass( this.tintPass)
+      // this.composer.addPass(this.filmPass)
+      this.composer.addPass(this.shaderPassGammaCorr)
+
+      if (this.debug) {
+        const folder = this.debug.addFolder('Teinte')
+        folder
+          .add(this.tintPass.material.uniforms.uTint.value, 'x')
+          .name('Rouge')
+          .min(-1.0)
+          .max(1.0)
+          .step(0.0001)
+        folder
+          .add(this.tintPass.material.uniforms.uTint.value, 'y')
+          .name('Vert')
+          .min(-1.0)
+          .max(1.0)
+          .step(0.0001)
+        folder
+          .add(this.tintPass.material.uniforms.uTint.value, 'z')
+          .name('Bleu')
+          .min(-1.0)
+          .max(1.0)
+          .step(0.0001)
+        if (this.choosenDefinition === 'high') {
+          const folderVign = this.debug.addFolder('Vignette')
+          folderVign
+            .add(this.effectVignette.uniforms['offset'], 'value')
+            .name('Offset')
+            .min(0.0)
+            .max(2.0)
+            .step(0.0001)
+          folderVign
+            .add(this.effectVignette.uniforms['darkness'], 'value')
+            .name('Darkness')
+            .min(-1.0)
+            .max(10.0)
+            .step(0.0001)
+        }
+      }
     }
   }
 }

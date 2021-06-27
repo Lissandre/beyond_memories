@@ -19,6 +19,7 @@ import oceanSound from '@sounds/ocean/ocean.mp3'
 export default class Floor {
   constructor(options) {
     // Set options
+    this.perf = options.perf
     this.assets = options.assets
     this.time = options.time
     this.debug = options.debug
@@ -159,8 +160,10 @@ export default class Floor {
         child.name.includes('Cylinder') ||
         child.name.includes('Cube')
       ) {
-        child.castShadow = true
-        child.receiveShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
         if (child.material !== undefined) {
           if (
             child.material.name.includes('LEAVES') ||
@@ -173,8 +176,10 @@ export default class Floor {
         }
       }
       if (child.name.includes('arbre')) {
-        child.castShadow = true
-        child.receiveShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
         if (
           child.material.name.includes('Leaf') ||
           child.material.name.includes('rocks') ||
@@ -184,23 +189,31 @@ export default class Floor {
         }
       }
       if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
-        child.castShadow = true
-        child.receiveShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
       }
       if (child.name.includes('SOL')) {
         child.receiveShadow = true
       }
       if (child.name.includes('ARMOIR')) {
-        child.castShadow = true
-        child.receiveShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
       }
       if (child.name.includes('CLOUDS')) {
-        child.receiveShadow = true
-        child.castShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
       }
       if (child.name.includes('ROCKS') || child.name.includes('FALAISE')) {
-        child.castShadow = true
-        child.receiveShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
         child.material.side = FrontSide
       }
       if (child.name.includes('TIPI')) {
@@ -218,8 +231,10 @@ export default class Floor {
         child.name.includes('PAVE') ||
         child.name.includes('BUSH')
       ) {
-        child.castShadow = true
-        child.receiveShadow = true
+        if (this.perf != 'low') {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
       }
       if (child.name.includes('EAU')) {
         child.material = this.materialRiver
@@ -233,14 +248,18 @@ export default class Floor {
       }
       if (child.name.includes('mod_') || child.name.includes('modInt_')) {
         if (child.isMesh) {
-          child.castShadow = true
-          child.receiveShadow = true
+          if (this.perf != 'low') {
+            child.castShadow = true
+            child.receiveShadow = true
+          }
           child.material.side = DoubleSide
         } else {
           child.traverse((children) => {
             if (children.isMesh) {
-              children.castShadow = true
-              children.receiveShadow = true
+              if (this.perf != 'low') {
+                child.castShadow = true
+                child.receiveShadow = true
+              }
               // child.material.side = DoubleSide
             }
           })
