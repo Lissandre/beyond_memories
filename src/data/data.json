@@ -190,7 +190,7 @@
                 "image": "./assets/CERF-VOLANT-min.png"
             }
         },
-        "mod_hubbahubba": {
+        "mod_hubbabubba": {
           "id": 12,
           "name": "Pokémon",
           "data_object": "mod_hubbabubba",
