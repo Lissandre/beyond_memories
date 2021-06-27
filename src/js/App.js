@@ -395,6 +395,7 @@ export default class App {
 
           this.gTimeline
             .to(this.homeDiv, {duration: 2, opacity: 0, ease: Power3}, '-=0.5')
+            .to(this.musicWaiting, {duration: 1, volume: 0, ease: Power3})
             .to(this.introVideoContainer, {duration: 1, display: 'block', opacity: 1, ease: Power3})
 
           //***************
@@ -409,7 +410,8 @@ export default class App {
             setTimeout(() => {
               console.log('remove video')
               this.world.music.play()
-              this.world.music.volume = this.world.musicFinVol
+              this.gTimeline
+                .to(this.world.music, {duration: 0.5, volume: this.world.musicFinVol, ease: Power3})
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
             }, 550)
@@ -428,19 +430,23 @@ export default class App {
               .to(this.introVideoContainer, {duration: 1, opacity: 0, ease: Power3})
             setTimeout(() => {
               this.world.music.play()
-              this.world.music.volume = this.world.musicFinVol
+              this.gTimeline
+              .to(this.world.music, {duration: 0.5, volume: this.world.musicFinVol, ease: Power3})
               this.introVideoContainer.remove()
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
             }, 2000)
           })
 
-          
+              
           setTimeout(() => {
             this.scene.remove(this.waitingScreen)
             this.homeDiv.remove()
             this.musicWaiting.pause()
             this.introVideo.play()
+            this.introVideo.volume = 0
+            this.gTimeline
+              .to(this.introVideo, {duration: 0.5, volume: 1, ease: Power3})
             this.isWaitingScreen = false
             this.scene.remove(this.waitingScreen.container)
             this.scene.remove(this.introCam.container)
