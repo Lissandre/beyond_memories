@@ -83,9 +83,8 @@ export default class App {
 
     this.isWaitingScreen = false
     this.musicWaitingFinVol = 1
-
     this.composer
-
+    
     this.setConfig()
     this.setRenderer()
     this.setCamera()
@@ -141,7 +140,6 @@ export default class App {
       this.debug && this.stats.begin()
       // if (!(this.renderOnBlur?.activated && !document.hasFocus() ) ) {
       // }
-      // console.log(this.isWaitingScreen);
       if (this.isWaitingScreen === true) {
         if (this.composer) {
           this.renderer.info.reset()
@@ -226,6 +224,7 @@ export default class App {
     this.world = new World({
       time: this.time,
       debug: this.debug,
+      sizes: this.sizes,
       assets: this.assets,
       camera: this.camera,
       scene: this.scene,

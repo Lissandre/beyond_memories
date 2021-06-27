@@ -76,6 +76,6 @@ export default class CanvasResult {
       link.download = `Beyond_Memories_Your_Childhood.png`
       link.href = this.canvas.toDataURL()
       link.click()
-    }, 1000)
+    }, 2000)
   }
 }

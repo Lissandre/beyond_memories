@@ -19,6 +19,7 @@ export default class World {
   constructor(options) {
     // Set options
     this.time = options.time
+    this.sizes = options.sizes
     this.debug = options.debug
     this.assets = options.assets
     this.camera = options.camera
@@ -65,6 +66,8 @@ export default class World {
     ]
 
     this.musicFinVol = 1
+    this.scrollValuePercentage = 0
+    this.scrollValue = 0
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -511,58 +514,49 @@ export default class World {
         this.elementEntered.isCollected = true
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
 
-        this.createItemCrad()
+        this.createItemCard()
         this.appThis.checkInventoryLength()
       }
     }
   }
 
-  createItemCrad() {
-    let item = document.createElement('div')
-    item.classList.add('inventory_content_items_item')
-
-    let item_imageContainer = document.createElement('div')
-    item_imageContainer.classList.add('item_pic')
-    let item_image = document.createElement('img')
-    item_image.setAttribute(
-      'src',
-      Data.monde_1[this.elementEntered.child.name].links.image
+  createItemCard() {
+    let emptySpaces = document.querySelector(
+      '.inventory_content_items_item.empty'
     )
-    item_imageContainer.appendChild(item_image)
-
-    let item_textContainer = document.createElement('div')
-    item_textContainer.classList.add('item_texts')
-    let item_name = document.createElement('p')
-    item_name.textContent = Data.monde_1[this.elementEntered.child.name].name
-    let item_description = document.createElement('p')
-    item_description.textContent =
-      Data.monde_1[this.elementEntered.child.name].description
-    item_textContainer.appendChild(item_name)
-    item_textContainer.appendChild(item_description)
+    emptySpaces.classList.remove('empty')
+    let cardImg = emptySpaces.querySelector(
+      `img[src*="${Data.monde_1.empty.links.image}"]`
+    )
+    cardImg.src = Data.monde_1[this.elementEntered.child.name].links.image
 
     let buttonDelete = document.createElement('button')
     buttonDelete.classList.add('item_button')
-    let spanL = document.createElement('span')
-    let spanR = document.createElement('span')
-    spanL.classList.add('button_bar')
-    spanR.classList.add('button_bar')
-    spanL.classList.add('leftBar')
-    spanR.classList.add('rightBar')
+    buttonDelete.innerText = 'Supprimer ?'
     buttonDelete.dataset.dataJs = 'js_deleteObject'
     buttonDelete.dataset.object =
       Data.monde_1[this.elementEntered.child.name].data_object
-    buttonDelete.appendChild(spanL)
-    buttonDelete.appendChild(spanR)
     buttonDelete.addEventListener('click', this.deleteItemCard.bind(this))
 
-    item.appendChild(buttonDelete)
-    item.appendChild(item_imageContainer)
-    item.appendChild(item_textContainer)
+    emptySpaces.appendChild(buttonDelete)
+  }
+
+  createInventory() {
+    let item = document.createElement('div')
+    item.classList.add('inventory_content_items_item', 'empty')
+
+    let item_image = document.createElement('img')
+    item_image.setAttribute('src', Data.monde_1['mod_mario'].links.image)
+
+    item.appendChild(item_image)
     this.itemsIventory.appendChild(item)
   }
 
   deleteItemCard(event) {
-    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+    event.target.parentNode.querySelector('img').src =
+      Data.monde_1.empty.links.image
+    event.target.parentNode.classList.add('empty')
+    event.target.parentNode.removeChild(event.target)
     this.playerInventory = this.playerInventory.filter((element) => {
       return element.data_object !== event.target.dataset.object
     })
@@ -640,6 +634,42 @@ export default class World {
   }
 
   createUi() {
+    this.optionDiv = document.querySelector('.options')
+
+    this.optionButton = document.createElement('button')
+    this.optionButton.classList.add('js_optionsBtn')
+    this.optionButton.classList.add('intBTN')
+    this.optionButton.classList.add('options_button')
+
+    this.optionDiv.appendChild(this.optionButton)
+
+    const inv = document.querySelector('.inventory_content_items')
+    for (let i = 1; i <= 8; i++) {
+      this.createInventory()
+    }
+    // this.items = [... document.querySelectorAll('inventory_content_items_item')]
+    // window.addEventListener("MozMousePixelScroll", handleScroll(event, this))
+    window.addEventListener('wheel', handleScroll)
+    // window.addEventListener("mousewheel", handleScroll(event, this))
+    // window.addEventListener("DOMMouseScroll", handleScroll(event, this))
+    let that = this
+    function handleScroll(e) {
+      that.docWidth = inv.offsetWidth
+
+      if (that.scrollValue - e.deltaY > 0) {
+        that.scrollValue = 0
+      } else if (
+        that.scrollValue - e.deltaY <
+        -that.docWidth + that.sizes.viewport.width
+      ) {
+        that.scrollValue = -that.docWidth + that.sizes.viewport.width
+      } else {
+        that.scrollValue -= e.deltaY
+      }
+      // that.scrollValuePercentage = (that.scrollValue/(that.docWidth - that.sizes.viewport.width)) * 100
+
+      inv.style.transform = `translateX(${that.scrollValue}px)`
+    }
     this.optionButton = document.querySelector('.js_optionsBtn')
     this.closeOptionButton = document.querySelector('.js_closeOptions')
   }
