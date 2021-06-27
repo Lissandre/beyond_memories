@@ -12,15 +12,10 @@ import {
   Box3,
   // Box3Helper,
   PositionalAudio,
-  AudioLoader,
 } from 'three'
 import { Capsule } from 'three/examples/jsm/math/Capsule'
 
 import Mouse from '@tools/Mouse'
-
-import walkingSound from '@sounds/Perso/bm_marche.ogg'
-import runningSound from '@sounds/Perso/bm_course.ogg'
-import jumpingSound from '@sounds/Perso/bm_jump.ogg'
 
 export default class Perso {
   constructor(options) {
@@ -77,7 +72,8 @@ export default class Perso {
       lerpSpeed: 0.005,
     }
 
-    this.playWalk = false
+    this.canPlayFall = false
+    this.lastSound = null
     this.ras = false
 
     this.setSounds()
@@ -99,7 +95,7 @@ export default class Perso {
     })
     this.perso.castShadow = true
 
-    this.perso.add(this.walkingSound, this.runningSound, this.jumpingSound)
+    this.perso.add(this.walkingSound, this.runningSound, this.jumpingSound, this.fallingSound)
 
     this.perso.position.set(-33.5, 7, 75.5)
     this.container.position.set(0, 0, 0)
@@ -135,31 +131,29 @@ export default class Perso {
 
   setSounds() {
     this.walkingSound = new PositionalAudio(this.listener)
-    const audioLoaderW = new AudioLoader()
-    audioLoaderW.load(walkingSound, (buffer) => {
-      this.walkingSound.setBuffer(buffer)
-      this.walkingSound.setRefDistance(5)
-      this.walkingSound.setLoop(true)
-      this.walkingSound.setVolume(3)
-    })
+    this.walkingSound.setBuffer(this.assets.sounds.Perso.bm_marche)
+    this.walkingSound.setRefDistance(5)
+    this.walkingSound.setLoop(true)
+    this.walkingSound.setVolume(3)
 
     this.runningSound = new PositionalAudio(this.listener)
-    const audioLoaderR = new AudioLoader()
-    audioLoaderR.load(runningSound, (buffer) => {
-      this.runningSound.setBuffer(buffer)
-      this.runningSound.setRefDistance(5)
-      this.runningSound.setLoop(true)
-      this.runningSound.setVolume(1)
-    })
+    this.runningSound.setBuffer(this.assets.sounds.Perso.bm_course)
+    this.runningSound.setRefDistance(5)
+    this.runningSound.setLoop(true)
+    this.runningSound.setVolume(1)
+
 
     this.jumpingSound = new PositionalAudio(this.listener)
-    const audioLoaderJ = new AudioLoader()
-    audioLoaderJ.load(jumpingSound, (buffer) => {
-      this.jumpingSound.setBuffer(buffer)
-      this.jumpingSound.setRefDistance(5)
-      this.jumpingSound.setLoop(false)
-      this.jumpingSound.setVolume(3)
-    })
+    this.jumpingSound.setBuffer(this.assets.sounds.Perso.bm_jump)
+    this.jumpingSound.setRefDistance(5)
+    this.jumpingSound.setLoop(false)
+    this.jumpingSound.setVolume(3)
+
+    this.fallingSound = new PositionalAudio(this.listener)
+    this.fallingSound.setBuffer(this.assets.sounds.Perso.bm_fall)
+    this.fallingSound.setRefDistance(5)
+    this.fallingSound.setLoop(false)
+    this.fallingSound.setVolume(3)
   }
 
   setListeners() {
@@ -171,10 +165,6 @@ export default class Perso {
           case 'ArrowUp': // up
           case 'KeyW': // w
             this.moveForward = true
-            this.playWalk = true
-            if (this.playWalk === true) {
-              this.walkingSound.play()
-            }
             break
           case 'ArrowLeft': // left
           case 'KeyA': // a
@@ -190,10 +180,6 @@ export default class Perso {
             break
           case 'ShiftLeft':
             this.run = true
-            if (this.moveForward === true) {
-              this.walkingSound.pause()
-              this.runningSound.play()
-            }
             if (
               this.currentBaseAction != 'IDLE' &&
               this.currentBaseAction != 'RUNNING' &&
@@ -205,12 +191,19 @@ export default class Perso {
                 this.baseActions['RUNNING'].action,
                 0.2
               )
+              this.walkingSound.pause()
+              this.runningSound.play()
               this.speedP = 0.01
             }
             break
           case 'Space': // space
             if (this.playerOnFloor) {
+              this.walkingSound.isPlaying && (this.lastSound = this.walkingSound)
+              this.runningSound.isPlaying && (this.lastSound = this.runningSound)
+              this.walkingSound.pause()
+              this.runningSound.pause()
               this.jumpingSound.play()
+              this.canPlayFall = true
               // this.baseActions['JUMP'].action.loop = LoopOnce
               this.temp = this.currentBaseAction
               this.prepareCrossFade(
@@ -249,10 +242,6 @@ export default class Perso {
           case 'ArrowUp': // up
           case 'KeyW': // w
             this.moveForward = false
-            this.playWalk = false
-            if (this.playWalk === false) {
-              this.walkingSound.pause()
-            }
             break
           case 'ArrowLeft': // left
           case 'KeyA': // a
@@ -269,6 +258,8 @@ export default class Perso {
           case 'ShiftLeft':
             this.run = false
             this.runningSound.pause()
+            this.walkingSound.isPlaying && this.walkingSound.play()
+            this.lastSound && (this.lastSound = this.walkingSound)
             break
           default:
             this.ras = true
@@ -287,6 +278,7 @@ export default class Perso {
             this.baseActions['IDLE'].action,
             1.2
           )
+          this.walkingSound.pause()
           this.speedP = 0.005
         } else if (
           this.currentBaseAction != 'WALKING' &&
@@ -302,6 +294,7 @@ export default class Perso {
             0.3
           )
           this.speedP = 0.005
+          this.walkingSound.play()
         }
       },
       false
@@ -338,6 +331,7 @@ export default class Perso {
                 this.baseActions['WALKING'].action,
                 0.6
               )
+              this.walkingSound.play()
             }
           }
           this.lerpOrientation()
@@ -381,6 +375,7 @@ export default class Perso {
                 this.baseActions['WALKING'].action,
                 0.6
               )
+              this.walkingSound.play()
             }
           }
           // this.lerpOrientation()
@@ -523,6 +518,14 @@ export default class Perso {
     const result = this.worldOctree.capsuleIntersect(this.playerCollider)
     this.playerOnFloor = false
     if (result) {
+      if (this.canPlayFall && result.normal.y > 0){
+        this.canPlayFall = false
+        this.fallingSound.play()
+        if (this.lastSound != null) {
+          this.lastSound.play()
+          this.lastSound = null
+        }
+      }
       this.playerOnFloor = result.normal.y > 0
       if (!this.playerOnFloor) {
         this.playerVelocity.addScaledVector(

@@ -198,6 +198,7 @@ export default class Floor {
         }
       }
       if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
+        child.material.side = FrontSide
         if (this.perf != 'low') {
           child.castShadow = true
           child.receiveShadow = true
