@@ -515,6 +515,7 @@ export default class World {
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
 
         this.setItemCard()
+        this.outline.selectedObjects = []
         this.appThis.checkInventoryLength()
       }
     }

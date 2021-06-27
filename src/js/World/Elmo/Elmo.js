@@ -6,7 +6,7 @@ import {
   MeshBasicMaterial,
   Mesh,
   Box3,
-  Box3Helper,
+  // Box3Helper,
   AnimationMixer,
   AnimationUtils,
   Vector2,
