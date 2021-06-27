@@ -51,11 +51,35 @@ export default class Elmo {
       JUMP: { weight: 0 },
       CHEERING: { weight: 0 },
     }
+<<<<<<< HEAD
     this.additiveActions = {
       // sneak_pose: { weight: 0 },
       // sad_pose: { weight: 0 },
       // agree: { weight: 0 },
       // headShake: { weight: 0 }
+=======
+    setElmo() {
+      this.elmo = this.assets.models.elmo.scene
+      this.elmo.children[0].rotation.set(0, 0, 0)
+      this.elmo.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true
+          child.receiveShadow = true
+        }
+      })
+      this.elmo.castShadow = true
+      this.elmo.scale.set(0.4,0.4,0.4)
+      this.elmo.position.set(8.5,15,-34.7)
+  
+      this.container.position.set(0,0,0)
+      this.playerCollider = new Capsule(
+        new Vector3(this.elmo.position.x, this.elmo.position.y, this.elmo.position.z),
+        new Vector3(this.elmo.position.x, this.elmo.position.y + 0.5, this.elmo.position.z),
+        0.5
+        )
+        
+      this.container.add(this.elmo)
+>>>>>>> put elmo in the cabane
     }
 
     this.setElmo()
