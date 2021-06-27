@@ -2,193 +2,233 @@
     "monde_1": {
         "empty": {
             "id": 1,
-            "name": "Champignon Mario",
-            "data_object": "mod_mario",
-            "description": "la desc du truc",
+            "name": "Empty Card",
+            "data_object": "empty",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/MARIO.png"
+                "image": "./assets/MARIO-min.png"
             }
         },
         "mod_starwars": {
             "id": 0,
             "name": "X-wings StarWars",
             "data_object": "mod_starwars",
-            "description": "la desc du truc star wars",
+            "description": "",
             "type": "object",
             "links": {
-                "image": "./assets/STARWARS.png"
+                "image": "./assets/STAR-WARS-min.png"
             }
         },
         "mod_mario": {
             "id": 1,
             "name": "Champignon Mario",
             "data_object": "mod_mario",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/MARIO.png"
+                "image": "./assets/MARIO-min.png"
             }
         },
         "mod_skate": {
             "id": 2,
             "name": "Tech Deck",
             "data_object": "mod_skate",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/SKATE.png"
+                "image": "./assets/FINGER-SKATE-min.png"
             }
         },
         "mod_barbecue": {
             "id": 3,
             "name": "Barbecue avec papa",
             "data_object": "mod_barbecue",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/BARBECUE.png"
+                "image": "./assets/BARBECUE-min.png"
             }
         },
         "mod_macdo": {
             "id": 4,
             "name": "Happy Meal",
             "data_object": "mod_macdo",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/MCDO.png"
+                "image": "./assets/MCDO-min.png"
             }
         },
         "mod_cabane": {
             "id": 5,
             "name": "Cabane",
             "data_object": "mod_cabane",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/CABANE.png"
+                "image": "./assets/MAISONETTE-min.png"
             }
         },
         "mod_peche": {
             "id": 6,
             "name": "Pêche",
             "data_object": "mod_peche",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/PECHE.png"
+                "image": "./assets/PECHE-min.png"
             }
         },
         "mod_pelle": {
             "id": 7,
             "name": "Pelle",
             "data_object": "mod_pelle",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/JARDINAGE.png"
+                "image": "./assets/JARDINAGE-min.png"
             }
         },
         "mod_jurassic": {
             "id": 8,
             "name": "Jurassic Park",
             "data_object": "mod_jurassic",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/PARK.png"
+                "image": "./assets/JURASSIC-min.png"
             }
         },
         "mod_bandicoot": {
             "id": 9,
             "name": "Crash Bandicoot",
             "data_object": "mod_bandicoot",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/CRASH.png"
+                "image": "./assets/CRASH-min.png"
             }
         },
         "mod_tortue": {
             "id": 10,
             "name": "Tortue",
             "data_object": "mod_tortue",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/SABLE.png"
+                "image": "./assets/BAC-A-SABLE-min.png"
             }
         },
         "mod_totoro": {
             "id": 11,
             "name": "Totoro",
             "data_object": "mod_totoro",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/TOTORO.png"
+                "image": "./assets/TOTORO-min.png"
             }
         },
         "mod_pokemon": {
             "id": 12,
             "name": "Pokémon",
             "data_object": "mod_pokemon",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/POKEMON.png"
+                "image": "./assets/POKEMON-min.png"
             }
         },
         "mod_dofus": {
             "id": 12,
             "name": "Pokémon",
             "data_object": "mod_dofus",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/DOFUS.png"
+                "image": "./assets/DOFUS-min.png"
             }
         },
         "mod_lego": {
             "id": 12,
             "name": "Pokémon",
             "data_object": "mod_lego",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/LEGO.png"
+                "image": "./assets/LEGO-min.png"
             }
         },
         "mod_toystory": {
             "id": 12,
             "name": "Pokémon",
             "data_object": "mod_toystory",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/TOYSTORY.png"
+                "image": "./assets/TOY-STORY-min.png"
             }
         },
         "mod_bouet": {
             "id": 12,
             "name": "Pokémon",
             "data_object": "mod_bouet",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/PLAGE.png"
+                "image": "./assets/PLAGE-min.png"
             }
         },
         "mod_cerfvolant": {
             "id": 12,
             "name": "Pokémon",
             "data_object": "mod_cerfvolant",
-            "description": "la desc du truc",
+            "description": "",
             "type": "media",
             "links": {
-                "image": "./assets/CERF.png"
+                "image": "./assets/CERF-VOLANT-min.png"
             }
+        },
+        "mod_hubbahubba": {
+          "id": 12,
+          "name": "Pokémon",
+          "data_object": "mod_hubbahubba",
+          "description": "",
+          "type": "media",
+          "links": {
+              "image": "./assets/HUBBA-HUBBA-min.png"
+          }
+        },
+        "mod_bateau": {
+          "id": 12,
+          "name": "Pokémon",
+          "data_object": "mod_bateau",
+          "description": "",
+          "type": "media",
+          "links": {
+              "image": "./assets/BATEAU-min.png"
+          }
+        },
+        "mod_sport": {
+          "id": 12,
+          "name": "Pokémon",
+          "data_object": "mod_sport",
+          "description": "",
+          "type": "media",
+          "links": {
+              "image": "./assets/HUBBA-HUBBA-min.png"
+          }
+        },
+        "mod_balancoire": {
+          "id": 12,
+          "name": "Pokémon",
+          "data_object": "mod_balancoire",
+          "description": "",
+          "type": "media",
+          "links": {
+              "image": "./assets/HUBBA-HUBBA-min.png"
+          }
         }
     }
 }

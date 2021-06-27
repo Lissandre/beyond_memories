@@ -89,7 +89,7 @@ export default class World {
     this.PlayerEnterObjectArea()
     this.PlayerEnterElmoArea()
 
-    this.createUi()
+    // this.createUi()
     this.openOptionsMethod()
     this.closeOptionsMethod()
 
@@ -514,13 +514,13 @@ export default class World {
         this.elementEntered.isCollected = true
         this.playerInventory.push(Data.monde_1[this.elementEntered.child.name])
 
-        this.createItemCard()
+        this.setItemCard()
         this.appThis.checkInventoryLength()
       }
     }
   }
 
-  createItemCard() {
+  setItemCard() {
     let emptySpaces = document.querySelector(
       '.inventory_content_items_item.empty'
     )
@@ -546,7 +546,7 @@ export default class World {
     item.classList.add('inventory_content_items_item', 'empty')
 
     let item_image = document.createElement('img')
-    item_image.setAttribute('src', Data.monde_1['mod_mario'].links.image)
+    item_image.setAttribute('src', Data.monde_1.empty.links.image)
 
     item.appendChild(item_image)
     this.itemsIventory.appendChild(item)
