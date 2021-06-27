@@ -16,8 +16,6 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js'
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
-
-import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
 
@@ -58,6 +56,7 @@ export default class App {
     this.qualityDivContainer = options.qualityDivContainer
 
     this.homeDiv = options.homeDiv
+    this.blackHome = options.blackHome
     this.introVideo = options.introVideo
     this.introVideoContainer = options.introVideoContainer
     this.introVideoSkipContainer = options.introVideoSkipContainer
@@ -217,7 +216,8 @@ export default class App {
       renderer: this.renderer,
       debug: this.debug,
       time: this.time,
-      homeDiv: this.homeDiv,
+      blackHome: this.blackHome,
+      gTimeline: this.gTimeline
     })
     // Add camera to scene
     this.scene.add(this.introCam.container)

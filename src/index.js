@@ -25,6 +25,7 @@ new App({
   js_startAll: document.querySelector('.js_startAll'),
   js_waitingOptions: document.querySelector('.js_waitingOptions'),
   homeDiv: document.querySelector('.home'),
+  blackHome: document.querySelector('.black_home'),
   introVideo: document.querySelector('.videoIntro'),
   introVideoContainer: document.querySelector('.videoContainer'),
   introVideoSkipContainer: document.querySelector('.videoButton'),
