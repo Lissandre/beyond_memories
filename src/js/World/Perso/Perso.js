@@ -105,7 +105,7 @@ export default class Perso {
     this.perso.add(this.walkingSound, this.runningSound, this.jumpingSound)
 
     
-    this.perso.position.set(-31, 10, 20)
+    this.perso.position.set(-33.5, 7, 75.5)
     this.container.position.set(0,0,0)
     this.playerCollider = new Capsule(
       new Vector3(this.perso.position.x, this.perso.position.y, this.perso.position.z),

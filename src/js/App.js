@@ -312,6 +312,10 @@ export default class App {
 
   selectDefinition () {
     this.qualityButton.forEach(element => {
+
+      //  *****************
+      // Choose definition
+      // ******************
       element.addEventListener('click', ()=> {
         this.choosenDefinition = element.dataset.definition
         console.log(this.choosenDefinition);
@@ -322,6 +326,9 @@ export default class App {
         this.musicWaiting.play()
         this.musicWaiting.volume = this.musicWaitingFinVol
 
+        // ***********************
+        // Click on start button
+        // ***********************
         this.js_startAll.addEventListener('click', ()=> {
           
           this.musicWaiting.pause()
@@ -330,30 +337,35 @@ export default class App {
           this.introVideoContainer.style.opacity = 1
           // this.introVideoContainer.remove()
           
+          //***************
+          // Click on skip
+          // **************
           this.introVideoSkipButton.addEventListener('click', ()=> {
             this.introVideoContainer.style.opacity = 0
             this.introVideo.pause()
             this.introVideo.currenTime = 0
-            this.world.music.play()
-            this.world.music.volume = this.world.musicFinVol
-            this.world.init()
             setTimeout(() => {
               console.log('remove video');
+              this.world.music.play()
+              this.world.music.volume = this.world.musicFinVol
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
             }, 550)
             setTimeout(() => {
+              console.log('delete video');
               this.introVideoContainer.remove()
             }, 2000)
           })
 
+          // ************
+          // Video ended
+          // ************
           this.introVideo.addEventListener('ended', ()=> {
             console.log('fin de video');
             this.introVideoContainer.style.opacity = 0
-            this.world.music.play()
-            this.world.music.volume = this.world.musicFinVol
-            this.world.init()
             setTimeout(() => {
+              this.world.music.play()
+              this.world.music.volume = this.world.musicFinVol
               this.introVideoContainer.remove()
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
@@ -369,8 +381,15 @@ export default class App {
             this.homeDiv.remove()
             this.introVideo.play()
           }, 800)
+
+          setTimeout(()=> {
+            this.world.init()
+          }, 1500)
         })
 
+        // *************
+        // Open options
+        // *************
         this.js_waitingOptions.addEventListener('click',()=> {
           this.body.classList.add('open_options')
           if(this.body.classList.contains('open_inventory')) {
