@@ -40,16 +40,13 @@ export default class CanvasResult {
       let row = Math.floor(spot / 4)
       let column = spot % 4
 
-      console.log(spot, 'row:' + row, 'column:' + column)
       const base_image = new Image()
-      console.log(element.links.image)
       base_image.src = element.links.image
       this.imageRect = base_image.getBoundingClientRect()
 
       base_image.onload = () => {
         const rotation = Math.random() * 20 - 10
         const random = Math.random() / 5
-        console.log(this.canvas)
         const ox = this.canvas.width / 2
         const oy = this.canvas.height / 2
         context.translate(ox, oy)

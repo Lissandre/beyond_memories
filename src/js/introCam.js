@@ -8,7 +8,7 @@ export default class IntroCam {
     this.sizes = options.sizes
     this.renderer = options.renderer
     this.debug = options.debug
-    this.homeDiv = options.homeDiv
+    this.blackHome = options.blackHome
 
     // Set up
     this.container = new Object3D()
@@ -113,13 +113,12 @@ export default class IntroCam {
       if (this.stateCam === 1) {
         this.targetPos1 = new Vector3(61, 34.8, 23)
         this.camera.position.lerp(this.targetPos1, 0.00025)
-        // console.log(this.camera.position);
         if (this.camera.position.z > 17.1) {
-          this.homeDiv.style.backgroundColor = '#000'
+          this.blackHome.style.backgroundColor = '#000'
         }
         if (this.camera.position.z > 17.22) {
           this.stateCam = 2
-          this.homeDiv.style.backgroundColor = 'transparent'
+          this.blackHome.style.backgroundColor = 'transparent'
           this.camera.position.set(
             this.secTravel.x,
             this.secTravel.y,
@@ -134,13 +133,12 @@ export default class IntroCam {
       } else if (this.stateCam === 2) {
         this.targetPos2 = new Vector3(-70, 12.8, 108.5)
         this.camera.position.lerp(this.targetPos2, 0.00025)
-        // console.log(this.camera.position);
         if (this.camera.position.x > -79.5) {
-          this.homeDiv.style.backgroundColor = '#000'
+          this.blackHome.style.backgroundColor = '#000'
         }
         if (this.camera.position.x > -79.3) {
           this.stateCam = 1
-          this.homeDiv.style.backgroundColor = 'transparent'
+          this.blackHome.style.backgroundColor = 'transparent'
           this.camera.position.set(
             this.firstTravel.x,
             this.firstTravel.y,

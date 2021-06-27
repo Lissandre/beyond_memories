@@ -88,7 +88,7 @@ export default class World {
     this.PlayerEnterObjectArea()
     this.PlayerEnterElmoArea()
 
-    // this.createUi()
+    this.createUi()
     this.openOptionsMethod()
     this.closeOptionsMethod()
 
@@ -447,35 +447,15 @@ export default class World {
     switch (event.code) {
       case 'KeyE': // e
         if (this.elementEntered !== null && this.elementEntered !== undefined) {
-          console.log('collect object')
           this.collecteObject()
         }
 
         if (this.playerEnteredInElmo === true) {
-          console.log('click sur elmo')
           this.getElmo()
         }
         break
     }
   }
-
-  // handleKeyF(event) {
-  //   if(!this.playerenteredInObject) {
-  //     return
-  //   }
-  //   switch (event.code) {
-  //     case 'KeyF': // f
-  //       this.text_01.style.opacity = 0
-  //       if(this.playerenteredInObject) {
-  //         if(this.videoScreen.isCollected === false){
-  //           this.collecteObject()
-  //         }else {
-  //           return
-  //         }
-  //       }
-  //       break
-  //   }
-  // }
 
   getElmo() {
     this.elmo.getPeted = true
@@ -559,8 +539,6 @@ export default class World {
         this.perso.moveLeft ||
         this.perso.moveRight
       ) {
-        // console.log(this.elementEnteredArray);
-
         for (const elementName in this.boxObjectManager.boxesArr) {
           const element = this.boxObjectManager.boxesArr[elementName]
           this.playerenteredInObject = element.objectBB.intersectsBox(
