@@ -179,7 +179,9 @@ export default class Floor {
         child.name.includes('ARBRE') ||
         child.name.includes('Arbre') ||
         child.name.includes('arbre') ||
-        child.name.includes('cabane01')
+        child.name.includes('cabane01') ||
+        child.name.includes('PALETTE') ||
+        child.name.includes('pont')
       ) {
         if (this.perf != 'low') {
           child.castShadow = true
