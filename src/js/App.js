@@ -570,7 +570,7 @@ export default class App {
           setTimeout(() => {
             this.renderPass.camera = this.camera.camera
             this.world.init()
-          }, 7000)
+          }, 30000)
         })
 
         setTimeout(() => {
