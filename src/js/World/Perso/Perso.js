@@ -115,7 +115,7 @@ export default class Perso {
       ),
       0.35
     )
-    this.container.add(this.perso)
+    // this.container.add(this.perso)
   }
   setCollider() {
     this.geometry = new BoxGeometry(1, 1, 1)

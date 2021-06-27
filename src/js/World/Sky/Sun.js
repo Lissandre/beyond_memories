@@ -43,7 +43,7 @@ export default class Sun {
     this.target = new Vector3(0, 0, 0)
 
     this.helper = new DirectionalLightHelper(this.light, 10)
-    this.container.add(this.light, this.helper)
+    this.container.add(this.light)
   }
 
   setDebug() {

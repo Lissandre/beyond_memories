@@ -109,7 +109,7 @@ export default class Elmo {
     this.cube.position.copy(this.elmo.position)
     this.elmoBB = new Box3().setFromObject(this.cube)
     const helper = new Box3Helper(this.elmoBB, 0xffff00)
-    this.container.add(helper)
+    // this.container.add(helper)
   }
 
   animateElmo() {
