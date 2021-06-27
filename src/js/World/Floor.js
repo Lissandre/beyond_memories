@@ -13,8 +13,8 @@ import OceanFrag from '@shaders/Water/OceanFrag.frag'
 import RiverFrag from '@shaders/Water/RiverFrag.frag'
 import WaterVert from '@shaders/Water/WaterVert.vert'
 
-import riverSound from '@sounds/river/river.mp3'
-import oceanSound from '@sounds/ocean/ocean.mp3'
+import riverSound from '@sounds/river/bm_river.ogg'
+import oceanSound from '@sounds/ocean/bm_mer.ogg'
 
 export default class Floor {
   constructor(options) {
@@ -248,7 +248,13 @@ export default class Floor {
       if (child.name.includes('EAU')) {
         child.material = this.materialRiver
         child.receiveShadow = true
+      }
+      if (child.name.includes('soundRiver')) {
         child.add(this.riverSound)
+      }
+      if (child.name.includes('soundWater')) {
+        console.log(child);
+        child.add(this.oceanSound)
       }
       if (child.name.includes('Plane004')) {
         child.material = this.materialOcean
