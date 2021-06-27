@@ -19,6 +19,7 @@ export default class Seagull {
     this.assets = options.assets
     this.curve = options.curve
     this.decal = options.decal
+    this.xDecal = options.xDecal
     this.heightDecal = options.heightDecal
     this.lineVisible = options.lineVisible
     this.rotation = options.rotation
@@ -103,7 +104,7 @@ export default class Seagull {
     this.clock = new Clock()
 
     for (var i = 0; i < this.curve.length; i++) {
-      var x = this.curve[i][0]
+      var x = this.curve[i][0] + this.xDecal
       var y = this.curve[i][1] + this.decal
       var z = this.curve[i][2] + this.heightDecal
       this.curve[i] = new Vector3(x, z, -y)

@@ -103,11 +103,11 @@ export default class Butterfly {
         this.curve[index][0]
       )
       this.butterTarget = this.vectButter
-      this.butterfly.scene.position.lerp(this.vectButter, 0.005)
+      this.butterfly.scene.position.lerp(this.vectButter, 0.0005)
       this.butterLook.lerp(this.butterTarget, 0.01)
       this.butterfly.scene.lookAt(this.butterLook.negate())
 
-      if (count === 240) {
+      if (count === 1000) {
         count = 0
 
         index = Math.floor(Math.random() * this.curve.length)

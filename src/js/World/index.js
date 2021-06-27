@@ -72,6 +72,7 @@ export default class World {
         [23.712326049804688, -27.731792449951172, 21.446821212768555],
         [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ],
+
     ]
 
     this.musicFinVol = 1
@@ -98,12 +99,12 @@ export default class World {
     this.setSky()
     this.setHemisphereLight()
     this.setAudioListener()
-    this.setPerso()
-    this.setElmo()
+    // this.setPerso()
+    // this.setElmo()
     this.setFloor()
-    this.setBoxObjectManager()
-    this.PlayerEnterObjectArea()
-    this.PlayerEnterElmoArea()
+    // this.setBoxObjectManager()
+    // this.PlayerEnterObjectArea()
+    // this.PlayerEnterElmoArea()
 
     this.createUi()
     this.openOptionsMethod()
@@ -116,21 +117,18 @@ export default class World {
       this.setSeagull4()
       this.setSeagull5()
       this.setSeagull6()
+      this.setSeagull7()
+      this.setSeagull8()
+      this.setSeagull9()
+      this.setSeagull10()
+      this.setSeagull11()
+      this.setSeagull12()
       this.setButterfly()
       this.setButterfly2()
       this.setParticules()
     }
     this.openInventoryMethod()
     this.closeInventoryMethod()
-    this.setSeagull()
-    this.setSeagull2()
-    this.setSeagull3()
-    this.setSeagull4()
-    this.setSeagull5()
-    this.setSeagull6()
-    this.setButterfly()
-    this.setButterfly2()
-    this.setParticules()
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
@@ -209,6 +207,7 @@ export default class World {
       assets: this.assets,
       curve: this.curves[0],
       decal: -60,
+      xDecal: 0,
       heightDecal: 20,
       lineVisible: false,
       rotation: Math.PI,
@@ -229,6 +228,7 @@ export default class World {
         [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ],
       decal: -57,
+      xDecal: 0,
       heightDecal: 22,
       lineVisible: false,
       rotation: Math.PI,
@@ -249,6 +249,7 @@ export default class World {
         [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ],
       decal: -63,
+      xDecal: 0,
       heightDecal: 18,
       lineVisible: false,
       rotation: Math.PI,
@@ -269,6 +270,7 @@ export default class World {
         [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ].reverse(),
       decal: -55,
+      xDecal: 0,
       heightDecal: 24,
       lineVisible: false,
       rotation: Math.PI,
@@ -289,6 +291,7 @@ export default class World {
         [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ].reverse(),
       decal: -52,
+      xDecal: 0,
       heightDecal: 26,
       lineVisible: false,
       rotation: Math.PI,
@@ -309,6 +312,7 @@ export default class World {
         [47.69215774536133, 103.88478088378906, 9.540440559387207],
       ].reverse(),
       decal: -58,
+      xDecal: 0,
       heightDecal: 22,
       lineVisible: false,
       rotation: Math.PI,
@@ -317,34 +321,137 @@ export default class World {
     this.container.add(this.seagull6.container)
   }
 
+  setSeagull7() {
+    this.seagull7 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+        [82.24927520751953, 146.232666015625, 34.38499450683594] ,
+        [-17.406494140625, 152.1570281982422, 15.20602798461914] ,
+        [-12.404407501220703, -2.6192703247070312, 21.14066505432129] ,
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+      ],
+      decal: -82,
+      xDecal: 0,
+      heightDecal: 26,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.00098,
+    })
+    this.container.add(this.seagull7.container)
+  }
+  setSeagull8() {
+    this.seagull8 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+        [82.24927520751953, 146.232666015625, 34.38499450683594] ,
+        [-17.406494140625, 152.1570281982422, 15.20602798461914] ,
+        [-12.404407501220703, -2.6192703247070312, 21.14066505432129] ,
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+      ],
+      decal: -86,
+      xDecal: 0,
+      heightDecal: 22,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.001,
+    })
+    this.container.add(this.seagull8.container)
+  }
+  setSeagull9() {
+    this.seagull9 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+        [82.24927520751953, 146.232666015625, 34.38499450683594] ,
+        [-17.406494140625, 152.1570281982422, 15.20602798461914] ,
+        [-12.404407501220703, -2.6192703247070312, 21.14066505432129] ,
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+      ],
+      decal: -90,
+      xDecal: 0,
+      heightDecal: 20,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.00102,
+    })
+    this.container.add(this.seagull9.container)
+  }
+
+  setSeagull10() {
+    this.seagull10 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+        [82.24927520751953, 146.232666015625, 34.38499450683594] ,
+        [-17.406494140625, 152.1570281982422, 15.20602798461914] ,
+        [-12.404407501220703, -2.6192703247070312, 21.14066505432129] ,
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+      ].reverse(),
+      decal: -82,
+      xDecal: -78,
+      heightDecal: 26,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.00098,
+    })
+    this.container.add(this.seagull10.container)
+  }
+  setSeagull11() {
+    this.seagull11 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+        [82.24927520751953, 146.232666015625, 34.38499450683594] ,
+        [-17.406494140625, 152.1570281982422, 15.20602798461914] ,
+        [-12.404407501220703, -2.6192703247070312, 21.14066505432129] ,
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+      ].reverse(),
+      decal: -86,
+      xDecal: -80,
+      heightDecal: 22,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.001,
+    })
+    this.container.add(this.seagull11.container)
+  }
+  setSeagull12() {
+    this.seagull12 = new Seagull({
+      time: this.time,
+      assets: this.assets,
+      curve: [
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+        [82.24927520751953, 146.232666015625, 34.38499450683594] ,
+        [-17.406494140625, 152.1570281982422, 15.20602798461914] ,
+        [-12.404407501220703, -2.6192703247070312, 21.14066505432129] ,
+        [59.05406951904297, 13.828178405761719, 20.216238021850586] ,
+      ].reverse(),
+      decal: -90,
+      xDecal: -86,
+      heightDecal: 20,
+      lineVisible: false,
+      rotation: Math.PI,
+      speed: 0.00102,
+    })
+    this.container.add(this.seagull12.container)
+  }
+
   setButterfly() {
     this.butterfly = new Butterfly({
       time: this.time,
       assets: this.assets,
       curve: [
-        [0.22757530212402344, -2.221489429473877, 5],
-        [0.22757530212402344, -2.221489429473877, 5],
-        [-1.8654354810714722, -4.528411388397217, 5],
-        [-4.785167694091797, -7.040308952331543, 5],
-        [-7.4153642654418945, -7.535991191864014, 5],
-        [-9.737287521362305, -7.310304164886475, 5],
-        [-11.392159461975098, -6.660364627838135, 5],
-        [-12.330945014953613, -5.16754150390625, 5],
-        [-12.177045822143555, -2.9667816162109375, 5],
-        [-10.638052940368652, 0.6344614028930664, 5],
-        [-7.59529972076416, 4.540771961212158, 5],
-        [-3.8008956909179688, 5.488203525543213, 5],
-        [-0.7774209976196289, 4.188275337219238, 5],
-        [1.0232001543045044, 1.0641200542449951, 5],
-        [12.1620547771453857, -0.0138654708862305, 5],
-        [5.2728655338287354, -11.17099666595459, 5],
-        [-8.22275161743164, -11.026939392089844, 5],
-        [-7.304580211639404, -2.692131757736206, 5],
-        [-13.927192687988281, -0.6309871673583984, 5],
-        [-13.942583084106445, 6.00206995010376, 5.2705764770507812],
-        [-5.803896903991699, 9.718185424804688, 5.0827462673187256],
-        [1.8961199522018433, 6.00206995010376, 5],
-        [2.0, 0.0, -0.18960541486740112],
+        [-15.033267974853516, -30.81005096435547,  8.937753677368164] ,
+        [-48.74482727050781, -19.805715560913086, 6.565812349319458] ,
+        [-33.64063262939453, 8.438921928405762, 4.24908447265625] ,
+        [1.4009926319122314, -1.3468989133834839, 4.839278697967529] ,
       ],
     })
     this.container.add(this.butterfly.container)
@@ -355,29 +462,10 @@ export default class World {
       time: this.time,
       assets: this.assets,
       curve: [
-        [0.22757530212402344, -2.221489429473877, 5],
-        [0.22757530212402344, -2.221489429473877, 5],
-        [-1.8654354810714722, -4.528411388397217, 5],
-        [-4.785167694091797, -7.040308952331543, 5],
-        [-7.4153642654418945, -7.535991191864014, 5],
-        [-9.737287521362305, -7.310304164886475, 5],
-        [-11.392159461975098, -6.660364627838135, 5],
-        [-12.330945014953613, -5.16754150390625, 5],
-        [-12.177045822143555, -2.9667816162109375, 5],
-        [-10.638052940368652, 0.6344614028930664, 5],
-        [-7.59529972076416, 4.540771961212158, 5],
-        [-3.8008956909179688, 5.488203525543213, 5],
-        [-0.7774209976196289, 4.188275337219238, 5],
-        [1.0232001543045044, 1.0641200542449951, 5],
-        [12.1620547771453857, -0.0138654708862305, 5],
-        [5.2728655338287354, -11.17099666595459, 5],
-        [-8.22275161743164, -11.026939392089844, 5],
-        [-7.304580211639404, -2.692131757736206, 5],
-        [-13.927192687988281, -0.6309871673583984, 5],
-        [-13.942583084106445, 6.00206995010376, 5.2705764770507812],
-        [-5.803896903991699, 9.718185424804688, 5.0827462673187256],
-        [1.8961199522018433, 6.00206995010376, 5],
-        [2.0, 0.0, -0.18960541486740112],
+        [-15.033267974853516, -30.81005096435547, 8.937753677368164] ,
+        [-48.74482727050781, -19.805715560913086, 6.565812349319458] ,
+        [-33.64063262939453, 8.438921928405762, 6.24908447265625] ,
+        [1.4009926319122314, -1.3468989133834839, 4.839278697967529] ,
       ].reverse(),
     })
     this.container.add(this.butterfly2.container)
