@@ -30,4 +30,6 @@ new App({
   introVideoContainer: document.querySelector('.videoContainer'),
   introVideoSkipContainer: document.querySelector('.videoButton'),
   introVideoSkipButton: document.querySelector('.js_videoSkip'),
+  bubbleInventory: document.querySelector('.bubbleInventory'),
+  inventoryItems: document.querySelector('.inventory_content_items')
 })

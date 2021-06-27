@@ -6,11 +6,101 @@ random(min,max)
   .inventory_container
     display flex
 
-.inventory
+.inventoryButton
   position fixed
-  bottom: 5%
-  left: 2%
-  overflow: scroll
+  bottom: -1%
+  left: -1%
+  z-index 100
+  height: 100px
+  width: 150px
+  z-index 300
+  // overflow: scroll
+
+  &_container
+    position relative
+    width: 100%
+    height: 100%
+
+    &:hover
+      .circle
+        transform: scale(1.1)
+
+      .card1
+        transform: rotate(-45deg)
+        left: 2%
+        top: 45%
+
+      .card2
+        transform: rotate(-20deg) translateY(-10px)
+        top: 30%
+
+      .card3
+        transform: rotate(20deg)
+        left: 40%
+
+    .circle
+      position: absolute
+      top: -20%
+      left: -25%
+      transition: .3s cubic-bezier(0,.15,0,1)
+      z-index 50
+
+  .js_closeInventory
+      position: absolute
+      left: 15%
+      top: 30%
+      margin: 0
+      background-color transparent
+      border: none
+      font-size 24px
+      line-height 31px
+      font-family Francesco
+      color #fff
+      text-transform uppercase
+      opacity: 0
+      z-index 500
+      cursor pointer
+      display none
+
+
+    &_cards
+      z-index 100
+      background-color transparent
+      border none
+      overflow visible
+      width: 150px
+      height: 100px
+      cursor: pointer
+      transform: rotate(20deg)
+      position: relative
+
+      .card1,
+      .card2,
+      .card3
+        transform-origin center
+        position: absolute
+        width: 50px
+        box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.4);
+        margin: 0
+        transition: .3s cubic-bezier(0,.15,0,1)
+
+      .card1
+        left: 5%
+        top: 40%
+        transform rotate(-35deg)
+        z-index: 10
+
+      .card2
+        left: 20%
+        top: 25%
+        transform rotate(-10deg)
+        z-index: 8
+
+      .card3
+        left: 35%
+        top: 40%
+        transform rotate(10deg)
+        z-index: 6
 
 ::-webkit-scrollbar
   display: none
@@ -19,14 +109,10 @@ random(min,max)
   min-width: 100%
   height: 100%
   position: absolute
-  background-color #000000
+  // background-color #000000
   display none
   align-items: center
-  &_close
-    position absolute
-    bottom: 5%
-    left: 2%
-    z-index 2000
+  z-index 200
 
 .inventory_content
   margin auto
@@ -37,6 +123,7 @@ random(min,max)
   align-items: flex-start
   justify-content: space-between
   transition .69s ease transform
+  padding-left 250px
   &_item
     position relative
     & button
@@ -44,9 +131,9 @@ random(min,max)
       opacity 0
       position absolute
       top 0
-      left 0
+      left -2%
       height 100%
-      width 100%
+      width 105%
       border none
       background rgba(0, 0, 0, 0.3)
       border-radius 30px
@@ -59,13 +146,13 @@ random(min,max)
 
 for num in (1..8)
   .inventory_content_items_item:nth-child({num})
-    width: 400px
+    width: 300px
     margin: 0 25px
     display: flex
     flex-flow column nowrap
     align-items: center
     justify-content: space-around
-    transition 0.3s ease transform
+    // transition 0.3s ease transform
     &:hover
       transform scale(1.05)
       & img
@@ -77,3 +164,14 @@ for num in (1..8)
       width 100%
       transform rotate(random(-3, 3) deg)
       transition 0.3s ease transform
+
+.bubbleInventory
+  display block
+  position: absolute
+  bottom: 0
+  left: 0
+  width: 10px
+  height: 10px
+  border-radius 50%
+  background-color #000
+  z-index 50

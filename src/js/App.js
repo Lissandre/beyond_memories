@@ -19,7 +19,8 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js'
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
-import { gsap, Power3, Circ } from 'gsap'
+
+import {gsap, Power3, Circ, Power4} from 'gsap'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -40,10 +41,12 @@ export default class App {
 
     this.openInventory = options.openInventory
     this.closeInventory = options.closeInventory
+    this.inventoryItems = options.inventoryItems
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
     this.body = options.body
     this.itemsInventory = options.itemsInventory
+    this.bubbleInventory = options.bubbleInventory
     this.screenShot = options.screenShot
     this.initButton = options.initButton
     this.js_startAll = options.js_startAll
@@ -93,6 +96,10 @@ export default class App {
     this.setRenderer()
     this.setCamera()
     this.setIntroCam()
+    this.composerCreator()
+    this.setWorld()
+    this.setWaitingScreen()
+    this.checkInventoryLength()
     this.selectDefinition()
   }
   setLoader() {
@@ -276,6 +283,10 @@ export default class App {
       closeOptions: this.closeOptions,
       qualityButton: this.qualityButton,
       qualityDiv: this.qualityDiv,
+      openInventory: this.openInventory,
+      closeInventory: this.closeInventory,
+      bubbleInventory: this.bubbleInventory,
+      inventoryItems: this.inventoryItems
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -320,18 +331,6 @@ export default class App {
       this.stats.showPanel(0) // 0: fps, 1: ms, 2: mb, 3+: custom
       document.body.appendChild(this.stats.dom)
     }
-  }
-
-  openInventoryMethod() {
-    this.openInventory.addEventListener('click', () => {
-      this.body.classList.add('open_inventory')
-    })
-  }
-
-  closeInventoryMethod() {
-    this.closeInventory.addEventListener('click', () => {
-      this.body.classList.remove('open_inventory')
-    })
   }
 
   checkInventoryLength() {

@@ -1,5 +1,6 @@
 import { AudioListener, AxesHelper, Object3D } from 'three'
 import { Octree } from 'three/examples/jsm/math/Octree'
+import {gsap, Power3, Power4} from 'gsap'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -34,11 +35,16 @@ export default class World {
     this.initButton = options.initButton
     this.music = options.music
 
+    
     this.qualityButton = options.qualityButton
     this.qualityDiv = options.qualityDiv
-
+    
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
+    this.openInventory = options.openInventory
+    this.closeInventory = options.closeInventory
+    this.bubbleInventory = options.bubbleInventory
+    this.inventoryItems = options.inventoryItems
 
     this.musicRange = options.musicRange
     this.ambianceRange = options.ambianceRange
@@ -69,6 +75,8 @@ export default class World {
     this.musicFinVol = 1
     this.scrollValuePercentage = 0
     this.scrollValue = 0
+
+    this.inventoryTL = new gsap.timeline()
 
     if (this.debug) {
       this.container.add(new AxesHelper(5))
@@ -103,6 +111,17 @@ export default class World {
       this.setButterfly2()
       this.setParticules()
     }
+    this.openInventoryMethod()
+    this.closeInventoryMethod()
+    this.setSeagull()
+    this.setSeagull2()
+    this.setSeagull3()
+    this.setSeagull4()
+    this.setSeagull5()
+    this.setSeagull6()
+    this.setButterfly()
+    this.setButterfly2()
+    this.setParticules()
     this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
@@ -504,7 +523,7 @@ export default class World {
 
   createInventory() {
     let item = document.createElement('div')
-    item.classList.add('inventory_content_items_item', 'empty')
+    item.classList.add('inventory_content_items_item', 'empty', 'js_itemsInv')
 
     let item_image = document.createElement('img')
     item_image.setAttribute('src', Data.monde_1.empty.links.image)
@@ -525,6 +544,37 @@ export default class World {
       event.target.dataset.object
     ].isCollected = false
   }
+
+  openInventoryMethod() {
+    this.openInventory.addEventListener('click', () => {
+      this.itemProps = document.querySelectorAll('.inventory_content_items_item')
+      // console.log(this.itemProps);
+      this.body.classList.add('open_inventory')
+    
+      this.inventoryTL
+        .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.out'})
+        .to(this.bubbleInventory, {duration: 1.2, transform: `scale(380)`, ease: 'Power4.inOut'}, '-=1')
+        .to(this.closeInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power4.out'}, '-=1')
+        .fromTo(this.itemProps,{x:'50%', opacity: 0}, {duration: 1, x: '0%', opacity: 1, ease: 'Power4.out',stagger: 0.1}, '-=0.6')
+    })
+  }
+
+  closeInventoryMethod() {
+    this.closeInventory.addEventListener('click', () => {
+      console.log(this.itemProps);
+      this.inventoryTL
+      .to(this.itemProps, {duration: 1, x: '50%', opacity: 0, ease: 'Power4.out',stagger: 0.1})
+      .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'}, '-=1')
+      .to(this.bubbleInventory, {duration: 1.2, transform: 'scale(1)', ease: 'Power4.inOut'}, '-=1' )
+      .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+      setTimeout(()=> {
+
+        this.body.classList.remove('open_inventory')
+      },2000)
+    })
+  }
+
+
 
   closeDiag() {
     document.removeEventListener('keydown', this.handleKeyE, false)
@@ -593,15 +643,6 @@ export default class World {
   }
 
   createUi() {
-    this.optionDiv = document.querySelector('.options')
-
-    this.optionButton = document.createElement('button')
-    this.optionButton.classList.add('js_optionsBtn')
-    this.optionButton.classList.add('intBTN')
-    this.optionButton.classList.add('options_button')
-
-    this.optionDiv.appendChild(this.optionButton)
-
     const inv = document.querySelector('.inventory_content_items')
     for (let i = 1; i <= 8; i++) {
       this.createInventory()
