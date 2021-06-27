@@ -20,7 +20,8 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 import { FilmPass } from 'three/examples/jsm/postprocessing/FilmPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
-import * as Gsap from 'gsap'
+
+import {gsap, Power3, Circ} from 'gsap'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -54,6 +55,7 @@ export default class App {
 
     this.qualityButton = options.qualityButton
     this.qualityDiv = options.qualityDiv
+    this.qualityDivContainer = options.qualityDivContainer
 
     this.homeDiv = options.homeDiv
     this.introVideo = options.introVideo
@@ -71,7 +73,7 @@ export default class App {
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
 
-    // this.gTimeline = new gsap.timeline()
+    this.gTimeline = new gsap.timeline()
 
     // Set up
     this.time = new Time()
@@ -310,59 +312,59 @@ export default class App {
     this.invLength = this.world.playerInventory.length
     this.depthColorFor3 = new Color(0x0a3772)
     this.surfaceColorFor3 = new Color(0x43b1d9)
-    this.timelineG = new Gsap.TimelineLite
+    this.timelineSh = new gsap.timeline()
     if (this.invLength === 2) {
 
-      this.timelineG
+      this.timelineSh
         .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 0.7543, ease: Gsap.Circ})
+            .5, {value: 0.7543, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
+            1, {value: 4, ease: Circ})
         .to(this.effectVignette.uniforms['offset'],
-            .5, {value: 0.431, ease: Gsap.Circ})
+            .5, {value: 0.431, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Circ})
     }
 
     if (this.invLength === 4) {
 
-      this.timelineG
+      this.timelineSh
         .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 0.8823, ease: Gsap.Circ})
+            .5, {value: 0.8823, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
+            1, {value: 4, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Circ})
     }
 
     if (this.invLength === 6) {
 
-      this.timelineG
+      this.timelineSh
         .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 1, ease: Gsap.Circ})
+            .5, {value: 1, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
+            1, {value: 4, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Circ})
     }
 
     if (this.invLength === 8) {
 
-      this.timelineG
+      this.timelineSh
         .to(this.effectVignette.uniforms['darkness'],
-            .5, {value: 1.1, ease: Gsap.Circ})
+            .5, {value: 1.1, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uHeightWave,
-            1, {value: 4, ease: Gsap.Circ})
+            1, {value: 4, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uDepthColor.value,
-            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.depthColorFor3.r, g: this.depthColorFor3.g, b: this.depthColorFor3.b, ease: Circ})
         .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value,
-            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Gsap.Circ})
+            1, {r: this.surfaceColorFor3.r, g: this.surfaceColorFor3.g, b: this.surfaceColorFor3.b, ease: Circ})
     }
     console.log(this.world.playerInventory.length)
   }
@@ -374,31 +376,36 @@ export default class App {
       // ******************
       element.addEventListener('click', () => {
         this.choosenDefinition = element.dataset.definition
-        console.log(this.choosenDefinition)
         this.waitingScreen.init()
-        this.qualityDiv.style.opacity = 0
-        // this.homeDiv.remove()
-        // this.introVideoContainer.remove()
         this.musicWaiting.play()
         this.musicWaiting.volume = this.musicWaitingFinVol
+
+        this.gTimeline
+          .to(this.qualityDiv, {duration: 2, opacity: 0, ease: Power3})
+          .to(this.homeDiv, {duration: 2, display: 'flex', opacity: 1, ease: Power3})
+        console.log(this.choosenDefinition)
+        // this.homeDiv.remove()
+        // this.introVideoContainer.remove()
 
         // ***********************
         // Click on start button
         // ***********************
         this.js_startAll.addEventListener('click', () => {
-          this.musicWaiting.pause()
-          this.homeDiv.style.opacity = 0
+          
 
-          this.introVideoContainer.style.opacity = 1
-          // this.introVideoContainer.remove()
+          this.gTimeline
+            .to(this.homeDiv, {duration: 2, opacity: 0, ease: Power3}, '-=0.5')
+            .to(this.introVideoContainer, {duration: 1, display: 'block', opacity: 1, ease: Power3})
 
           //***************
           // Click on skip
           // **************
           this.introVideoSkipButton.addEventListener('click', () => {
-            this.introVideoContainer.style.opacity = 0
             this.introVideo.pause()
             this.introVideo.currenTime = 0
+            
+            this.gTimeline
+              .to(this.introVideoContainer, {duration: 1, opacity: 0, ease: Power3})
             setTimeout(() => {
               console.log('remove video')
               this.world.music.play()
@@ -417,7 +424,8 @@ export default class App {
           // ************
           this.introVideo.addEventListener('ended', () => {
             console.log('fin de video')
-            this.introVideoContainer.style.opacity = 0
+            this.gTimeline
+              .to(this.introVideoContainer, {duration: 1, opacity: 0, ease: Power3})
             setTimeout(() => {
               this.world.music.play()
               this.world.music.volume = this.world.musicFinVol
@@ -427,32 +435,22 @@ export default class App {
             }, 2000)
           })
 
-          this.isWaitingScreen = false
-          this.renderPass.camera = this.camera.camera
-          this.scene.remove(this.waitingScreen.container)
-          this.scene.remove(this.introCam.container)
-
+          
           setTimeout(() => {
+            this.scene.remove(this.waitingScreen)
             this.homeDiv.remove()
+            this.musicWaiting.pause()
             this.introVideo.play()
-          }, 800)
+            this.isWaitingScreen = false
+            this.scene.remove(this.waitingScreen.container)
+            this.scene.remove(this.introCam.container)
+          }, 3500)
 
-          setTimeout(() => {
+          setTimeout(()=> {
+            this.renderPass.camera = this.camera.camera
             this.world.init()
-          }, 1500)
+          }, 7000)
         })
-
-        // *************
-        // Open options
-        // *************
-        this.js_waitingOptions.addEventListener('click', () => {
-          this.body.classList.add('open_options')
-          if (this.body.classList.contains('open_inventory')) {
-            this.body.classList.remove('open_inventory')
-          }
-        })
-        this.world.createUi()
-        this.world.closeOptionsMethod()
 
         setTimeout(() => {
           this.qualityDiv.remove()
@@ -464,6 +462,7 @@ export default class App {
   composerCreator() {
     //Composer
     this.composer = new EffectComposer(this.renderer)
+    console.log('create composer effect');
 
     // this.composer.outputEncoding = sRGBEncoding
     this.composer.renderer.outputEncoding = sRGBEncoding
@@ -474,12 +473,6 @@ export default class App {
     // Render
     this.renderPass = new RenderPass(this.scene, this.introCam.camera)
     this.composer.addPass(this.renderPass)
-
-    // Grain (film pass)
-    this.filmPass = new FilmPass(0.5, 0, 0, false)
-
-    this.filmPass.renderToScreen = true
-    // this.composer.addPass(this.filmPass)
 
     const params = {
       exposure: 0,
@@ -618,10 +611,7 @@ export default class App {
       1 / (this.sizes.height * pixelRatio)
 
     this.composer.addPass(this.tintPass)
-
-    // this.composer.addPass( this.tintPass)
     this.composer.addPass(this.effectVignette)
-    // this.composer.addPass(this.filmPass)
     this.composer.addPass(bloomPass)
     this.composer.addPass(this.outlinePass)
     this.composer.addPass(this.fxaaPass)

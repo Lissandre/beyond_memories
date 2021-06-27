@@ -21,6 +21,7 @@ new App({
   unmuteButton: document.querySelector('.js_unmuteSound'),
   qualityButton: document.querySelectorAll('.js_DefinitionButton'),
   qualityDiv: document.querySelector('.definition'),
+  qualityDivContainer: document.querySelector('.definition_container'),
   js_startAll: document.querySelector('.js_startAll'),
   js_waitingOptions: document.querySelector('.js_waitingOptions'),
   homeDiv: document.querySelector('.home'),

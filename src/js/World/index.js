@@ -1,5 +1,6 @@
 import { AudioListener, AxesHelper, Object3D } from 'three'
 import { Octree } from 'three/examples/jsm/math/Octree'
+import {gsap, Power3} from 'gsap'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -14,6 +15,7 @@ import Butterfly from './Butterfly/Butterfly'
 import Particles from './Particles/Particles'
 
 import Data from '../../data/data.json'
+
 
 export default class World {
   constructor(options) {
@@ -78,6 +80,8 @@ export default class World {
     this.setLoader()
   }
   init() {
+    console.log('create world');
+    console.log(this.appThis.renderPass);
     this.setAmbientLight()
     this.setSky()
     this.setHemisphereLight()
@@ -89,7 +93,7 @@ export default class World {
     this.PlayerEnterObjectArea()
     this.PlayerEnterElmoArea()
 
-    // this.createUi()
+    this.createUi()
     this.openOptionsMethod()
     this.closeOptionsMethod()
 
@@ -114,7 +118,6 @@ export default class World {
     this.progress = this.loadDiv.querySelector('.progress')
 
     if (this.assets.total === 0) {
-      this.init()
       this.loadDiv.remove()
     } else {
       this.assets.on('ressourceLoad', () => {
@@ -125,10 +128,13 @@ export default class World {
       })
 
       this.assets.on('ressourcesReady', () => {
-        this.loadDiv.style.opacity = 0
+        this.timelineLoader = new gsap.timeline()
+        this.timelineLoader
+          .to(this.loadDiv, {duration:1, opacity: 0, ease: Power3})
+          .to(this.appThis.qualityDivContainer, {duration: 2, opacity: 1, ease: Power3}, '+=0.5')
         setTimeout(() => {
           this.loadDiv.remove()
-        }, 550)
+        }, 1500)
       })
     }
   }
@@ -480,24 +486,6 @@ export default class World {
         break
     }
   }
-
-  // handleKeyF(event) {
-  //   if(!this.playerenteredInObject) {
-  //     return
-  //   }
-  //   switch (event.code) {
-  //     case 'KeyF': // f
-  //       this.text_01.style.opacity = 0
-  //       if(this.playerenteredInObject) {
-  //         if(this.videoScreen.isCollected === false){
-  //           this.collecteObject()
-  //         }else {
-  //           return
-  //         }
-  //       }
-  //       break
-  //   }
-  // }
 
   getElmo() {
     this.elmo.getPeted = true
