@@ -468,7 +468,7 @@ export default class World {
     // }
     switch (event.code) {
       case 'KeyE': // e
-        if (this.elementEntered !== null) {
+        if (this.elementEntered !== null && this.elementEntered !== undefined) {
           console.log('collect object')
           this.collecteObject()
         }
@@ -516,6 +516,8 @@ export default class World {
 
         this.setItemCard()
         this.outline.selectedObjects = []
+        this.perso.victoryAnimation()
+        this.elmo.victoryAnimation()
         this.appThis.checkInventoryLength()
       }
     }
@@ -595,7 +597,9 @@ export default class World {
                 this.meshes.push(child)
               }
             })
-            this.outline.selectedObjects = this.meshes
+            if(element.isCollected === false) {
+              this.outline.selectedObjects = this.meshes
+            }
             this.keyPressAction()
           }
           // else{

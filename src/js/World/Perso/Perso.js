@@ -78,6 +78,7 @@ export default class Perso {
     }
 
     this.playWalk = false
+    this.ras = false
 
     this.setSounds()
     this.setPerso()
@@ -165,6 +166,7 @@ export default class Perso {
     document.addEventListener(
       'keydown',
       (event) => {
+        this.ras = false
         switch (event.code) {
           case 'ArrowUp': // up
           case 'KeyW': // w
@@ -195,6 +197,7 @@ export default class Perso {
             if (
               this.currentBaseAction != 'IDLE' &&
               this.currentBaseAction != 'RUNNING' &&
+              this.currentBaseAction != 'VICTORY' &&
               (this.moveForward == true || this.moveBackward == true)
             ) {
               this.prepareCrossFade(
@@ -232,6 +235,8 @@ export default class Perso {
             this.playerOnFloor = false
 
             break
+          default:
+            this.ras = true
         }
       },
       false
@@ -239,6 +244,7 @@ export default class Perso {
     document.addEventListener(
       'keyup',
       (event) => {
+        this.ras = false
         switch (event.code) {
           case 'ArrowUp': // up
           case 'KeyW': // w
@@ -264,12 +270,17 @@ export default class Perso {
             this.run = false
             this.runningSound.pause()
             break
+          default:
+            this.ras = true
         }
         if (
           this.moveForward == false &&
           this.moveBackward == false &&
           this.moveLeft == false &&
-          this.moveRight == false
+          this.moveRight == false &&
+          this.currentBaseAction != 'VICTORY' &&
+          this.currentBaseAction != 'IDLE' &&
+          !this.ras
         ) {
           this.prepareCrossFade(
             this.baseActions[this.currentBaseAction].action,
@@ -280,8 +291,10 @@ export default class Perso {
         } else if (
           this.currentBaseAction != 'WALKING' &&
           this.currentBaseAction != 'IDLE' &&
+          this.currentBaseAction != 'VICTORY' &&
           this.run == false &&
-          (this.moveForward == true || this.moveBackward == true)
+          (this.moveForward == true || this.moveBackward == true) &&
+          !this.ras
         ) {
           this.prepareCrossFade(
             this.baseActions[this.currentBaseAction].action,
@@ -309,7 +322,8 @@ export default class Perso {
           this.playerBB.setFromObject(this.cube)
           if (
             this.currentBaseAction != 'WALKING' &&
-            this.currentBaseAction != 'RUNNING'
+            this.currentBaseAction != 'RUNNING' &&
+            this.currentBaseAction != 'VICTORY'
           ) {
             if (this.run) {
               this.prepareCrossFade(
@@ -351,7 +365,8 @@ export default class Perso {
           this.playerBB.setFromObject(this.cube)
           if (
             this.currentBaseAction != 'WALKING' &&
-            this.currentBaseAction != 'RUNNING'
+            this.currentBaseAction != 'RUNNING' &&
+            this.currentBaseAction != 'VICTORY'
           ) {
             if (this.run) {
               this.prepareCrossFade(
@@ -470,6 +485,26 @@ export default class Perso {
       const delta = Math.min(0.1, this.clock.getDelta())
       this.updatePlayer(delta)
     })
+  }
+  victoryAnimation(){
+    this.oldSpeedP = this.speedP
+    this.oldAction = this.currentBaseAction
+    this.speedP = 0
+    setTimeout(() => {
+      this.prepareCrossFade(
+        this.baseActions[this.currentBaseAction].action,
+        this.baseActions['VICTORY'].action,
+        0.5
+      )
+      setTimeout(() => {
+        this.prepareCrossFade(
+          this.baseActions[this.currentBaseAction].action,
+          this.baseActions[this.oldAction].action,
+          0.4
+        )
+        this.speedP = this.oldSpeedP
+      }, 1100)
+    }, 200)
   }
   lerpOrientation() {
     const baseQuat = new Quaternion().copy(this.camera.container.quaternion)
