@@ -339,9 +339,8 @@ export default class App {
     this.depthColorFor3 = new Color(0x0a3772)
     this.surfaceColorFor3 = new Color(0x43b1d9)
     if (this.choosenDefinition === 'high') {
-      this.timelineG = new TimelineLite()
       if (this.invLength === 2) {
-        this.timelineG
+        this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 0.7543,
             ease: Circ,
@@ -369,7 +368,7 @@ export default class App {
       }
 
       if (this.invLength === 4) {
-        this.timelineG
+        this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 0.8823,
             ease: Circ,
@@ -393,7 +392,7 @@ export default class App {
       }
 
       if (this.invLength === 6) {
-        this.timelineG
+        this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 1,
             ease: Circ,
@@ -417,7 +416,7 @@ export default class App {
       }
 
       if (this.invLength === 8) {
-        this.timelineG
+        this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 1.1,
             ease: Circ,
