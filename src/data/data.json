@@ -193,11 +193,11 @@
         "mod_hubbahubba": {
           "id": 12,
           "name": "Pokémon",
-          "data_object": "mod_hubbahubba",
+          "data_object": "mod_hubbabubba",
           "description": "",
           "type": "media",
           "links": {
-              "image": "./assets/HUBBA-HUBBA-min.png"
+              "image": "./assets/HUBBA-BUBBA-min.png"
           }
         },
         "mod_bateau": {
