@@ -84,7 +84,7 @@ export default class App {
     this.isWaitingScreen = false
     this.musicWaitingFinVol = 1
     this.composer
-    
+
     this.setConfig()
     this.setRenderer()
     this.setCamera()
