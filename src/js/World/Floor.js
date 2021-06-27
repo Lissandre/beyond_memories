@@ -166,7 +166,7 @@ export default class Floor {
         }
         if (child.material !== undefined) {
           if (
-            child.material.name.includes('LEAVES') ||
+            child.material.name.includes('LEAVE') ||
             child.material.name.includes('Leaf') ||
             child.material.name.includes('rocks') ||
             child.material.name.includes('BUSH')
@@ -175,17 +175,24 @@ export default class Floor {
           }
         }
       }
-      if (child.name.includes('arbre')) {
+      if (
+        child.name.includes('ARBRE') ||
+        child.name.includes('Arbre') ||
+        child.name.includes('arbre') ||
+        child.name.includes('cabane01')
+      ) {
         if (this.perf != 'low') {
           child.castShadow = true
           child.receiveShadow = true
         }
-        if (
-          child.material.name.includes('Leaf') ||
-          child.material.name.includes('rocks') ||
-          child.material.name.includes('LEAVES')
-        ) {
-          child.material.transparent = true
+        if (child.material !== undefined) {
+          if (
+            child.material.name.includes('Leaf') ||
+            child.material.name.includes('rocks') ||
+            child.material.name.includes('LEAVE')
+          ) {
+            child.material.transparent = true
+          }
         }
       }
       if (child.name.includes('HOUSE') || child.name.includes('ROCK')) {
@@ -228,8 +235,7 @@ export default class Floor {
         child.name.includes('SAUT') ||
         child.name.includes('TRONC') ||
         child.name.includes('TIPI') ||
-        child.name.includes('PAVE') ||
-        child.name.includes('BUSH')
+        child.name.includes('PAVE')
       ) {
         if (this.perf != 'low') {
           child.castShadow = true
