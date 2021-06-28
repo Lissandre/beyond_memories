@@ -435,11 +435,11 @@ export default class App {
           .to(this.effectVignette.uniforms['offset'], 1, {
             value: 0.15,
             ease: 'power4.out',
-          }, '-=1')
+          })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 2,
             ease: 'power4.out',
-          }, '-=1')
+          })
       }
 
       if (this.invLength === 4) {
@@ -451,11 +451,11 @@ export default class App {
           .to(this.effectVignette.uniforms['offset'], 1, {
             value: 0.23,
             ease: 'power4.out',
-          }, '-=1')
+          })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 3.5,
             ease: 'power4.out',
-          }, '-=1')
+          })
       }
 
       if (this.invLength === 6) {
@@ -467,11 +467,11 @@ export default class App {
           .to(this.effectVignette.uniforms['offset'], 1, {
             value: 0.31,
             ease: 'power4.out',
-          }, '-=1')
+          })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 5,
             ease: 'power4.out',
-          }, '-=1')
+          })
           
       }
       
@@ -484,11 +484,11 @@ export default class App {
           .to(this.effectVignette.uniforms['offset'], 1, {
             value: 0.35,
             ease: 'power4.out',
-          }, '-=1')
+          })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 6.5,
             ease: 'power4.out',
-          }, '-=1')
+          })
           
 
       }

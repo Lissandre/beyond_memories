@@ -1,7 +1,7 @@
 {
     "monde_1": {
         "empty": {
-            "id": 1,
+            "id": 22,
             "name": "Empty Card",
             "data_object": "empty",
             "description": "",
@@ -141,7 +141,7 @@
             }
         },
         "mod_dofus": {
-            "id": 12,
+            "id": 13,
             "name": "Pokémon",
             "data_object": "mod_dofus",
             "description": "",
@@ -151,7 +151,7 @@
             }
         },
         "mod_lego": {
-            "id": 12,
+            "id": 14,
             "name": "Pokémon",
             "data_object": "mod_lego",
             "description": "",
@@ -161,7 +161,7 @@
             }
         },
         "mod_toystory": {
-            "id": 12,
+            "id": 15,
             "name": "Pokémon",
             "data_object": "mod_toystory",
             "description": "",
@@ -171,7 +171,7 @@
             }
         },
         "mod_bouet": {
-            "id": 12,
+            "id": 16,
             "name": "Pokémon",
             "data_object": "mod_bouet",
             "description": "",
@@ -181,7 +181,7 @@
             }
         },
         "mod_cerfvolant": {
-            "id": 12,
+            "id": 17,
             "name": "Pokémon",
             "data_object": "mod_cerfvolant",
             "description": "",
@@ -191,7 +191,7 @@
             }
         },
         "mod_hubbabubba": {
-          "id": 12,
+          "id": 18,
           "name": "Pokémon",
           "data_object": "mod_hubbabubba",
           "description": "",
@@ -201,7 +201,7 @@
           }
         },
         "mod_bateau": {
-          "id": 12,
+          "id": 19,
           "name": "Pokémon",
           "data_object": "mod_bateau",
           "description": "",
@@ -211,7 +211,7 @@
           }
         },
         "mod_sport": {
-          "id": 12,
+          "id": 20,
           "name": "Pokémon",
           "data_object": "mod_sport",
           "description": "",
@@ -221,7 +221,7 @@
           }
         },
         "mod_balancoire": {
-          "id": 12,
+          "id": 21,
           "name": "Pokémon",
           "data_object": "mod_balancoire",
           "description": "",
