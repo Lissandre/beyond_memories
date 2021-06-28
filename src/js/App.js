@@ -466,8 +466,8 @@ export default class App {
                 .to(this.musicWaiting, {duration: 1, volume: 1, ease: Power4})
               this.waitingScreen = true
               this.renderPass.camera = this.introCam.camera
-              this.container.add(this.waitingScreen.container)
-              this.container.remove(this.world.container)
+              this.scene.add(this.waitingScreen.container)
+              this.scene.remove(this.world.container)
             })
             
             setTimeout(()=> {
@@ -568,6 +568,8 @@ export default class App {
             }, 550)
             setTimeout(() => {
               this.introVideoContainer.remove()
+              this.renderPass.camera = this.camera.camera
+              this.world.init()
             }, 2000)
           })
 
@@ -576,12 +578,13 @@ export default class App {
           // ************
           this.introVideo.addEventListener('ended', () => {
             this.gTimeline.to(this.introVideoContainer, {
-              duration: 1,
+              duration: 3,
               opacity: 0,
               ease: Power3,
             })
             setTimeout(() => {
               this.world.music.play()
+              this.renderPass.camera = this.camera.camera
               this.gTimeline.to(this.world.music, {
                 duration: 0.5,
                 volume: this.world.musicFinVol,
@@ -590,6 +593,7 @@ export default class App {
               this.introVideoContainer.remove()
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
+            this.world.init()
             }, 2000)
           })
 
@@ -608,11 +612,6 @@ export default class App {
             this.scene.remove(this.waitingScreen.container)
             this.scene.remove(this.introCam.container)
           }, 3500)
-
-          setTimeout(() => {
-            this.renderPass.camera = this.camera.camera
-            this.world.init()
-          }, 7000)
         })
 
         setTimeout(() => {

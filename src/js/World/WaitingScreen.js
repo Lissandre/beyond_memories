@@ -61,11 +61,11 @@ export default class WaitingScreen {
 
     this.musicFinVol = 1
 
-    if (this.debug) {
-      this.container.add(new AxesHelper(5))
-      this.debugFolder = this.debug.addFolder('WaitingScreen')
-      this.debugFolder.open()
-    }
+    // if (this.debug) {
+    //   this.container.add(new AxesHelper(5))
+    //   this.debugFolder = this.debug.addFolder('WaitingScreen')
+    //   this.debugFolder.open()
+    // }
   }
   init() {
     this.setAmbientLight()
