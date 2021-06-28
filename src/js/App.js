@@ -454,11 +454,15 @@ export default class App {
 
         setTimeout(()=> {
           console.log('fin du jeu');
+          this.optionButton = document.querySelector('.inventoryButton')
+          this.closeOptionButton = document.querySelector('.options')
           this.gTimeline
             .to(this.outroVideoContainer, {duration: 1, opacity: 1, display: 'block', ease: Power4})
             .to(this.world.music, {duration: 1, volume: 0, ease: Power4})
+            .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
+            .to(this.closeOptionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
           
-            this.endOfGame = true
+            
             this.world.screenCanvas()
             
             this.outroVideo.addEventListener('ended', ()=> {
@@ -558,7 +562,7 @@ export default class App {
             this.introVideo.currenTime = 0
 
             this.gTimeline.to(this.introVideoContainer, {
-              duration: 1,
+              duration: 3,
               opacity: 0,
               ease: Power3,
             })
@@ -576,7 +580,7 @@ export default class App {
               this.introVideoContainer.remove()
               this.renderPass.camera = this.camera.camera
               this.world.init()
-            }, 2000)
+            }, 1000)
           })
 
           // ************
@@ -600,7 +604,7 @@ export default class App {
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
             this.world.init()
-            }, 2000)
+            }, 1000)
           })
 
           setTimeout(() => {

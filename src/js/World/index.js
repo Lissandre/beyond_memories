@@ -135,7 +135,6 @@ export default class World {
     this.muteSoundMethod()
     this.unmuteSoundMethod()
     this.openDiagOne()
-    this.endGameClose()
   }
   setAmbientLight() {
     this.ambientlight = new AmbientLightSource({
@@ -613,7 +612,7 @@ export default class World {
 
     setTimeout(()=> {
       this.divShowedPic.remove()
-    }, 7000)
+    }, 3500)
   }
 
   setItemCard() {
@@ -918,13 +917,13 @@ export default class World {
   }
 
   endGameClose() {
-    if(this.endOfGame === true) {
       this.optionTL
         .to(this.optionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'})
 
       this.inventoryTL
         .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'})
 
-    }
+    
   }
+
 }
