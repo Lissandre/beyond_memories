@@ -6,6 +6,7 @@ import {
   Vector3,
   Quaternion,
   Box3,
+  // Box3Helper
 } from 'three'
 
 export default class BoxObjectVanilla {
@@ -28,7 +29,7 @@ export default class BoxObjectVanilla {
     if (this.child.isMesh) {
       this.child.geometry.boundingBox.getSize(this.size)
       if (this.child.name === 'mod_starwars') {
-        this.size = new Vector3(50, 50, 50)
+        this.size = new Vector3(27, 27, 27)
       }
     } else {
       this.size = new Vector3(8, 8, 8)
@@ -48,6 +49,6 @@ export default class BoxObjectVanilla {
     this.cube.position.copy(this.child.position)
     this.objectBB = new Box3().setFromObject(this.cube)
     // const helper = new Box3Helper(this.objectBB, 0xff0000)
-    // this.container.add(this.cube)
+    // this.container.add(helper)
   }
 }
