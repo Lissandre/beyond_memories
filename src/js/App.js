@@ -107,18 +107,21 @@ export default class App {
     this.selectDefinition()
   }
   setLoader() {
-    this.loadDiv = document.querySelector('.loadScreen')
-    this.loadModels = this.loadDiv.querySelector('.load')
-    this.progress = this.loadDiv.querySelector('.progress')
-
+    this.loadDiv = document.querySelector('.loading')
+    const tl = gsap.timeline()
+    const path = document.querySelector('.loading-circle-background svg path')
+    const l = path.getTotalLength()
+    path.style.strokeDashoffset = 100
     if (this.assets.total === 0) {
       this.loadDiv.remove()
     } else {
       this.assets.on('ressourceLoad', () => {
-        this.progress.style.width = this.loadModels.innerHTML = `${
-          Math.floor((this.assets.done / this.assets.total) * 100) +
-          Math.floor((1 / this.assets.total) * this.assets.currentPercent)
-        }%`
+        path.style.strokeDashoffset = -(l / 100) * (Math.floor((this.assets.done / this.assets.total) * 100) + Math.floor((1 / this.assets.total) * this.assets.currentPercent))
+
+        tl
+          .set(path, {strokeDasharray:l})
+          .fromTo('.loading-title span', {y:'50%', autoAlpha:0}, {y:'0%', autoAlpha:1, duration:1.2, ease:'power4.out', stagger:{each: 0.07, ease:'power2.in'}}, 0.6)
+          // .fromTo(path, {strokeDashoffset:l}, {strokeDashoffset: 0, duration:2, ease:'power4.out'}, '-=1.2')
       })
 
       this.assets.on('ressourcesReady', () => {
@@ -149,7 +152,7 @@ export default class App {
     this.renderer = new WebGLRenderer({
       canvas: this.canvas,
       alpha: true,
-      antialias: true,
+      // antialias: true,
       powerPreference: 'high-performance',
     })
     // this.renderer.toneMapping = CineonToneMapping
@@ -510,6 +513,9 @@ export default class App {
 
         if (this.choosenDefinition === 'low') {
           this.renderer.shadowMap.enabled = false
+          this.renderer.antialias = false
+        } else if (this.choosenDefinition === 'medium') {
+          this.renderer.antialias = true
         }
         this.waitingScreen.init()
         this.musicWaiting.play()
