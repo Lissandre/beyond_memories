@@ -356,171 +356,141 @@ export default class App {
     this.outroVideoContainer = document.querySelector('.outroContainer')
     this.outroVideo = document.querySelector('.videoOutro')
 
+    if(this.invLength === 1) {
+      this.js_firstItemSound.volume = 1
+      this.js_firstItemSound.play()
 
+      this.js_firstItemSound.addEventListener('ended', ()=> {
+        this.js_firstItemSound.remove()
+      })
+    }
+    if(this.invLength === 7) {
+      this.js_lastIemSound.volume = 1
+      this.js_lastIemSound.play()
+
+      this.js_lastIemSound.addEventListener('ended', ()=> {
+        this.js_lastIemSound.remove()
+      })
+    }
+    if(this.invLength === 8) {
+      setTimeout(()=> {
+        console.log();
+        this.optionButton = document.querySelector('.inventoryButton')
+        this.closeOptionButton = document.querySelector('.options')
+        this.thanksDiv = document.querySelector('.thanks')
+        this.thanksTitle = document.querySelector('.thanks_title')
+        this.thanksCreditsTitle = document.querySelector('.thanks_creditsTitle')
+        this.thanksName = document.querySelectorAll('.thanks_name')
+        this.thanksRefresh = document.querySelector('.thanks_refresh')
+
+        this.gTimeline
+          .to(this.outroVideoContainer, {duration: 1, opacity: 1, display: 'block', ease: 'power4.out'})
+          .to(this.world.music, {duration: 1, volume: 0, ease: 'power4.out'})
+          .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'power4.out'}, '-=1')
+          .to(this.closeOptionButton, {duration: 1, opacity: 0, display: 'none', ease: 'power4.out'}, '-=1')
+        
+          
+          this.world.screenCanvas()
+          
+          this.outroVideo.addEventListener('ended', ()=> {
+            this.gTimeline
+              .to(this.outroVideoContainer, {duration: 1, opacity: 0, display: 'none', ease: 'power4.out'})
+              .to(this.musicWaiting, {duration: 1, volume: 1, ease: 'power4.out'})
+            this.musicWaiting.volume = 0
+            this.musicWaiting.play()
+
+            this.scene.remove(this.world.container)
+          })
+
+          setTimeout(()=> {
+            this.gTimeline
+            .to(this.thanksDiv, {duration: 1, opacity: 1, display: 'flex', ease: 'power4.out'})
+            .to(this.thanksTitle, {duration: 1, opacity: 1, ease: 'power4.out'})
+            .to(this.thanksCreditsTitle, {duration: 1, opacity: 1, ease: 'power4.out'})
+            .to(this.thanksName, {duration: 1, opacity: 1, ease: 'power4.out', stagger: 0.1})
+            .to(this.thanksRefresh, {duration: 1, opacity:1, ease: 'power4.out'})
+          }, 48500)
+          
+          setTimeout(()=> {
+            this.outroVideo.play()
+            this.world.music.pause()
+            this.world.floor.oceanSound.pause()
+            this.world.floor.riverSound.pause()
+            this.waitingScreen.floor.oceanSound.pause()
+            this.waitingScreen.floor.riverSound.pause()
+          }, 1000)
+
+          
+
+      },2000)
+    }
     if (this.choosenDefinition === 'high') {
-      if(this.invLength === 1) {
-        this.js_firstItemSound.volume = 1
-        this.js_firstItemSound.play()
-
-        this.js_firstItemSound.addEventListener('ended', ()=> {
-          this.js_firstItemSound.remove()
-        })
-      }
+      
       if (this.invLength === 2) {
         this.gTimeline
-          .to(this.effectVignette.uniforms['darkness'], 0.5, {
-            value: 0.7543,
+          .to(this.effectVignette.uniforms['darkness'], 1, {
+            value: 0.7,
             ease: 'power4.out',
           })
+          .to(this.effectVignette.uniforms['offset'], 1, {
+            value: 0.15,
+            ease: 'power4.out',
+          }, '-=1')
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
-            value: 4,
+            value: 2,
             ease: 'power4.out',
-          })
-          .to(this.effectVignette.uniforms['offset'], 0.5, {
-            value: 0.431,
-            ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
-            r: this.depthColorFor3.r,
-            g: this.depthColorFor3.g,
-            b: this.depthColorFor3.b,
-            ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
-            r: this.surfaceColorFor3.r,
-            g: this.surfaceColorFor3.g,
-            b: this.surfaceColorFor3.b,
-            ease: 'power4.out',
-          })
+          }, '-=1')
       }
 
       if (this.invLength === 4) {
         this.gTimeline
-          .to(this.effectVignette.uniforms['darkness'], 0.5, {
-            value: 0.8823,
+          .to(this.effectVignette.uniforms['darkness'], 1, {
+            value: 0.75,
             ease: 'power4.out',
           })
+          .to(this.effectVignette.uniforms['offset'], 1, {
+            value: 0.23,
+            ease: 'power4.out',
+          }, '-=1')
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
-            value: 4,
+            value: 3.5,
             ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
-            r: this.depthColorFor3.r,
-            g: this.depthColorFor3.g,
-            b: this.depthColorFor3.b,
-            ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
-            r: this.surfaceColorFor3.r,
-            g: this.surfaceColorFor3.g,
-            b: this.surfaceColorFor3.b,
-            ease: 'power4.out',
-          })
+          }, '-=1')
       }
 
       if (this.invLength === 6) {
         this.gTimeline
-          .to(this.effectVignette.uniforms['darkness'], 0.5, {
-            value: 1,
+          .to(this.effectVignette.uniforms['darkness'], 1, {
+            value: 0.77,
             ease: 'power4.out',
           })
+          .to(this.effectVignette.uniforms['offset'], 1, {
+            value: 0.31,
+            ease: 'power4.out',
+          }, '-=1')
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
-            value: 4,
+            value: 5,
             ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
-            r: this.depthColorFor3.r,
-            g: this.depthColorFor3.g,
-            b: this.depthColorFor3.b,
-            ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
-            r: this.surfaceColorFor3.r,
-            g: this.surfaceColorFor3.g,
-            b: this.surfaceColorFor3.b,
-            ease: 'power4.out',
-          })
+          }, '-=1')
+          
       }
-      if(this.invLength === 7) {
-        this.js_lastIemSound.volume = 1
-        this.js_lastIemSound.play()
-
-        this.js_lastIemSound.addEventListener('ended', ()=> {
-          this.js_lastIemSound.remove()
-        })
-      }
+      
       if (this.invLength === 8) {
         this.gTimeline
-          .to(this.effectVignette.uniforms['darkness'], 0.5, {
-            value: 1.1,
+          .to(this.effectVignette.uniforms['darkness'], 1, {
+            value: 0.8,
             ease: 'power4.out',
           })
+          .to(this.effectVignette.uniforms['offset'], 1, {
+            value: 0.35,
+            ease: 'power4.out',
+          }, '-=1')
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
-            value: 4,
+            value: 6.5,
             ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
-            r: this.depthColorFor3.r,
-            g: this.depthColorFor3.g,
-            b: this.depthColorFor3.b,
-            ease: 'power4.out',
-          })
-          .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
-            r: this.surfaceColorFor3.r,
-            g: this.surfaceColorFor3.g,
-            b: this.surfaceColorFor3.b,
-            ease: 'power4.out',
-          })
-
-        setTimeout(()=> {
-          this.optionButton = document.querySelector('.inventoryButton')
-          this.closeOptionButton = document.querySelector('.options')
-          this.thanksDiv = document.querySelector('.thanks')
-          this.thanksTitle = document.querySelector('.thanks_title')
-          this.thanksCreditsTitle = document.querySelector('.thanks_creditsTitle')
-          this.thanksName = document.querySelectorAll('.thanks_name')
-          this.thanksRefresh = document.querySelector('.thanks_refresh')
-
-          this.gTimeline
-            .to(this.outroVideoContainer, {duration: 1, opacity: 1, display: 'block', ease: Power4})
-            .to(this.world.music, {duration: 1, volume: 0, ease: Power4})
-            .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
-            .to(this.closeOptionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
+          }, '-=1')
           
-            
-            this.world.screenCanvas()
-            
-            this.outroVideo.addEventListener('ended', ()=> {
-              this.gTimeline
-                .to(this.outroVideoContainer, {duration: 1, opacity: 0, display: 'none', ease: Power4})
-                .to(this.musicWaiting, {duration: 1, volume: 1, ease: Power4})
-              this.musicWaiting.volume = 0
-              this.musicWaiting.play()
-  
-              this.scene.remove(this.world.container)
-            })
 
-            setTimeout(()=> {
-              this.gTimeline
-              .to(this.thanksDiv, {duration: 1, opacity: 1, display: 'flex', ease: Power4})
-              .to(this.thanksTitle, {duration: 1, opacity: 1, ease: Power4})
-              .to(this.thanksCreditsTitle, {duration: 1, opacity: 1, ease: Power4})
-              .to(this.thanksName, {duration: 1, opacity: 1, ease: Power4, stagger: 0.1})
-              .to(this.thanksRefresh, {duration: 1, opacity:1, ease: Power4})
-            }, 48500)
-            
-            setTimeout(()=> {
-              this.outroVideo.play()
-              this.world.music.pause()
-              this.world.floor.oceanSound.pause()
-              this.world.floor.riverSound.pause()
-              this.waitingScreen.floor.oceanSound.pause()
-              this.waitingScreen.floor.riverSound.pause()
-            }, 1000)
-
-            
-
-        },2000)
       }
     }
   }
