@@ -57,6 +57,8 @@ export default class World {
 
     this.outline = options.outline
 
+    this.endOfGame =  options.endOfGame
+
     // Set up
     this.container = new Object3D()
     this.worldOctree = new Octree()
@@ -99,12 +101,12 @@ export default class World {
     this.setSky()
     this.setHemisphereLight()
     this.setAudioListener()
-    // this.setPerso()
-    // this.setElmo()
+    this.setPerso()
+    this.setElmo()
     this.setFloor()
-    // this.setBoxObjectManager()
-    // this.PlayerEnterObjectArea()
-    // this.PlayerEnterElmoArea()
+    this.setBoxObjectManager()
+    this.PlayerEnterObjectArea()
+    this.PlayerEnterElmoArea()
 
     this.createUi()
     this.openOptionsMethod()
@@ -129,11 +131,11 @@ export default class World {
     }
     this.openInventoryMethod()
     this.closeInventoryMethod()
-    this.screenCanvas()
     this.getMusicRangeValue()
     this.muteSoundMethod()
     this.unmuteSoundMethod()
     this.openDiagOne()
+    this.endGameClose()
   }
   setAmbientLight() {
     this.ambientlight = new AmbientLightSource({
@@ -495,11 +497,9 @@ export default class World {
   }
 
   screenCanvas() {
-    this.screenShot.addEventListener('click', () => {
-      this.CanvasResult = new CanvasResult({
-        playerInventory: this.playerInventory,
-        body: this.body,
-      })
+    this.CanvasResult = new CanvasResult({
+      playerInventory: this.playerInventory,
+      body: this.body,
     })
   }
 
@@ -911,5 +911,16 @@ export default class World {
       .to(this.subtitleTitle, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
       .to(this.subtitle, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'}, '-=1')
       
+  }
+
+  endGameClose() {
+    if(this.endOfGame === true) {
+      this.optionTL
+        .to(this.optionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'})
+
+      this.inventoryTL
+        .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.inOut'})
+
+    }
   }
 }

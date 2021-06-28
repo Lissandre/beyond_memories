@@ -79,6 +79,8 @@ export default class App {
 
     this.gTimeline = new gsap.timeline()
 
+    this.endOfGame = false
+
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
@@ -290,7 +292,8 @@ export default class App {
       bubbleInventory: this.bubbleInventory,
       inventoryItems: this.inventoryItems,
       musicObject: this.musicObject,
-      bubbleOption: this.bubbleOption
+      bubbleOption: this.bubbleOption,
+      endOfGame: this.endOfGame
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -341,6 +344,11 @@ export default class App {
     this.invLength = this.world.playerInventory.length
     this.depthColorFor3 = new Color(0x0a3772)
     this.surfaceColorFor3 = new Color(0x43b1d9)
+
+    this.outroVideoContainer = document.querySelector('.outroContainer')
+    this.outroVideo = document.querySelector('.videoOutro')
+
+
     if (this.choosenDefinition === 'high') {
       if (this.invLength === 2) {
         this.gTimeline
@@ -440,6 +448,40 @@ export default class App {
             b: this.surfaceColorFor3.b,
             ease: Circ,
           })
+
+        setTimeout(()=> {
+          console.log('fin du jeu');
+          this.gTimeline
+            .to(this.outroVideoContainer, {duration: 1, opacity: 1, display: 'block', ease: Power4})
+            .to(this.world.music, {duration: 1, volume: 0, ease: Power4})
+          
+            this.endOfGame = true
+            this.world.screenCanvas()
+            
+            this.outroVideo.addEventListener('ended', ()=> {
+              this.musicWaiting.volume = 0
+              this.musicWaiting.play()
+              this.gTimeline
+                .to(this.outroVideoContainer, {duration: 1, opacity: 0, display: 'none', ease: Power4})
+                .to(this.musicWaiting, {duration: 1, volume: 1, ease: Power4})
+              this.waitingScreen = true
+              this.renderPass.camera = this.introCam.camera
+              this.container.add(this.waitingScreen.container)
+              this.container.remove(this.world.container)
+            })
+            
+            setTimeout(()=> {
+              this.outroVideo.play()
+              this.world.music.pause()
+              this.world.floor.oceanSound.pause()
+              this.world.floor.riverSound.pause()
+              this.waitingScreen.floor.oceanSound.pause()
+              this.waitingScreen.floor.riverSound.pause()
+            }, 1000)
+
+            
+
+        },5000)
       }
     }
   }

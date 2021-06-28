@@ -263,7 +263,6 @@ export default class Floor {
         child.add(this.riverSound)
       }
       if (child.name.includes('soundWater')) {
-        console.log(child);
         child.add(this.oceanSound)
       }
       if (child.name.includes('Plane004')) {

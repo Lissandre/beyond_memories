@@ -27,14 +27,14 @@ export default class BoxObjectManager {
         this.boxesArr[name] = this.boxObjectVanilla
         this.container.add(this.boxObjectVanilla.container)
       }
-      if (child.name.includes('modInt_')) {
-        this.boxObjectInt = new BoxObjectInteractif({
-          child: child,
-        })
-        const name = child.name
-        this.boxesArr[name] = this.boxObjectInt
-        this.container.add(this.boxObjectInt.container)
-      }
+      // if (child.name.includes('modInt_')) {
+      //   this.boxObjectInt = new BoxObjectInteractif({
+      //     child: child,
+      //   })
+      //   const name = child.name
+      //   this.boxesArr[name] = this.boxObjectInt
+      //   this.container.add(this.boxObjectInt.container)
+      // }
     })
   }
 }
