@@ -33,5 +33,8 @@ new App({
   bubbleInventory: document.querySelector('.bubbleInventory'),
   inventoryItems: document.querySelector('.inventory_content_items'),
   msuicObject: document.querySelector('.js_musicObject'),
-  bubbleOption: document.querySelector('.bubbleOptions')
+  bubbleOption: document.querySelector('.bubbleOptions'),
+  js_firstItemSound: document.querySelector('.js_firstItemSound'),
+  js_lastIemSound: document.querySelector('.js_lastIemSound'),
+  js_getElmoSound: document.querySelector('.js_getElmoSound')
 })

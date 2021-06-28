@@ -52,6 +52,7 @@ export default class World {
     this.ambianceRange = options.ambianceRange
     this.js_musicVol = options.js_musicVol
     this.js_ambianceVol = options.js_ambianceVol
+    this.js_getElmoSound = options.js_getElmoSound
     this.muteButton = options.muteButton
     this.unmuteButton = options.unmuteButton
 
@@ -574,6 +575,12 @@ export default class World {
 
   getElmo() {
     this.elmo.getPeted = true
+    this.js_getElmoSound.volume = 1
+        this.js_getElmoSound.play()
+
+        this.js_getElmoSound.addEventListener('ended', ()=> {
+          this.js_getElmoSound.remove()
+        })
   }
 
   collecteObject() {

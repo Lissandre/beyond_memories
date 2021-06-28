@@ -73,6 +73,10 @@ export default class App {
     this.muteButton = options.muteButton
     this.unmuteButton = options.unmuteButton
 
+    this.js_firstItemSound = options.js_firstItemSound
+    this.js_getElmoSound = options.js_getElmoSound
+    this.js_lastIemSound = options.js_lastIemSound
+
     this.openOptions = options.openOptions
     this.closeOptions = options.closeOptions
     this.bubbleOption = options.bubbleOption
@@ -296,7 +300,8 @@ export default class App {
       inventoryItems: this.inventoryItems,
       musicObject: this.musicObject,
       bubbleOption: this.bubbleOption,
-      endOfGame: this.endOfGame
+      endOfGame: this.endOfGame,
+      js_getElmoSound: this.js_getElmoSound
     })
     // Add world to scene
     this.scene.add(this.world.container)
@@ -353,6 +358,14 @@ export default class App {
 
 
     if (this.choosenDefinition === 'high') {
+      if(this.invLength === 1) {
+        this.js_firstItemSound.volume = 1
+        this.js_firstItemSound.play()
+
+        this.js_firstItemSound.addEventListener('ended', ()=> {
+          this.js_firstItemSound.remove()
+        })
+      }
       if (this.invLength === 2) {
         this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
@@ -428,7 +441,14 @@ export default class App {
             ease: Circ,
           })
       }
+      if(this.invLength === 7) {
+        this.js_lastIemSound.volume = 1
+        this.js_lastIemSound.play()
 
+        this.js_lastIemSound.addEventListener('ended', ()=> {
+          this.js_lastIemSound.remove()
+        })
+      }
       if (this.invLength === 8) {
         this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
@@ -453,9 +473,14 @@ export default class App {
           })
 
         setTimeout(()=> {
-          console.log('fin du jeu');
           this.optionButton = document.querySelector('.inventoryButton')
           this.closeOptionButton = document.querySelector('.options')
+          this.thanksDiv = document.querySelector('.thanks')
+          this.thanksTitle = document.querySelector('.thanks_title')
+          this.thanksCreditsTitle = document.querySelector('.thanks_creditsTitle')
+          this.thanksName = document.querySelectorAll('.thanks_name')
+          this.thanksRefresh = document.querySelector('.thanks_refresh')
+
           this.gTimeline
             .to(this.outroVideoContainer, {duration: 1, opacity: 1, display: 'block', ease: Power4})
             .to(this.world.music, {duration: 1, volume: 0, ease: Power4})
@@ -466,16 +491,23 @@ export default class App {
             this.world.screenCanvas()
             
             this.outroVideo.addEventListener('ended', ()=> {
-              this.musicWaiting.volume = 0
-              this.musicWaiting.play()
               this.gTimeline
                 .to(this.outroVideoContainer, {duration: 1, opacity: 0, display: 'none', ease: Power4})
                 .to(this.musicWaiting, {duration: 1, volume: 1, ease: Power4})
-              this.waitingScreen = true
-              this.renderPass.camera = this.introCam.camera
-              this.scene.add(this.waitingScreen.container)
+              this.musicWaiting.volume = 0
+              this.musicWaiting.play()
+  
               this.scene.remove(this.world.container)
             })
+
+            setTimeout(()=> {
+              this.gTimeline
+              .to(this.thanksDiv, {duration: 1, opacity: 1, display: 'flex', ease: Power4})
+              .to(this.thanksTitle, {duration: 1, opacity: 1, ease: Power4})
+              .to(this.thanksCreditsTitle, {duration: 1, opacity: 1, ease: Power4})
+              .to(this.thanksName, {duration: 1, opacity: 1, ease: Power4, stagger: 0.1})
+              .to(this.thanksRefresh, {duration: 1, opacity:1, ease: Power4})
+            }, 48500)
             
             setTimeout(()=> {
               this.outroVideo.play()
@@ -488,7 +520,7 @@ export default class App {
 
             
 
-        },5000)
+        },2000)
       }
     }
   }
