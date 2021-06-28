@@ -207,6 +207,7 @@ export default class Floor {
       }
       if (child.name.includes('SOL')) {
         child.receiveShadow = true
+        child.material.side = FrontSide
       }
       if (child.name.includes('ARMOIR')) {
         if (this.perf != 'low') {
