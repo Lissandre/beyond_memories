@@ -1,6 +1,6 @@
 import { AudioListener, AxesHelper, Object3D } from 'three'
 import { Octree } from 'three/examples/jsm/math/Octree'
-import {gsap, Power3, Power4, Back} from 'gsap'
+import gsap from 'gsap'
 
 import AmbientLightSource from './Lights/AmbientLight'
 import HemisphereLightSource from './Lights/HemisphereLight'
@@ -614,8 +614,8 @@ export default class World {
     this.body.appendChild(this.divShowedPic)
 
     this.showPictureTL
-      .to(this.imageShow, { duration: 1, scale: 0.45, rotate: '10deg', ease: 'Power4.inOut'})
-      .to(this.divShowedPic, {duration: 1, scale: 0.3,x: '-400%', y: '110%', ease: 'Power4.inOut'}, '+=1.5')
+      .fromTo(this.imageShow,{rotate: '-6deg', scale:0}, {duration: 1.6, scale: 0.75, rotate: '10deg', ease: 'power4.out'})
+      .to(this.divShowedPic, {duration: 1.4, scale: 0.3, autoAlpha:0, x: '-300%', rotate: '24deg', y: '110%', ease: 'power4.inOut'}, '+=0.2')
 
     setTimeout(()=> {
       this.divShowedPic.remove()
@@ -673,20 +673,20 @@ export default class World {
       this.body.classList.add('open_inventory')
     
       this.inventoryTL
-        .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.out'})
-        .to(this.bubbleInventory, {duration: 1.2, transform: `scale(380)`, ease: 'Power4.inOut'}, '-=1')
-        .to(this.closeInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power4.out'}, '-=1')
-        .fromTo(this.itemProps,{x:'50%', opacity: 0}, {duration: 1, x: '0%', opacity: 1, ease: 'Power4.out',stagger: 0.1}, '-=0.6')
+        .to(this.openInventory, {duration: 1, opacity: 0, display: 'none', ease: 'power4.out'})
+        .to(this.bubbleInventory, {duration: 1.4, transform: `scale(600)`, ease: 'power4.out'}, '-=1')
+        .to(this.closeInventory, {duration: 1, opacity: 1, display: 'block', ease: 'power4.out'}, '-=1')
+        .fromTo(this.itemProps,{x:'50%', opacity: 0}, {duration: 1, x: '0%', opacity: 1, ease: 'power4.out',stagger: {each:0.07}}, '-=1.2')
     })
   }
 
   closeInventoryMethod() {
     this.closeInventory.addEventListener('click', () => {
       this.inventoryTL
-        .to(this.itemProps, {duration: 1, x: '50%', opacity: 0, ease: 'Power4.out',stagger: 0.1})
-        .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'}, '-=1')
-        .to(this.bubbleInventory, {duration: 1.2, transform: 'scale(1)', ease: 'Power4.inOut'}, '-=1' )
-        .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+        .to(this.itemProps, {duration: 0.5, opacity: 0, ease: 'power4.out'},  )
+        .to(this.bubbleInventory, {duration: 1.4, transform: 'scale(0)', ease: 'power4.out'}, '-=0.4')
+        .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'power3.out'}, '-=1')        
+        .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'power3.out'}, '-=1 ')
       setTimeout(()=> {
 
         this.body.classList.remove('open_inventory')
@@ -815,10 +815,10 @@ export default class World {
       this.body.classList.add('open_options')
       if (this.body.classList.contains('open_inventory')) {
         this.inventoryTL
-          .to(this.itemProps, {duration: 1, x: '50%', opacity: 0, ease: 'Power4.out',stagger: 0.1})
-          .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'}, '-=1')
-          .to(this.bubbleInventory, {duration: 1.2, transform: 'scale(1)', ease: 'Power4.inOut'}, '-=1' )
-          .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+          .to(this.itemProps, {duration: 0.5, opacity: 0, ease: 'power4.out'},  )
+          .to(this.bubbleInventory, {duration: 1.4, transform: 'scale(0)', ease: 'power4.out'}, '-=0.4')
+          .to(this.closeInventory, {duration: 1, opacity: 0, display: 'none', ease: 'power3.out'}, '-=1')        
+          .to(this.openInventory, {duration: 1, opacity: 1, display: 'block', ease: 'power3.out'}, '-=1 ')
           
         setTimeout(()=> {
 
@@ -827,14 +827,14 @@ export default class World {
       }
 
       this.optionTL
-        .to(this.optionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power4.out'})
-        .to(this.bubbleOption, {duration: 1.2, transform: `scale(380)`, ease: 'Power4.inOut'}, '-=1')
-        .to(this.closeOptionButton, {duration: 1, opacity: 1, display: 'block', ease: 'Power4.out'}, '-=1')
-        .to(this.mute, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
-        .to(this.blobOption, {duration: 1, opacity: 1, ease: 'Power4.inOut'})
-        .to(this.optionsTitle, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
-        .to(this.optionSounds, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
-        .to(this.optionReplayCta, {duration: 1, opacity: 1, ease: 'Power4.inOut'}, '-=1')
+        .to(this.optionButton, {duration: 0.6, opacity: 0, display: 'none', ease: 'power4.out'})
+        .to(this.bubbleOption, {duration: 1.2, transform: `scale(600)`, ease: 'power4.out'}, '-=0.6')
+        .to(this.closeOptionButton, {duration: 0.6, opacity: 1, display: 'block', ease: 'power4.out'}, '-=1.1')
+        .to(this.mute, {duration: 0.6, opacity: 1, ease: 'power4.out'}, '-=1.1')
+        // .to(this.blobOption, {duration: 1, opacity: 1, ease: 'power4.out'}, '-=1.1')
+        .fromTo(this.optionsTitle,{y:'20%', opacity:0}, {duration: 1.2, y:'0%', autoAlpha:1, ease: 'power4.out'}, '-=1.1')
+        .fromTo(this.optionSounds,{y:'20%', opacity:0}, {duration: 1, opacity: 1, ease: 'power4.out'}, '-=1')
+        .to(this.optionReplayCta, {duration: 1, opacity: 1, ease: 'power4.out'}, '-=1')
 
     })
   }
@@ -844,14 +844,13 @@ export default class World {
 
     this.closeOptionButton.addEventListener('click', () => {
       this.optionTL
-        .to(this.closeOptionButton, {duration: 1, opacity: 0, display: 'none', ease: 'Power3.out'})
-        .to(this.mute, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
-        .to(this.blobOption, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
-        .to(this.optionsTitle, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
-        .to(this.optionSounds, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
-        .to(this.optionReplayCta, {duration: 1, opacity: 0, ease: 'Power4.inOut'}, '-=1')
-        .to(this.bubbleOption, {duration: 1.2, transform: 'scale(0)', ease: 'Power4.inOut'})
-        .to(this.optionButton, {duration: 1, opacity: 1, display: 'block', ease: 'Power3.out'}, '-=1')
+        .to(this.bubbleOption, {duration: 1.2, transform: 'scale(0)', ease: 'power4.inOut'})
+        .to(this.closeOptionButton, {duration: 0.6, opacity: 0, display: 'none', ease: 'power3.out'}, '-=1.1')
+        .to(this.mute, {duration: 0.6, opacity: 0, ease: 'power4.inOut'}, '-=1.1')
+        .to(this.optionsTitle, {duration: 0.6, opacity: 0, ease: 'power4.inOut'}, '-=1.1')
+        .to(this.optionSounds, {duration: 0.6, opacity: 0, ease: 'power4.inOut'}, '-=1.1')
+        .to(this.optionReplayCta, {duration: 0.6, opacity: 0, ease: 'power4.inOut'}, '-=1.1')        
+        .to(this.optionButton, {duration: 0.6, opacity: 1, display: 'block', ease: 'power3.out'}, '-=1.1')
 
       setTimeout(()=> {
         this.body.classList.remove('open_options')

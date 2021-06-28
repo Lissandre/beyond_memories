@@ -1,3 +1,6 @@
+* 
+  user-select: none
+
 html, body
   margin 0
   padding 0
@@ -36,6 +39,11 @@ canvas
   bottom: 5%
   left: 50%
   transform: translateX(-50%)
+  transition : opacity .6s cubic-bezier(0,.15,0,1)
+  transform-origin: center
+
+  &:hover
+    opacity:0.8
 
 .videoCta
   position: relative

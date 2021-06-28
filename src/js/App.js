@@ -20,7 +20,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
 
 
-import {gsap, Power3, Circ, Power4} from 'gsap'
+import gsap from 'gsap'
 
 import * as dat from 'dat.gui'
 import Stats from 'stats.js'
@@ -131,10 +131,10 @@ export default class App {
       this.assets.on('ressourcesReady', () => {
         this.timelineLoader = new gsap.timeline()
         this.timelineLoader
-          .to(this.loadDiv, { duration: 1, opacity: 0, ease: Power3 })
+          .to(this.loadDiv, { duration: 1, opacity: 0, ease: 'power4.out' })
           .to(
             this.qualityDivContainer,
-            { duration: 2, opacity: 1, ease: Power3 },
+            { duration: 2, opacity: 1, ease: 'power4.out' },
             '+=0.5'
           )
         setTimeout(() => {
@@ -370,27 +370,27 @@ export default class App {
         this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 0.7543,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 4,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.effectVignette.uniforms['offset'], 0.5, {
             value: 0.431,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
             r: this.depthColorFor3.r,
             g: this.depthColorFor3.g,
             b: this.depthColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
             r: this.surfaceColorFor3.r,
             g: this.surfaceColorFor3.g,
             b: this.surfaceColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
       }
 
@@ -398,23 +398,23 @@ export default class App {
         this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 0.8823,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 4,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
             r: this.depthColorFor3.r,
             g: this.depthColorFor3.g,
             b: this.depthColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
             r: this.surfaceColorFor3.r,
             g: this.surfaceColorFor3.g,
             b: this.surfaceColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
       }
 
@@ -422,23 +422,23 @@ export default class App {
         this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 1,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 4,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
             r: this.depthColorFor3.r,
             g: this.depthColorFor3.g,
             b: this.depthColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
             r: this.surfaceColorFor3.r,
             g: this.surfaceColorFor3.g,
             b: this.surfaceColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
       }
       if(this.invLength === 7) {
@@ -453,23 +453,23 @@ export default class App {
         this.gTimeline
           .to(this.effectVignette.uniforms['darkness'], 0.5, {
             value: 1.1,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uHeightWave, 1, {
             value: 4,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uDepthColor.value, 1, {
             r: this.depthColorFor3.r,
             g: this.depthColorFor3.g,
             b: this.depthColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
           .to(this.world.floor.materialOcean.uniforms.uSurfaceColor.value, 1, {
             r: this.surfaceColorFor3.r,
             g: this.surfaceColorFor3.g,
             b: this.surfaceColorFor3.b,
-            ease: Circ,
+            ease: 'power4.out',
           })
 
         setTimeout(()=> {
@@ -534,7 +534,7 @@ export default class App {
         if (!document.querySelector('.recommended')) {
           const recoSpan = document.createElement('span')
           recoSpan.classList.add('recommended')
-          recoSpan.innerHTML = '(Recommandé pour vous)'
+          recoSpan.innerHTML = '(Recommande pour vous)'
           document
             .querySelectorAll('.definition_item')
             [result.tier - 1].appendChild(recoSpan)
@@ -558,12 +558,12 @@ export default class App {
         this.musicWaiting.volume = this.musicWaitingFinVol
 
         this.gTimeline
-          .to(this.qualityDiv, { duration: 2, opacity: 0, ease: Power3 })
+          .to(this.qualityDiv, { duration: 2, opacity: 0, ease: 'power4.out' })
           .to(this.homeDiv, {
             duration: 2,
             display: 'flex',
             opacity: 1,
-            ease: Power3,
+            ease: 'power4.out',
           })
         // this.homeDiv.remove()
         // this.introVideoContainer.remove()
@@ -575,68 +575,68 @@ export default class App {
           this.gTimeline
             .to(
               this.homeDiv,
-              { duration: 2, opacity: 0, ease: Power3 },
-              '-=0.5'
-            )
-            .to(this.musicWaiting, { duration: 1, volume: 0, ease: Power3 })
+              { duration: 1.6, opacity: 0, ease: 'power4.out' },
+          )
+            .to(this.musicWaiting, { duration: 1, volume: 0, ease: 'power4.out' }, '-=1')
             .to(this.introVideoContainer, {
               duration: 1,
               display: 'block',
               opacity: 1,
-              ease: Power3,
-            })
+              ease: 'power4.out',
+            }, '-=1')
 
           //***************
           // Click on skip
           // **************
           this.introVideoSkipButton.addEventListener('click', () => {
-            this.introVideo.pause()
-            this.introVideo.currenTime = 0
-
-            this.gTimeline.to(this.introVideoContainer, {
-              duration: 3,
-              opacity: 0,
-              ease: Power3,
-            })
             setTimeout(() => {
               this.world.music.play()
               this.gTimeline.to(this.world.music, {
                 duration: 0.5,
                 volume: this.world.musicFinVol,
-                ease: Power3,
+                ease: 'power4.out',
               })
-              this.introVideo.remove()
-              this.introVideo.style.display = 'none'
+              this.world.init()
             }, 550)
             setTimeout(() => {
-              this.introVideoContainer.remove()
+              this.introVideo.pause()
+              this.introVideo.currenTime = 0
               this.renderPass.camera = this.camera.camera
-              this.world.init()
-            }, 1000)
+              this.gTimeline.to(this.introVideoContainer, {
+                duration: 1,
+                opacity: 0,
+                ease: 'power4.out',
+              })
+              setTimeout(() => {
+                this.introVideoContainer.remove()
+              }, 1000)
+            }, 1500)
+            
           })
 
           // ************
           // Video ended
           // ************
           this.introVideo.addEventListener('ended', () => {
-            this.gTimeline.to(this.introVideoContainer, {
-              duration: 3,
-              opacity: 0,
-              ease: Power3,
-            })
+
             setTimeout(() => {
               this.world.music.play()
               this.renderPass.camera = this.camera.camera
               this.gTimeline.to(this.world.music, {
                 duration: 0.5,
                 volume: this.world.musicFinVol,
-                ease: Power3,
+                ease: 'power4.out',
               })
               this.introVideoContainer.remove()
               this.introVideo.remove()
               this.introVideo.style.display = 'none'
             this.world.init()
             }, 1000)
+            this.gTimeline.to(this.introVideoContainer, {
+              duration: 3,
+              opacity: 0,
+              ease: 'power4.out',
+            })
           })
 
           setTimeout(() => {
@@ -648,7 +648,7 @@ export default class App {
             this.gTimeline.to(this.introVideo, {
               duration: 0.5,
               volume: 1,
-              ease: Power3,
+              ease: 'power4.out',
             })
             this.isWaitingScreen = false
             this.scene.remove(this.waitingScreen.container)
@@ -718,63 +718,64 @@ export default class App {
         this.fxaaPass.material.uniforms['resolution'].value.y =
           1 / (this.sizes.height * pixelRatio)
 
-        const VignetteShader = {
-          uniforms: {
-            tDiffuse: { type: 't', value: null },
-            offset: { type: 'f', value: 1.0 },
-            darkness: { type: 'f', value: 1.0 },
-          },
-
-          vertexShader: `
-            varying vec2 vUv;
-            
-            void main() {
-              
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-              
-            }`,
-
-          fragmentShader: `
-            uniform float offset;
-            uniform float darkness;
-            
-            uniform sampler2D tDiffuse;
-            
-            varying vec2 vUv;
-            
-            void main() {
-              
-              // Eskil's vignette
-              
-              // vec4 texel = texture2D( tDiffuse, vUv );
-              // vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
-              // gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
-              
-              
-              // alternative version from glfx.js
-              // this one makes more dusty look (as opposed to burned)
-              
-              vec4 color = texture2D( tDiffuse, vUv );
-              float dist = distance( vUv, vec2( 0.5 ) );
-              color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
-              gl_FragColor = color;
-              
-            
-            }
-            `,
-        }
-
-        this.shaderVignette = VignetteShader
-        this.effectVignette = new ShaderPass(this.shaderVignette)
-        this.effectVignette.renderToScreen = true
-        this.effectVignette.uniforms['offset'].value = 0.15
-        this.effectVignette.uniforms['darkness'].value = 0.8
+        
 
         this.composer.addPass(this.fxaaPass)
-        this.composer.addPass(this.effectVignette)
         this.composer.addPass(bloomPass)
       }
+
+      const VignetteShader = {
+        uniforms: {
+          tDiffuse: { type: 't', value: null },
+          offset: { type: 'f', value: 1.0 },
+          darkness: { type: 'f', value: 1.0 },
+        },
+
+        vertexShader: `
+          varying vec2 vUv;
+          
+          void main() {
+            
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+            
+          }`,
+
+        fragmentShader: `
+          uniform float offset;
+          uniform float darkness;
+          
+          uniform sampler2D tDiffuse;
+          
+          varying vec2 vUv;
+          
+          void main() {
+            
+            // Eskil's vignette
+            
+            // vec4 texel = texture2D( tDiffuse, vUv );
+            // vec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );
+            // gl_FragColor = vec4( mix( texel.rgb, vec3( 1.0 - darkness ), dot( uv, uv ) ), texel.a );
+            
+            
+            // alternative version from glfx.js
+            // this one makes more dusty look (as opposed to burned)
+            
+            vec4 color = texture2D( tDiffuse, vUv );
+            float dist = distance( vUv, vec2( 0.5 ) );
+            color.rgb *= smoothstep( 0.8, offset * 0.799, dist *( darkness + offset ) );
+            gl_FragColor = color;
+            
+          
+          }
+          `,
+      }
+
+      this.shaderVignette = VignetteShader
+      this.effectVignette = new ShaderPass(this.shaderVignette)
+      this.effectVignette.renderToScreen = true
+      this.effectVignette.uniforms['offset'].value = 0.15
+      this.effectVignette.uniforms['darkness'].value = 0.8
 
       // Tint pass
       const TintShader = {
@@ -814,6 +815,7 @@ export default class App {
       this.shaderPassGammaCorr = new ShaderPass(GammaCorrectionShader)
 
       this.composer.addPass(this.tintPass)
+      this.composer.addPass(this.effectVignette)
       // this.composer.addPass( this.tintPass)
       // this.composer.addPass(this.filmPass)
       this.composer.addPass(this.shaderPassGammaCorr)
