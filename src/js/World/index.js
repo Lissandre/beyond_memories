@@ -91,9 +91,9 @@ export default class World {
     this.showOptions = document.querySelector('.options')
 
     if (this.debug) {
-      this.container.add(new AxesHelper(5))
-      this.debugFolder = this.debug.addFolder('World')
-      this.debugFolder.open()
+      // this.container.add(new AxesHelper(5))
+      // this.debugFolder = this.debug.addFolder('World')
+      // this.debugFolder.open()
     }
   }
   init() {
@@ -610,6 +610,10 @@ export default class World {
     this.showPictureTL
       .to(this.imageShow, { duration: 1, scale: 0.45, rotate: '10deg', ease: 'Power4.inOut'})
       .to(this.divShowedPic, {duration: 1, scale: 0.3,x: '-400%', y: '110%', ease: 'Power4.inOut'}, '+=1.5')
+
+    setTimeout(()=> {
+      this.divShowedPic.remove()
+    }, 7000)
   }
 
   setItemCard() {
