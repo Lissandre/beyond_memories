@@ -9,6 +9,7 @@ import {
   Vector3,
 } from 'three'
 import { getGPUTier } from 'detect-gpu'
+import isMobile from 'ismobilejs'
 
 // Post Pro
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js'
@@ -99,16 +100,27 @@ export default class App {
     this.musicWaitingFinVol = 1
     this.composer
 
-    this.setLoader()
-    this.setConfig()
-    this.setRenderer()
-    this.setCamera()
-    this.setIntroCam()
-    this.composerCreator()
-    this.setWorld()
-    this.setWaitingScreen()
-    this.checkInventoryLength()
-    this.selectDefinition()
+    this.isMobile()
+  }
+  isMobile() {
+    if(isMobile(window.navigator).any) {
+      while (this.body.childNodes.length > 1) {
+        this.body.removeChild(this.body.lastChild)
+      }
+      document.querySelector('.mobile').classList.add('visible')
+      this.body.classList.add('hide')
+    } else {
+      this.setLoader()
+      this.setConfig()
+      this.setRenderer()
+      this.setCamera()
+      this.setIntroCam()
+      this.composerCreator()
+      this.setWorld()
+      this.setWaitingScreen()
+      this.checkInventoryLength()
+      this.selectDefinition()
+    }
   }
   setLoader() {
     this.loadDiv = document.querySelector('.loading')
