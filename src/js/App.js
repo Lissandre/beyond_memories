@@ -89,7 +89,6 @@ export default class App {
     // Set up
     this.time = new Time()
     this.sizes = new Sizes()
-    this.assets = new Assets()
     this.params = {
       fogColor: 0xa2dcfc,
       fogNear: 0,
@@ -110,6 +109,8 @@ export default class App {
       document.querySelector('.mobile').classList.add('visible')
       this.body.classList.add('hide')
     } else {
+      this.assets = new Assets()
+
       this.setLoader()
       this.setConfig()
       this.setRenderer()
