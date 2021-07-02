@@ -192,6 +192,13 @@ export default class App {
         this.sizes.viewport.width,
         this.sizes.viewport.height
       )
+      if (this.composer) {
+        this.composer.setSize(
+          this.sizes.viewport.width,
+          this.sizes.viewport.height
+        )
+        this.outlinePass.resolution.set( new Vector2(this.sizes.viewport.width, this.sizes.viewport.height))
+      }
     })
     // Set RequestAnimationFrame with 60fps
     this.time.on('tick', () => {
@@ -653,7 +660,7 @@ export default class App {
     // this.composer.outputEncoding = sRGBEncoding
     this.composer.renderer.outputEncoding = sRGBEncoding
     // this.composer.renderer.gammaFactor = 2
-    this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 1))
+    this.composer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.composer.setSize(window.innerWidth, window.innerHeight)
 
     this.outlinePass = new OutlinePass(
