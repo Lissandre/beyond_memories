@@ -1,4 +1,6 @@
-# Game project
+# Beyond Memories
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/630b6b92-b0a9-4a4c-b49c-fa17dfc8e796/deploy-status)](https://app.netlify.com/sites/jovial-bardeen-98b8a3/deploys)
 
 ## Requirements & Setup
 You need to have **node.js** installed. 
